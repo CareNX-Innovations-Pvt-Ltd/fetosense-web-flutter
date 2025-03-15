@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
+import '../services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   final Client client; // Accepts Appwrite Client
@@ -15,12 +16,21 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
   String message = "";
 
-  void loginUser() {
-    print("Logging in with: ${usernameController.text}");
+ void loginUser() async {
+  try {
+    await AuthService(widget.client)
+        .loginUser(usernameController.text, passwordController.text);
+
+    Navigator.pushReplacementNamed(context, '/home');
+  } catch (e) {
     setState(() {
-      message = "Login attempt made! (Replace with real API call)";
+      message = "Login failed. Please check credentials.";
     });
   }
+}
+
+
+
 
   @override
   Widget build(BuildContext context) {

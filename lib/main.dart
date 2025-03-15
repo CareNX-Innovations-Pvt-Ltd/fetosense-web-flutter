@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
-import 'screens/login_screen.dart'; // Import LoginScreen
-import 'screens/register_screen.dart'; // Import RegisterScreen
+import 'screens/login_screen.dart';
+import 'screens/register_screen.dart';
+import 'screens/home_screen.dart';
+import 'screens/organization_registration.dart';
 
 void main() {
   Client client = Client()
-    ..setEndpoint('https://cloud.appwrite.io/v1') // Appwrite API Endpoint
-    ..setProject('67d157b9003b4e1a231c'); // Your Appwrite Project ID
+    ..setEndpoint('https://cloud.appwrite.io/v1')
+    ..setProject('67d157b9003b4e1a231c');
 
   runApp(MyApp(client: client));
 }
@@ -20,11 +22,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Web + Appwrite',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(), // Dark theme to match your login screen
+      theme: ThemeData.dark(),
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginScreen(client: client), // Default Login Screen
-        '/register': (context) => RegisterScreen(client: client), // Register Screen Route
+        '/': (context) => LoginScreen(client: client),
+        '/register': (context) => RegisterScreen(client: client),
+        '/home': (context) => HomeScreen(client: client), // Home Page Route
+        '/organization-registration': (context) => OrganizationRegistration(),
+
       },
     );
   }
