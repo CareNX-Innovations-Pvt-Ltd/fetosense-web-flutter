@@ -84,17 +84,28 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.pushNamed(context, '/home');
           }),
 
-          _buildExpandableMenu(
-            Icons.app_registration,
-            "Registration",
-            [
-              _sidebarSubItem("Organization", '/organization-registration'),
-              _sidebarSubItem("Device", '/device-registration'),
-              _sidebarSubItem("Generate QR", '/generate-qr'),
-            ],
-          ),
+         _buildExpandableMenu(
+  Icons.app_registration,
+  "Registration",
+  [
+    _sidebarSubItem("Organization", '/organization-registration'),
+    _sidebarSubItem("Device", '/device-registration'), 
+    _sidebarSubItem("Generate QR", '/generate-qr'), 
+  ],
+),
+_buildExpandableMenu(
+  Icons.pie_chart,
+  "MIS",
+  [
+    _sidebarSubItem("Organizations", '/mis-organizations'),
+    _sidebarSubItem("Device", '/mis-devices'), 
+    _sidebarSubItem("Doctor", '/mis-doctors'), 
+    _sidebarSubItem("Mother", '/mis-mothers'),
+    _sidebarSubItem("Test", '/mis-tests'), 
+  ],
+),
 
-          _sidebarItem(Icons.pie_chart, "MIS"),
+
           _sidebarItem(Icons.analytics, "Analytics"),
           _sidebarItem(Icons.article, "Reports"),
           _sidebarItem(Icons.settings, "Operations"),

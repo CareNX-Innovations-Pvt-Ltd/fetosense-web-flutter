@@ -4,6 +4,9 @@ import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/organization_registration.dart';
+import 'screens/device_registration.dart';
+import 'screens/generate_qr_page.dart';
+import 'screens/organization_details_page.dart';
 
 void main() {
   Client client = Client()
@@ -29,6 +32,12 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterScreen(client: client),
         '/home': (context) => HomeScreen(client: client), // Home Page Route
         '/organization-registration': (context) => OrganizationRegistration(),
+        '/device-registration': (context) => DeviceRegistration(),
+        '/generate-qr': (context) => GenerateQRPage(),
+        '/mis-organizations': (context) => OrganizationDetailsPage(client: client),
+
+
+
 
       },
     );
