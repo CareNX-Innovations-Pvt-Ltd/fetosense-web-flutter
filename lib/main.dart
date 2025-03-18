@@ -1,3 +1,4 @@
+import 'package:fetosense_mis/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import 'screens/login_screen.dart';
@@ -9,9 +10,10 @@ import 'screens/generate_qr_page.dart';
 import 'screens/organization_details_page.dart';
 
 void main() {
-  Client client = Client()
-    ..setEndpoint('https://cloud.appwrite.io/v1')
-    ..setProject('67d157b9003b4e1a231c');
+  Client client =
+      Client()
+        ..setEndpoint('http://172.172.241.56/v1')
+        ..setProject('67d94dac003bd3e50fc8');
 
   runApp(MyApp(client: client));
 }
@@ -30,15 +32,14 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginScreen(client: client),
         '/register': (context) => RegisterScreen(client: client),
-        '/home': (context) => HomeScreen(client: client), // Home Page Route
+        // '/home': (context) => HomeScreen(client: client), // Home Page Route
+        '/dashboard':
+            (context) => DashboardScreen(client: client), // Home Page Route
         '/organization-registration': (context) => OrganizationRegistration(),
         '/device-registration': (context) => DeviceRegistration(),
         '/generate-qr': (context) => GenerateQRPage(),
-        '/mis-organizations': (context) => OrganizationDetailsPage(client: client),
-
-
-
-
+        '/mis-organizations':
+            (context) => OrganizationDetailsPage(client: client),
       },
     );
   }
