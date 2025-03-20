@@ -55,30 +55,49 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Device Registration",
-                    style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+                Text(
+                  "Device Registration",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
 
                 SizedBox(height: 20),
 
                 Row(
                   children: [
-                    _buildDropdownField("Organization", organizationList, selectedOrganization, (value) {
-                      setState(() {
-                        selectedOrganization = value;
-                      });
-                    }),
+                    _buildDropdownField(
+                      "Organization",
+                      organizationList,
+                      selectedOrganization,
+                      (value) {
+                        setState(() {
+                          selectedOrganization = value;
+                        });
+                      },
+                    ),
                     SizedBox(width: 20),
-                    _buildDropdownField("Product Type", productTypeList, selectedProductType, (value) {
-                      setState(() {
-                        selectedProductType = value;
-                      });
-                    }),
+                    _buildDropdownField(
+                      "Product Type",
+                      productTypeList,
+                      selectedProductType,
+                      (value) {
+                        setState(() {
+                          selectedProductType = value;
+                        });
+                      },
+                    ),
                   ],
                 ),
 
                 Row(
                   children: [
-                    _buildTextField("Device Name (Bluetooth)", deviceNameController),
+                    _buildTextField(
+                      "Device Name (Bluetooth)",
+                      deviceNameController,
+                    ),
                     SizedBox(width: 20),
                     _buildTextField("Kit ID", kitIdController),
                   ],
@@ -88,7 +107,10 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
                   children: [
                     _buildTextField("Toco ID", tocoIdController),
                     SizedBox(width: 20),
-                    _buildTextField("Tablet Serial Number", tabletSerialController),
+                    _buildTextField(
+                      "Tablet Serial Number",
+                      tabletSerialController,
+                    ),
                   ],
                 ),
 
@@ -99,9 +121,18 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
                     onPressed: _submitForm,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blueAccent,
-                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 14,
+                      ),
                     ),
-                    child: Text("Save", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    child: Text(
+                      "Save",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -112,15 +143,26 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
     );
   }
 
-  Widget _buildDropdownField(String label, List<String> items, String? selectedValue, Function(String?) onChanged) {
+  Widget _buildDropdownField(
+    String label,
+    List<String> items,
+    String? selectedValue,
+    Function(String?) onChanged,
+  ) {
     return Expanded(
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 8.0),
         child: DropdownButtonFormField<String>(
           value: selectedValue,
-          items: items
-              .map((e) => DropdownMenuItem(value: e, child: Text(e, style: TextStyle(color: Colors.white))))
-              .toList(),
+          items:
+              items
+                  .map(
+                    (e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(e, style: TextStyle(color: Colors.white)),
+                    ),
+                  )
+                  .toList(),
           onChanged: (value) {
             onChanged(value);
           },

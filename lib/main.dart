@@ -34,9 +34,13 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterScreen(client: client),
         // '/home': (context) => HomeScreen(client: client), // Home Page Route
         '/dashboard':
-            (context) => DashboardScreen(client: client), // Home Page Route
-        '/organization-registration': (context) => OrganizationRegistration(),
-        '/device-registration': (context) => DeviceRegistration(),
+            (context) => DashboardScreen(
+              client: client,
+              childIndex: 0,
+            ), // Home Page Route
+        '/organization-registration':
+            (context) => DashboardScreen(client: client, childIndex: 1),
+        // '/device-registration': (context) => DeviceRegistration(),
         '/generate-qr': (context) => GenerateQRPage(),
         '/mis-organizations':
             (context) => OrganizationDetailsPage(client: client),

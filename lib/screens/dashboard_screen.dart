@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'organization_registration.dart';
 import 'sidebar.dart';
 import 'appbar.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -7,11 +8,16 @@ import 'package:appwrite/appwrite.dart';
 
 class DashboardScreen extends StatefulWidget {
   final Client client;
+  final int childIndex;
 
-  DashboardScreen({required this.client});
+  const DashboardScreen({
+    super.key,
+    required this.client,
+    required this.childIndex,
+  });
 
   @override
-  _DashboardScreenState createState() => _DashboardScreenState();
+  State createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
@@ -32,7 +38,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         userEmail = user.email;
       });
     } catch (e) {
-      print("Error fetching user: $e");
+      debugPrint("Error fetching user: $e");
     }
   }
 
@@ -52,14 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: Row(
         children: [
           buildSidebar(context, _logout), // Sidebar imported from sidebar.dart
-          Expanded(
-            child: Column(
-              children: [
-                _buildTopStats(),
-                Expanded(child: _buildGraphSection()),
-              ],
-            ),
-          ),
+          getChild(widget.childIndex),
         ],
       ),
     );
@@ -141,5 +140,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
     );
+  }
+
+  Widget getChild(int childIndex) {
+    switch (childIndex) {
+      case 0:
+        return Expanded(
+          child: Column(
+            children: [_buildTopStats(), Expanded(child: _buildGraphSection())],
+          ),
+        );
+      default:
+        return OrganizationRegistration();
+    }
   }
 }

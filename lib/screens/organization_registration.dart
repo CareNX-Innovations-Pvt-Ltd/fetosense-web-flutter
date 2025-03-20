@@ -3,9 +3,10 @@ import 'sidebar.dart'; // Import the sidebar
 import 'appbar.dart'; // Import the appbar
 
 class OrganizationRegistration extends StatefulWidget {
+  const OrganizationRegistration({super.key});
+
   @override
-  _OrganizationRegistrationState createState() =>
-      _OrganizationRegistrationState();
+  State createState() => _OrganizationRegistrationState();
 }
 
 class _OrganizationRegistrationState extends State<OrganizationRegistration> {
@@ -25,7 +26,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
   String? selectedCity;
 
   // Dummy data for dropdowns
-  List<String> statusList = ["Trail", "Demo", "Sold"];
+  List<String> statusList = ["Trial", "Demo", "Sold"];
   List<String> designationList = ["Manager", "Executive", "Admin"];
   List<String> stateList = ["Maharashtra", "Karnataka", "Gujarat"];
   Map<String, List<String>> cityMap = {
@@ -36,302 +37,350 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black87,
-      appBar: buildAppBar("User Email", () {}), // Use the imported AppBar
-      body: Row(
-        children: [
-          buildSidebar(context, () {}), // Use the imported Sidebar
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Container(
-                width: 900, // Set form width
-                padding: EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade900,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [BoxShadow(color: Colors.white, blurRadius: 10)],
-                ),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 20),
-                      // Form fields as per your requirements
-                      Row(
-                        children: [
-                          _buildLabel("Organization", true),
-                          _buildTextField(
-                            "Organization",
-                            organizationController,
-                            isRequired: true,
-                          ),
-                          SizedBox(width: 16),
-                          _buildLabel("Mobile", true),
-                          _buildTextField(
-                            "Mobile",
-                            mobileController,
-                            isRequired: true,
-                            isNumber: true,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          _buildDropdownLabel("Status", true),
-                          _buildDropdownField(
-                            "Status",
-                            statusList,
-                            selectedStatus,
-                            (value) {
-                              setState(() {
-                                selectedStatus = value;
-                              });
-                            },
-                          ),
-                          SizedBox(width: 16),
-                          _buildDropdownField(
-                            "Designation",
-                            designationList,
-                            selectedDesignation,
-                            (value) {
-                              setState(() {
-                                selectedDesignation = value;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          _buildLabel("Contact Person", true),
-                          _buildTextField(
-                            "Contact Person",
-                            contactPersonController,
-                            isRequired: true,
-                          ),
-                          SizedBox(width: 16),
-                          _buildLabel("Email", true),
-                          _buildTextField("Email", emailController),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          _buildLabel("Street", true),
-                          _buildTextField(
-                            "Street",
-                            streetController,
-                            isRequired: true,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          _buildDropdownField(
-                            "Country",
-                            ["India"],
-                            "India",
-                            (value) {},
-                          ),
-                          SizedBox(width: 16),
-                          _buildDropdownField(
-                            "State",
-                            stateList,
-                            selectedState,
-                            (value) {
-                              setState(() {
-                                selectedState = value;
-                                selectedCity = null; // Reset city selection
-                              });
-                            },
-                          ),
-                          SizedBox(width: 16),
-                          _buildDropdownField(
-                            "City",
-                            selectedState != null
-                                ? cityMap[selectedState] ?? []
-                                : [],
-                            selectedCity,
-                            (value) {
-                              setState(() {
-                                selectedCity = value;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: _saveForm,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueAccent,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 40,
-                              vertical: 12,
-                            ),
-                          ),
-                          child: Text(
-                            "Save",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+    return Expanded(
+      child: Container(
+        alignment: Alignment.topCenter,
+        child: Container(
+          margin: EdgeInsets.all(16),
+          padding: EdgeInsets.all(15.0),
+          decoration: BoxDecoration(
+            color: Colors.black45,
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(color: Colors.white, width: 0.5),
+          ),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  "Organization Registration",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
-              ),
+                SizedBox(height: 10),
+                Container(
+                  // width: 700,
+                  // padding: EdgeInsets.symmetric(horizontal: -10),
+                  height: 1,
+                  color: Colors.white,
+                  margin: EdgeInsets.symmetric(horizontal: 0),
+                ),
+                SizedBox(height: 20),
+                _buildFormFields(),
+                SizedBox(height: 20),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: _saveForm,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.cyan[700],
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    child: Text(
+                      "Save",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
-  // Sidebar item widget
-  Widget _sidebarItem(IconData icon, String title, {VoidCallback? onTap}) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.white),
-      title: Text(title, style: TextStyle(color: Colors.white)),
-      onTap: onTap,
+  /*
+  child: Expanded(
+        child: SingleChildScrollView(
+          child: Container(
+            width: 700, // Set form width
+            padding: EdgeInsets.all(15.0),
+            decoration: BoxDecoration(
+              color: Colors.black45,
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: Colors.white, width: 0.5),
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    "Organization Registration",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    // width: 700,
+                    // padding: EdgeInsets.symmetric(horizontal: -10),
+                    height: 1,
+                    color: Colors.white,
+                    margin: EdgeInsets.symmetric(horizontal: 0),
+                  ),
+                  SizedBox(height: 20),
+                  _buildFormFields(),
+                  SizedBox(height: 20),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: _saveForm,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.cyan[700],
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 40,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      child: Text(
+                        "Save",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+   */
+  Widget _buildFormFields() {
+    return Column(
+      children: [
+        _buildRow([
+          _buildColumnWithTextField(
+            "Organization",
+            organizationController,
+            "Enter organization name",
+            true,
+          ),
+          _buildColumnWithTextField(
+            "Mobile",
+            mobileController,
+            "Enter mobile number",
+            true,
+            isNumber: true,
+          ),
+        ]),
+        _buildRow([
+          _buildColumnWithDropdown(
+            "Status",
+            statusList,
+            selectedStatus,
+            "Select status",
+            (value) {
+              setState(() => selectedStatus = value);
+            },
+            true,
+          ),
+          _buildColumnWithDropdown(
+            "Designation",
+            designationList,
+            selectedDesignation,
+            "Select designation",
+            (value) {
+              setState(() => selectedDesignation = value);
+            },
+            true,
+          ),
+        ]),
+        _buildRow([
+          _buildColumnWithTextField(
+            "Contact Person",
+            contactPersonController,
+            "Enter contact person name",
+            true,
+          ),
+          _buildColumnWithTextField(
+            "Email",
+            emailController,
+            "Enter your email",
+            false,
+          ),
+        ]),
+        _buildRow([
+          _buildColumnWithTextField(
+            "Street",
+            streetController,
+            "Enter street name",
+            true,
+          ),
+        ]),
+        _buildRow([
+          _buildColumnWithDropdown(
+            "Country",
+            ["India"],
+            "India",
+            "Select country",
+            (value) {},
+            false,
+          ),
+          _buildColumnWithDropdown(
+            "State",
+            stateList,
+            selectedState,
+            "Select state",
+            (value) {
+              setState(() {
+                selectedState = value;
+                selectedCity = null;
+              });
+            },
+            true,
+          ),
+          _buildColumnWithDropdown(
+            "City",
+            selectedState != null ? cityMap[selectedState] ?? [] : [],
+            selectedCity,
+            "Select city",
+            (value) {
+              setState(() => selectedCity = value);
+            },
+            true,
+          ),
+        ]),
+      ],
     );
   }
 
-  // Method to build labels for text fields
+  Widget _buildRow(List<Widget> children) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: Row(
+        children:
+            children
+                .map(
+                  (e) => Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: e,
+                    ),
+                  ),
+                )
+                .toList(),
+      ),
+    );
+  }
+
+  Widget _buildColumnWithTextField(
+    String label,
+    TextEditingController controller,
+    String hintText,
+    bool isRequired, {
+    bool isNumber = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildLabel(label, isRequired),
+        SizedBox(height: 8),
+        SizedBox(
+          height: 40, // Set fixed height
+          child: TextFormField(
+            controller: controller,
+            style: TextStyle(color: Colors.grey),
+            keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+            decoration: _inputDecoration(hintText),
+            validator:
+                isRequired
+                    ? (value) =>
+                        value == null || value.isEmpty
+                            ? "$label is required"
+                            : null
+                    : null,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildColumnWithDropdown(
+    String label,
+    List<String> items,
+    String? selectedValue,
+    String hintText,
+    Function(String?) onChanged,
+    bool isRequired,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildLabel(label, isRequired),
+        SizedBox(height: 8),
+        SizedBox(
+          height: 40, // Set fixed height
+          child: DropdownButtonFormField<String>(
+            value: selectedValue,
+            items:
+                items
+                    .map(
+                      (e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(e, style: TextStyle(color: Colors.white)),
+                      ),
+                    )
+                    .toList(),
+            onChanged: onChanged,
+            decoration: _inputDecoration(hintText),
+            dropdownColor: Colors.black45,
+          ),
+        ),
+      ],
+    );
+  }
+
+  InputDecoration _inputDecoration(String hintText) {
+    return InputDecoration(
+      hintText: hintText,
+      hintStyle: TextStyle(color: Colors.grey[500]),
+      filled: true,
+      fillColor: Colors.black54,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 12,
+      ), // Adjust height
+    );
+  }
+
   Widget _buildLabel(String label, bool isRequired) {
     return Row(
       children: [
         Text(label, style: TextStyle(color: Colors.white)),
-        if (isRequired)
-          Text(
-            ' *',
-            style: TextStyle(color: Colors.red), // Red color for asterisk
-          ),
+        if (isRequired) Text(' *', style: TextStyle(color: Colors.red)),
       ],
     );
   }
 
-  // Method to build text fields
-  Widget _buildTextField(
-    String label,
-    TextEditingController controller, {
-    bool isRequired = false,
-    bool isNumber = false,
-  }) {
-    return Expanded(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.0),
-        child: TextFormField(
-          controller: controller,
-          style: TextStyle(color: Colors.white),
-          keyboardType: isNumber ? TextInputType.number : TextInputType.text,
-          decoration: InputDecoration(
-            labelText: "",
-            labelStyle: TextStyle(color: Colors.white),
-            filled: true,
-            fillColor: Colors.grey.shade900,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-          ),
-          validator:
-              isRequired
-                  ? (value) {
-                    if (value == null || value.isEmpty) {
-                      return "$label is required";
-                    }
-                    return null;
-                  }
-                  : null,
-        ),
-      ),
-    );
-  }
-
-  // Method to build dropdown fields
-  Widget _buildDropdownField(
-    String label,
-    List<String> items,
-    String? selectedValue,
-    Function(String?) onChanged, {
-    bool isRequired = false,
-  }) {
-    return Expanded(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildDropdownLabel(label, isRequired),
-            SizedBox(height: 8),
-            DropdownButtonFormField<String>(
-              value: selectedValue,
-              items:
-                  items.isNotEmpty
-                      ? items
-                          .map(
-                            (e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(
-                                e,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          )
-                          .toList()
-                      : [],
-              onChanged: (value) {
-                setState(() {
-                  onChanged(value);
-                });
-              },
-              decoration: InputDecoration(
-                labelText: "",
-                labelStyle: TextStyle(color: Colors.white),
-                filled: true,
-                fillColor: Colors.grey.shade900,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-              dropdownColor: Colors.grey.shade900,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Method to build dropdown labels
-  Widget _buildDropdownLabel(String label, bool isRequired) {
-    return Row(
-      children: [
-        Text(label, style: TextStyle(color: Colors.white)),
-        if (isRequired)
-          Text(
-            ' *',
-            style: TextStyle(color: Colors.red), // Red color for asterisk
-          ),
-      ],
-    );
-  }
-
-  // Save form method
   void _saveForm() {
     if (_formKey.currentState!.validate()) {
       print("Form Submitted!");
-      print("Organization: ${organizationController.text}");
-      print("Mobile: ${mobileController.text}");
-      print("Status: $selectedStatus");
-      print("Designation: $selectedDesignation");
-      print("Contact Person: ${contactPersonController.text}");
-      print("Email: ${emailController.text}");
-      print("Street: ${streetController.text}");
-      print("State: $selectedState");
-      print("City: $selectedCity");
     }
   }
 }
