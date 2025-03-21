@@ -2,86 +2,217 @@ import 'package:flutter/material.dart';
 
 Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
   return Container(
-    width: 250,
+    width: 210,
     color: Colors.grey[850],
-    padding: EdgeInsets.symmetric(vertical: 20),
+    // padding: const EdgeInsets.symmetric(vertical: 20),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            "fetosense",
-            style: TextStyle(
-              color: Colors.tealAccent,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        SizedBox(height: 20),
-        _sidebarItem(
-          Icons.dashboard,
-          "Dashboard",
+        // const Padding(
+        //   padding: EdgeInsets.symmetric(horizontal: 16),
+        //   // child: Text(
+        //   //   "fetosense",
+        //   //   style: TextStyle(
+        //   //     color: Colors.tealAccent,
+        //   //     fontSize: 20,
+        //   //     fontWeight: FontWeight.normal,
+        //   //   ),
+        //   // ),
+        // ),
+        // const SizedBox(height: 20),
+        _SidebarItem(
+          icon: Icons.dashboard,
+          title: "Dashboard",
           onTap: () {
-            Navigator.pushNamed(context, '/home');
+            Navigator.pushNamed(context, '/dashboard');
           },
         ),
-        _buildExpandableMenu(Icons.app_registration, "Registration", [
-          _sidebarSubItem(
-            context,
-            "Organization",
-            '/organization-registration',
-          ),
-          _sidebarSubItem(context, "Device", '/device-registration'),
-          _sidebarSubItem(context, "Generate QR", '/generate-qr'),
-        ]),
-        _buildExpandableMenu(Icons.pie_chart, "MIS", [
-          _sidebarSubItem(context, "Organizations", '/mis-organizations'),
-          _sidebarSubItem(context, "Device", '/mis-devices'),
-          _sidebarSubItem(context, "Doctor", '/mis-doctors'),
-          _sidebarSubItem(context, "Mother", '/mis-mothers'),
-          _sidebarSubItem(context, "Test", '/mis-tests'),
-        ]),
-        _sidebarItem(Icons.analytics, "Analytics"),
-        _sidebarItem(Icons.article, "Reports"),
-        _sidebarItem(Icons.settings, "Operations"),
-        _sidebarItem(Icons.people, "Users"),
-        Spacer(),
-        _sidebarItem(Icons.logout, "Logout", onTap: logoutCallback),
+        _ExpandableMenu(
+          icon: Icons.app_registration,
+          title: "Registration",
+          children: [
+            _SidebarItem(
+              title: "Organization",
+              route: '/organization-registration',
+            ),
+            _SidebarItem(title: "Device", route: '/device-registration'),
+            _SidebarItem(title: "Generate QR", route: '/generate-qr'),
+          ],
+        ),
+        _ExpandableMenu(
+          icon: Icons.pie_chart,
+          title: "MIS",
+          children: [
+            _SidebarItem(title: "Organizations", route: '/mis-organizations'),
+            _SidebarItem(title: "Device", route: '/mis-devices'),
+            _SidebarItem(title: "Doctor", route: '/mis-doctors'),
+            _SidebarItem(title: "Mother", route: '/mis-mothers'),
+            _SidebarItem(title: "Test", route: '/mis-tests'),
+          ],
+        ),
+        _SidebarItem(icon: Icons.analytics, title: "Analytics"),
+        _SidebarItem(icon: Icons.article, title: "Reports"),
+        _SidebarItem(icon: Icons.settings, title: "Operations"),
+        _SidebarItem(icon: Icons.people, title: "Users"),
+        const Spacer(),
+        // _SidebarItem(
+        //   icon: Icons.logout,
+        //   title: "Logout",
+        //   onTap: logoutCallback,
+        // ),
       ],
     ),
   );
 }
 
-Widget _sidebarItem(IconData icon, String title, {VoidCallback? onTap}) {
-  return ListTile(
-    leading: Icon(icon, color: Colors.white),
-    title: Text(title, style: TextStyle(color: Colors.white)),
-    onTap: onTap,
-  );
+// Sidebar item with hover effect
+class _SidebarItem extends StatefulWidget {
+  final IconData? icon;
+  final String title;
+  final String? route;
+  final VoidCallback? onTap;
+
+  const _SidebarItem({
+    Key? key,
+    this.icon,
+    required this.title,
+    this.route,
+    this.onTap,
+  }) : super(key: key);
+
+  @override
+  _SidebarItemState createState() => _SidebarItemState();
 }
 
-Widget _buildExpandableMenu(
-  IconData icon,
-  String title,
-  List<Widget> children,
-) {
-  return Theme(
-    data: ThemeData().copyWith(dividerColor: Colors.transparent),
-    child: ExpansionTile(
-      leading: Icon(icon, color: Colors.white),
-      title: Text(title, style: TextStyle(color: Colors.white)),
-      children: children,
-    ),
-  );
+class _SidebarItemState extends State<_SidebarItem> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: () {
+          if (widget.route != null) {
+            Navigator.pushNamed(context, widget.route!);
+          } else if (widget.onTap != null) {
+            widget.onTap!();
+          }
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+          decoration: BoxDecoration(
+            color: _isHovered ? Colors.cyan[700] : Colors.transparent,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Row(
+            children: [
+              if (widget.icon != null)
+                Icon(
+                  widget.icon,
+                  size: 18,
+                  color: _isHovered ? Colors.white : Colors.grey[600],
+                ),
+              if (widget.icon != null) const SizedBox(width: 10),
+              Text(
+                widget.title,
+                style: TextStyle(
+                  color: _isHovered ? Colors.white : Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-Widget _sidebarSubItem(BuildContext context, String title, String route) {
-  return ListTile(
-    title: Text(title, style: TextStyle(color: Colors.white)),
-    onTap: () {
-      Navigator.pushNamed(context, route);
-    },
-  );
+// Expandable menu with hover effect
+class _ExpandableMenu extends StatefulWidget {
+  final IconData icon;
+  final String title;
+  final List<Widget> children;
+
+  const _ExpandableMenu({
+    Key? key,
+    required this.icon,
+    required this.title,
+    required this.children,
+  }) : super(key: key);
+
+  @override
+  _ExpandableMenuState createState() => _ExpandableMenuState();
+}
+
+class _ExpandableMenuState extends State<_ExpandableMenu> {
+  bool _isHovered = false;
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        MouseRegion(
+          onEnter: (_) => setState(() => _isHovered = true),
+          onExit: (_) => setState(() => _isHovered = false),
+          child: GestureDetector(
+            onTap: () => setState(() => _isExpanded = !_isExpanded),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              decoration: BoxDecoration(
+                color:
+                    _isExpanded
+                        ? Colors.grey[900] // Change to grey[900] when expanded
+                        : (_isHovered ? Colors.cyan[700] : Colors.transparent),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    widget.icon,
+                    size: 18,
+                    color:
+                        _isHovered || _isExpanded
+                            ? Colors.white
+                            : Colors.grey[600],
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      widget.title,
+                      style: TextStyle(
+                        color:
+                            _isHovered || _isExpanded
+                                ? Colors.white
+                                : Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    _isExpanded ? Icons.expand_less : Icons.expand_more,
+                    color:
+                        _isHovered || _isExpanded ? Colors.white : Colors.white,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          color:
+              _isExpanded
+                  ? Colors.grey[900]
+                  : Colors.transparent, // Keep background grey when expanded
+          child: Column(children: _isExpanded ? widget.children : []),
+        ),
+      ],
+    );
+  }
 }

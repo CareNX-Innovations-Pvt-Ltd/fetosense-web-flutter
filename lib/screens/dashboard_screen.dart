@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'organization_registration.dart';
+import 'device_registration.dart';
 import 'sidebar.dart';
 import 'appbar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../services/auth_service.dart';
 import 'package:appwrite/appwrite.dart';
+import 'bottom_navigation_bar.dart';
 
 class DashboardScreen extends StatefulWidget {
   final Client client;
@@ -23,6 +25,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   late AuthService _authService;
   String userEmail = "";
+  bool isSidebarOpen = true; // Sidebar visibility state
 
   @override
   void initState() {
@@ -42,6 +45,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
+  void _toggleSidebar() {
+    setState(() {
+      isSidebarOpen = !isSidebarOpen;
+    });
+  }
+
   void _logout() async {
     await _authService.logoutUser();
     Navigator.pushReplacementNamed(context, '/');
@@ -51,19 +60,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black87,
-      appBar: buildAppBar(
-        userEmail,
-        _logout,
-      ), // AppBar imported from appbar.dart
-      body: Row(
+      appBar: buildAppBar(_toggleSidebar, userEmail),
+      body: Column(
         children: [
-          buildSidebar(context, _logout), // Sidebar imported from sidebar.dart
-          getChild(widget.childIndex),
+          Expanded(
+            child: Row(
+              children: [
+                if (isSidebarOpen) buildSidebar(context, _logout),
+                Expanded(child: getChild(widget.childIndex)),
+              ],
+            ),
+          ),
+          const BottomNavBar(), // ✅ Add the Bottom Navigation Bar
         ],
       ),
     );
   }
 
+  // Restored methods below 👇
+
+  /// **Builds top statistics cards**
   Widget _buildTopStats() {
     return Container(
       padding: EdgeInsets.all(16),
@@ -80,6 +96,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  /// **Builds individual stat cards**
   Widget _statCard(IconData icon, String title, String count) {
     return Container(
       padding: EdgeInsets.all(16),
@@ -106,6 +123,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  /// **Builds the graph section**
   Widget _buildGraphSection() {
     return Container(
       padding: EdgeInsets.all(16),
@@ -143,15 +161,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget getChild(int childIndex) {
-    switch (childIndex) {
-      case 0:
-        return Expanded(
-          child: Column(
-            children: [_buildTopStats(), Expanded(child: _buildGraphSection())],
-          ),
-        );
-      default:
-        return OrganizationRegistration();
+    if (childIndex == 0) {
+      return Column(
+        children: [
+          _buildTopStats(),
+          Expanded(child: _buildGraphSection()), // ✅ Keep Expanded here
+        ],
+      );
+    } else if (childIndex == 1) {
+      return OrganizationRegistration(); // ❌ DO NOT wrap this in Expanded if it already has one inside.
+    } else if (childIndex == 2) {
+      return DeviceRegistration(); // ❌ Same here
+    } else {
+      return OrganizationRegistration();
     }
   }
 }

@@ -40,7 +40,8 @@ class MyApp extends StatelessWidget {
             ), // Home Page Route
         '/organization-registration':
             (context) => DashboardScreen(client: client, childIndex: 1),
-        // '/device-registration': (context) => DeviceRegistration(),
+        '/device-registration':
+            (context) => DashboardScreen(client: client, childIndex: 2),
         '/generate-qr': (context) => GenerateQRPage(),
         '/mis-organizations':
             (context) => OrganizationDetailsPage(client: client),
