@@ -25,7 +25,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   late AuthService _authService;
   String userEmail = "";
-  bool isSidebarOpen = true; // Sidebar visibility state
+  bool isSidebarOpen = true;
 
   @override
   void initState() {
@@ -71,15 +71,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
           ),
-          const BottomNavBar(), // ✅ Add the Bottom Navigation Bar
+          const BottomNavBar(),
         ],
       ),
     );
   }
 
-  // Restored methods below 👇
-
-  /// **Builds top statistics cards**
   Widget _buildTopStats() {
     return Container(
       padding: EdgeInsets.all(16),
@@ -96,7 +93,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  /// **Builds individual stat cards**
   Widget _statCard(IconData icon, String title, String count) {
     return Container(
       padding: EdgeInsets.all(16),
@@ -123,7 +119,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  /// **Builds the graph section**
   Widget _buildGraphSection() {
     return Container(
       padding: EdgeInsets.all(16),
@@ -163,17 +158,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget getChild(int childIndex) {
     if (childIndex == 0) {
       return Column(
-        children: [
-          _buildTopStats(),
-          Expanded(child: _buildGraphSection()), // ✅ Keep Expanded here
-        ],
+        children: [_buildTopStats(), Expanded(child: _buildGraphSection())],
       );
     } else if (childIndex == 1) {
-      return OrganizationRegistration(); // ❌ DO NOT wrap this in Expanded if it already has one inside.
+      return OrganizationRegistration(client: widget.client);
     } else if (childIndex == 2) {
-      return DeviceRegistration(); // ❌ Same here
+      return DeviceRegistration(client: widget.client);
     } else {
-      return OrganizationRegistration();
+      return OrganizationRegistration(client: widget.client);
     }
   }
 }

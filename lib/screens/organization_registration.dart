@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'sidebar.dart'; // Import the sidebar
-import 'appbar.dart'; // Import the appbar
+import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/models.dart' as models;
 
 class OrganizationRegistration extends StatefulWidget {
-  const OrganizationRegistration({super.key});
+  final Client client;
+  const OrganizationRegistration({super.key, required this.client});
 
   @override
   State createState() => _OrganizationRegistrationState();
@@ -12,20 +13,19 @@ class OrganizationRegistration extends StatefulWidget {
 class _OrganizationRegistrationState extends State<OrganizationRegistration> {
   final _formKey = GlobalKey<FormState>();
 
-  // Controllers for text fields
+  late Databases db;
+
   TextEditingController organizationController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
   TextEditingController contactPersonController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController streetController = TextEditingController();
 
-  // Dropdown selected values
   String? selectedStatus;
   String? selectedDesignation;
   String? selectedState;
   String? selectedCity;
 
-  // Dummy data for dropdowns
   List<String> statusList = ["Trial", "Demo", "Sold"];
   List<String> designationList = ["Manager", "Executive", "Admin"];
   List<String> stateList = ["Maharashtra", "Karnataka", "Gujarat"];
@@ -34,6 +34,12 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
     "Karnataka": ["Bangalore", "Mysore"],
     "Gujarat": ["Ahmedabad", "Surat"],
   };
+
+  @override
+  void initState() {
+    super.initState();
+    db = Databases(widget.client);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +71,6 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
                 ),
                 SizedBox(height: 10),
                 Container(
-                  // width: 700,
-                  // padding: EdgeInsets.symmetric(horizontal: -10),
                   height: 1,
                   color: Colors.white,
                   margin: EdgeInsets.symmetric(horizontal: 0),
@@ -104,72 +108,6 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
     );
   }
 
-  /*
-  child: Expanded(
-        child: SingleChildScrollView(
-          child: Container(
-            width: 700, // Set form width
-            padding: EdgeInsets.all(15.0),
-            decoration: BoxDecoration(
-              color: Colors.black45,
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: Colors.white, width: 0.5),
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    "Organization Registration",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    // width: 700,
-                    // padding: EdgeInsets.symmetric(horizontal: -10),
-                    height: 1,
-                    color: Colors.white,
-                    margin: EdgeInsets.symmetric(horizontal: 0),
-                  ),
-                  SizedBox(height: 20),
-                  _buildFormFields(),
-                  SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: _saveForm,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.cyan[700],
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 40,
-                          vertical: 12,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      child: Text(
-                        "Save",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-   */
   Widget _buildFormFields() {
     return Column(
       children: [
@@ -301,7 +239,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
         _buildLabel(label, isRequired),
         SizedBox(height: 8),
         SizedBox(
-          height: 40, // Set fixed height
+          height: 40,
           child: TextFormField(
             controller: controller,
             style: TextStyle(color: Colors.grey),
@@ -334,7 +272,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
         _buildLabel(label, isRequired),
         SizedBox(height: 8),
         SizedBox(
-          height: 40, // Set fixed height
+          height: 40,
           child: DropdownButtonFormField<String>(
             value: selectedValue,
             items:
@@ -362,10 +300,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
       filled: true,
       fillColor: Colors.black54,
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-      contentPadding: EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 12,
-      ), // Adjust height
+      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
     );
   }
 
@@ -378,9 +313,34 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
     );
   }
 
-  void _saveForm() {
+  void _saveForm() async {
     if (_formKey.currentState!.validate()) {
-      print("Form Submitted!");
+      try {
+        final response = await db.createDocument(
+          databaseId: '67e14dc00025fa9f71ad',
+          collectionId: '67e14dcb001889e9167d',
+          documentId: ID.unique(),
+          data: {
+            'organization': organizationController.text,
+            'mobile': mobileController.text,
+            'status': selectedStatus,
+            'designation': selectedDesignation,
+            'contact_person': contactPersonController.text,
+            'email': emailController.text,
+            'street': streetController.text,
+            'state': selectedState,
+            'city': selectedCity,
+            'country': "India",
+          },
+        );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Organization saved successfully!')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      }
     }
   }
 }

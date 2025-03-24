@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'sidebar.dart'; // Import the sidebar
 import 'appbar.dart'; // Import the appbar
+import 'package:appwrite/appwrite.dart';
 
 class DeviceRegistration extends StatefulWidget {
-  const DeviceRegistration({super.key});
+  final Client client;
+  const DeviceRegistration({super.key, required this.client});
 
   @override
   State createState() => _DeviceRegistrationState();
