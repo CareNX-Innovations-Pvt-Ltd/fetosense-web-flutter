@@ -48,7 +48,6 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
         alignment: Alignment.topCenter,
         child: Container(
           margin: EdgeInsets.all(16),
-          padding: EdgeInsets.all(15.0),
           decoration: BoxDecoration(
             color: Colors.black45,
             borderRadius: BorderRadius.circular(5),
@@ -61,43 +60,53 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  "Organization Registration",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.normal,
+                Container(
+                  margin: EdgeInsets.only(bottom: 8),
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Colors.white, width: 1),
+                    ),
+                  ),
+                  child: Text(
+                    "Organization Registration",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
                 ),
-                SizedBox(height: 10),
-                Container(
-                  height: 1,
-                  color: Colors.white,
-                  margin: EdgeInsets.symmetric(horizontal: 0),
-                ),
-                SizedBox(height: 20),
-                _buildFormFields(),
-                SizedBox(height: 20),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: _saveForm,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.cyan[700],
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 40,
-                        vertical: 12,
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 20),
+                      _buildFormFields(),
+                      SizedBox(height: 20),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: _saveForm,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.cyan[700],
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 40,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          child: Text(
+                            "Save",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-                    child: Text(
-                      "Save",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    ],
                   ),
                 ),
               ],
@@ -318,16 +327,16 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
       try {
         final response = await db.createDocument(
           databaseId: '67e14dc00025fa9f71ad',
-          collectionId: '67e14dcb001889e9167d',
+          collectionId: '67e293bc001845f81688',
           documentId: ID.unique(),
           data: {
-            'organization': organizationController.text,
+            'name': organizationController.text,
             'mobile': mobileController.text,
             'status': selectedStatus,
             'designation': selectedDesignation,
-            'contact_person': contactPersonController.text,
+            'contactPerson': contactPersonController.text,
             'email': emailController.text,
-            'street': streetController.text,
+            'addressLine': streetController.text,
             'state': selectedState,
             'city': selectedCity,
             'country': "India",

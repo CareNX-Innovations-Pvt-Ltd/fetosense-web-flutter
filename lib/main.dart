@@ -43,9 +43,10 @@ class MyApp extends StatelessWidget {
 
         '/device-registration':
             (context) => DashboardScreen(client: client, childIndex: 2),
-        '/generate-qr': (context) => GenerateQRPage(),
+        '/generate-qr':
+            (context) => DashboardScreen(client: client, childIndex: 3),
         '/mis-organizations':
-            (context) => OrganizationDetailsPage(client: client),
+            (context) => DashboardScreen(client: client, childIndex: 4),
       },
     );
   }

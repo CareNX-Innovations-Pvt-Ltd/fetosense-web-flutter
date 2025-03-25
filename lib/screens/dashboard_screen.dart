@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'generate_qr_page.dart';
 import 'organization_registration.dart';
 import 'device_registration.dart';
 import 'sidebar.dart';
@@ -7,6 +8,7 @@ import 'package:fl_chart/fl_chart.dart';
 import '../services/auth_service.dart';
 import 'package:appwrite/appwrite.dart';
 import 'bottom_navigation_bar.dart';
+import 'organization_details_page.dart';
 
 class DashboardScreen extends StatefulWidget {
   final Client client;
@@ -42,6 +44,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       });
     } catch (e) {
       debugPrint("Error fetching user: $e");
+      setState(() {
+        userEmail = 'Error';
+      });
     }
   }
 
@@ -164,8 +169,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
       return OrganizationRegistration(client: widget.client);
     } else if (childIndex == 2) {
       return DeviceRegistration(client: widget.client);
+    } else if (childIndex == 3) {
+      return const GenerateQRPage();
+    } else if (childIndex == 4) {
+      return OrganizationDetailsPage(client: widget.client); // ✅ Correct
     } else {
-      return OrganizationRegistration(client: widget.client);
+      return const Center(
+        child: Text("Page not found", style: TextStyle(color: Colors.white)),
+      );
     }
   }
 }

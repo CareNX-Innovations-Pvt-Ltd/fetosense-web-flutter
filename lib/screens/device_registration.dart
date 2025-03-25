@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'sidebar.dart'; // Import the sidebar
-import 'appbar.dart'; // Import the appbar
 import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/models.dart' as models;
+import 'sidebar.dart';
+import 'appbar.dart';
 
 class DeviceRegistration extends StatefulWidget {
   final Client client;
@@ -13,156 +14,84 @@ class DeviceRegistration extends StatefulWidget {
 
 class _DeviceRegistrationState extends State<DeviceRegistration> {
   final _formKey = GlobalKey<FormState>();
+  late Databases db;
 
-  // Controllers for text fields
   TextEditingController deviceNameController = TextEditingController();
   TextEditingController kitIdController = TextEditingController();
   TextEditingController tabletSerialNumberController = TextEditingController();
   TextEditingController tocoIdController = TextEditingController();
 
-  // Dropdown selected values
   String? selectedOrganization;
   String? selectedProductType;
 
-  // Dummy data for dropdowns
   List<String> organizationList = ["Trial", "Demo", "Sold"];
-  List<String> productTypeList = ["Fetosense Main", "Fetosense Mini"];
+  List<String> productTypeList = ["Fetosense_Main", "Fetosense_Mini"];
+
+  @override
+  void initState() {
+    super.initState();
+    db = Databases(widget.client);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Container(
+      alignment: Alignment.topCenter,
       child: Container(
-        alignment: Alignment.topCenter,
-        child: Container(
-          margin: EdgeInsets.all(16),
-          padding: EdgeInsets.all(15.0),
-          decoration: BoxDecoration(
-            color: Colors.black45,
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(color: Colors.white, width: 0.5),
-          ),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  "Device Registration",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Container(
-                  // width: 700,
-                  // padding: EdgeInsets.symmetric(horizontal: -10),
-                  height: 1,
+        margin: EdgeInsets.all(16),
+        padding: EdgeInsets.all(15.0),
+        decoration: BoxDecoration(
+          color: Colors.black45,
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(color: Colors.white, width: 0.5),
+        ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                "Device Registration",
+                style: TextStyle(
                   color: Colors.white,
-                  margin: EdgeInsets.symmetric(horizontal: 0),
+                  fontSize: 15,
+                  fontWeight: FontWeight.normal,
                 ),
-                SizedBox(height: 20),
-                _buildFormFields(),
-                SizedBox(height: 20),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: _saveForm,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.cyan[700],
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 40,
-                        vertical: 12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-                    child: Text(
-                      "Save",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                height: 1,
+                color: Colors.white,
+                margin: EdgeInsets.symmetric(horizontal: 0),
+              ),
+              SizedBox(height: 20),
+              _buildFormFields(),
+              SizedBox(height: 20),
+              Center(
+                child: ElevatedButton(
+                  onPressed: _saveForm,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.cyan[700],
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
                     ),
                   ),
+                  child: Text(
+                    "Save",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  /*
-  child: Expanded(
-        child: SingleChildScrollView(
-          child: Container(
-            width: 700, // Set form width
-            padding: EdgeInsets.all(15.0),
-            decoration: BoxDecoration(
-              color: Colors.black45,
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: Colors.white, width: 0.5),
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    "Organization Registration",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    // width: 700,
-                    // padding: EdgeInsets.symmetric(horizontal: -10),
-                    height: 1,
-                    color: Colors.white,
-                    margin: EdgeInsets.symmetric(horizontal: 0),
-                  ),
-                  SizedBox(height: 20),
-                  _buildFormFields(),
-                  SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: _saveForm,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.cyan[700],
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 40,
-                          vertical: 12,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      child: Text(
-                        "Save",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-   */
   Widget _buildFormFields() {
     return Column(
       children: [
@@ -172,9 +101,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
             organizationList,
             selectedOrganization,
             "Select Organization",
-            (value) {
-              setState(() => selectedOrganization = value);
-            },
+            (value) => setState(() => selectedOrganization = value),
             true,
           ),
           _buildColumnWithDropdown(
@@ -182,9 +109,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
             productTypeList,
             selectedProductType,
             "Select Product Type",
-            (value) {
-              setState(() => selectedProductType = value);
-            },
+            (value) => setState(() => selectedProductType = value),
             true,
           ),
         ]),
@@ -252,7 +177,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
         _buildLabel(label, isRequired),
         SizedBox(height: 8),
         SizedBox(
-          height: 40, // Set fixed height
+          height: 40,
           child: TextFormField(
             controller: controller,
             style: TextStyle(color: Colors.grey),
@@ -285,7 +210,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
         _buildLabel(label, isRequired),
         SizedBox(height: 8),
         SizedBox(
-          height: 40, // Set fixed height
+          height: 40,
           child: DropdownButtonFormField<String>(
             value: selectedValue,
             items:
@@ -313,10 +238,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
       filled: true,
       fillColor: Colors.black54,
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-      contentPadding: EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 12,
-      ), // Adjust height
+      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
     );
   }
 
@@ -329,9 +251,30 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
     );
   }
 
-  void _saveForm() {
+  void _saveForm() async {
     if (_formKey.currentState!.validate()) {
-      print("Form Submitted!");
+      try {
+        final response = await db.createDocument(
+          databaseId: '67e14dc00025fa9f71ad',
+          collectionId: '67e23563002807aa6528',
+          documentId: ID.unique(),
+          data: {
+            'organization': selectedOrganization,
+            'product_type': selectedProductType,
+            'device_name': deviceNameController.text,
+            'kit_id': kitIdController.text,
+            'tablet_serial_number': tabletSerialNumberController.text,
+            'toco_id': tocoIdController.text,
+          },
+        );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Device registered successfully!')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      }
     }
   }
 }
