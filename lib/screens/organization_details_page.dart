@@ -1,6 +1,8 @@
+// lib/screens/organization_details_page.dart
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
+import 'package:fetosense_mis/services/excel_export_service.dart';
 
 class OrganizationDetailsPage extends StatefulWidget {
   final Client client;
@@ -19,18 +21,30 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
   DateTime? fromDate;
   DateTime? tillDate;
 
+  late TextEditingController fromDateController;
+  late TextEditingController tillDateController;
+
   @override
   void initState() {
     super.initState();
     db = Databases(widget.client);
+    fromDateController = TextEditingController();
+    tillDateController = TextEditingController();
     _fetchOrganizations();
+  }
+
+  @override
+  void dispose() {
+    fromDateController.dispose();
+    tillDateController.dispose();
+    super.dispose();
   }
 
   Future<void> _fetchOrganizations() async {
     try {
       final result = await db.listDocuments(
-        databaseId: '67e14dc00025fa9f71ad', // Replace with your DB ID
-        collectionId: '67e293bc001845f81688', // Replace with your Collection ID
+        databaseId: '67e14dc00025fa9f71ad',
+        collectionId: '67e293bc001845f81688',
       );
       setState(() {
         organizations = result.documents;
@@ -40,330 +54,381 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
     }
   }
 
+  void _downloadExcel() async {
+    try {
+      await ExcelExportService.exportOrganizationsToExcel(
+        context,
+        organizations,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Failed to export: $e")));
+    }
+  }
+
+  Widget _customDatePicker({
+    required String label,
+    required DateTime? selectedDate,
+    required TextEditingController controller,
+    required VoidCallback onDateCleared,
+    required ValueChanged<DateTime> onDateSelected,
+  }) {
+    return TextFormField(
+      readOnly: true,
+      controller: controller,
+      onTap: () async {
+        final picked = await showDatePicker(
+          context: context,
+          initialDate: selectedDate ?? DateTime.now(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2100),
+          builder:
+              (context, child) => Theme(data: ThemeData.dark(), child: child!),
+        );
+        if (picked != null) {
+          controller.text = "${picked.day}/${picked.month}/${picked.year}";
+          onDateSelected(picked);
+        }
+      },
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: 'Select date',
+        hintStyle: const TextStyle(color: Colors.white),
+        labelStyle: const TextStyle(color: Colors.grey),
+        filled: true,
+        fillColor: const Color(0xFF181A1B),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4),
+          borderSide: BorderSide.none,
+        ),
+        suffixIcon: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF1A86AD),
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(4),
+              bottomRight: Radius.circular(4),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(width: 1, height: 30, color: Colors.white24),
+              IconButton(
+                icon: const Icon(Icons.clear, color: Colors.white),
+                tooltip: 'Clear date',
+                onPressed:
+                    selectedDate != null
+                        ? () {
+                          controller.clear();
+                          onDateCleared();
+                        }
+                        : null,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.topCenter,
       child: Container(
         margin: const EdgeInsets.all(16),
-        padding: const EdgeInsets.all(15.0),
         decoration: BoxDecoration(
-          color: Colors.black45,
+          color: const Color(0xFF181A1B),
           borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: Colors.grey, width: 0.5),
+          border: Border.all(color: const Color(0xFF272A2C), width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Header
-            Row(
-              children: const [
-                Icon(Icons.apartment, color: Colors.white, size: 20),
-                SizedBox(width: 8),
-                Text(
-                  "Organization Details",
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Container(height: 1, color: Colors.white),
-            const SizedBox(height: 20),
-
-            // Filter Row
-            Row(
-              children: [
-                _datePicker("From Date"),
-                const SizedBox(width: 16),
-                _datePicker("Till Date"),
-                const SizedBox(width: 16),
-                ElevatedButton(
-                  onPressed: _fetchOrganizations,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                  ),
-                  child: const Text("Get Data"),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-
-            // Search
-            TextField(
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search, color: Colors.white),
-                hintText: 'Search',
-                hintStyle: const TextStyle(color: Colors.grey),
-                filled: true,
-                fillColor: const Color(0xFF2A2A2A),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
+            Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                color: Color(0xFF1F2223),
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFF3E4346), width: 0.5),
                 ),
               ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: const [
+                      Icon(Icons.apartment, color: Colors.white, size: 20),
+                      SizedBox(width: 8),
+                      Text(
+                        "Organization Details",
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.download, color: Colors.white),
+                    onPressed: _downloadExcel,
+                    tooltip: 'Download Excel',
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 20),
-
-            // Table
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xFF2A2A2A),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    columnSpacing: 16,
-                    headingRowColor: MaterialStateProperty.all(
-                      const Color(0xFF333333),
-                    ),
-                    columns: const [
-                      DataColumn(
-                        label: Text(
-                          "Name",
-                          style: TextStyle(color: Colors.white),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 15.0,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _customDatePicker(
+                          label: "From Date",
+                          selectedDate: fromDate,
+                          controller: fromDateController,
+                          onDateCleared: () => setState(() => fromDate = null),
+                          onDateSelected:
+                              (picked) => setState(() => fromDate = picked),
                         ),
                       ),
-                      DataColumn(
-                        label: Text(
-                          "Device",
-                          style: TextStyle(color: Colors.white),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _customDatePicker(
+                          label: "Till Date",
+                          selectedDate: tillDate,
+                          controller: tillDateController,
+                          onDateCleared: () => setState(() => tillDate = null),
+                          onDateSelected:
+                              (picked) => setState(() => tillDate = picked),
                         ),
                       ),
-                      DataColumn(
-                        label: Text(
-                          "Doctors",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "Mother",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "Test",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "Mobile",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "Status",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "Created On",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "Address",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "Email",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "Action",
-                          style: TextStyle(color: Colors.white),
+                      const SizedBox(width: 16),
+                      SizedBox(
+                        height: 40,
+                        child: ElevatedButton(
+                          onPressed: _fetchOrganizations,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            side: const BorderSide(color: Color(0xFF1A86AD)),
+                          ),
+                          child: const Text(
+                            "Get Data",
+                            style: TextStyle(color: Color(0xFF1A86AD)),
+                          ),
                         ),
                       ),
                     ],
-                    rows:
-                        organizations.map((org) {
-                          final data = org.data;
-                          return DataRow(
-                            cells: [
-                              DataCell(
-                                Text(
-                                  data['name'] ?? '',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              DataCell(
-                                Text(
-                                  data['device']?.toString() ?? '',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              DataCell(
-                                Text(
-                                  data['doctors']?.toString() ?? '',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              DataCell(
-                                Text(
-                                  data['mother']?.toString() ?? '',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              DataCell(
-                                Text(
-                                  data['test']?.toString() ?? '',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              DataCell(
-                                Text(
-                                  data['mobile'] ?? '',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              DataCell(
-                                Text(
-                                  data['status'] ?? '',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              DataCell(
-                                Text(
-                                  data['created_on'] ?? '',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              DataCell(
-                                Text(
-                                  data['address'] ?? '',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              DataCell(
-                                Text(
-                                  data['email'] ?? '',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              DataCell(
-                                Text(
-                                  "Edit",
-                                  style: TextStyle(color: Colors.blue),
-                                ),
-                              ),
-                            ],
-                          );
-                        }).toList(),
                   ),
-                ),
-              ),
-            ),
-
-            // Pagination Placeholder
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Row(
-                children: [
-                  const Text(
-                    "Items per page:",
+                  const SizedBox(height: 20),
+                  const TextField(
                     style: TextStyle(color: Colors.white),
-                  ),
-                  const SizedBox(width: 10),
-                  DropdownButton<int>(
-                    dropdownColor: const Color(0xFF2A2A2A),
-                    value: 5,
-                    items:
-                        [5, 10, 25, 50, 100].map((e) {
-                          return DropdownMenuItem(
-                            value: e,
-                            child: Text(
-                              e.toString(),
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          );
-                        }).toList(),
-                    onChanged: (_) {},
-                  ),
-                  const SizedBox(width: 20),
-                  Text(
-                    "1–${organizations.length} of ${organizations.length}",
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  const Spacer(),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.white,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.search, color: Colors.white),
+                      hintText: 'Search',
+                      hintStyle: TextStyle(color: Colors.grey),
+                      filled: true,
+                      fillColor: Color(0xFF181A1B),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _datePicker(String label) {
-    DateTime? selectedDate = label == "From Date" ? fromDate : tillDate;
-
-    return SizedBox(
-      width: 200,
-      child: GestureDetector(
-        onTap: () async {
-          final picked = await showDatePicker(
-            context: context,
-            initialDate: selectedDate ?? DateTime.now(),
-            firstDate: DateTime(2020),
-            lastDate: DateTime(2100),
-            builder:
-                (context, child) =>
-                    Theme(data: ThemeData.dark(), child: child!),
-          );
-          if (picked != null) {
-            setState(() {
-              if (label == "From Date") {
-                fromDate = picked;
-              } else {
-                tillDate = picked;
-              }
-            });
-          }
-        },
-        child: AbsorbPointer(
-          child: TextFormField(
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              labelText: label,
-              hintText:
-                  selectedDate != null
-                      ? "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}"
-                      : 'Select date',
-              hintStyle: const TextStyle(color: Colors.white),
-              labelStyle: const TextStyle(color: Colors.grey),
-              filled: true,
-              fillColor: const Color(0xFF2A2A2A),
-              suffixIcon: const Icon(Icons.calendar_today, color: Colors.white),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide.none,
+            const SizedBox(height: 20),
+            Expanded(
+              child: SingleChildScrollView(
+                child: DataTable(
+                  columnSpacing: 16,
+                  headingRowColor: MaterialStateProperty.all(
+                    const Color(0xFF181A1B),
+                  ),
+                  columns: const [
+                    DataColumn(
+                      label: Text(
+                        "Name",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        "Device",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        "Doctors",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        "Mother",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        "Test",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        "Mobile",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        "Status",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        "Created On",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        "Address",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        "Email",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        "Action",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows:
+                      organizations.map((org) {
+                        final data = org.data;
+                        return DataRow(
+                          cells: [
+                            DataCell(
+                              Text(
+                                data['name'] ?? '',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                data['device']?.toString() ?? '',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                data['doctors']?.toString() ?? '',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                data['mother']?.toString() ?? '',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                data['test']?.toString() ?? '',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                data['mobile'] ?? '',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                data['status'] ?? '',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                data['created_on'] ?? '',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                '${data['addressLine'] ?? ''}, ${data['city'] ?? ''}, ${data['state'] ?? ''}, ${data['country'] ?? ''}',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                data['email'] ?? '',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            const DataCell(
+                              Text(
+                                "Edit",
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

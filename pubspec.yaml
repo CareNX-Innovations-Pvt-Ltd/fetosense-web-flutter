@@ -16,6 +16,9 @@ dependencies:
   dropdown_button2: ^2.3.9
   qr_flutter: ^4.1.0
   font_awesome_flutter: ^10.6.0
+  excel: ^3.0.0
+  path_provider: ^2.0.14
+  permission_handler: ^11.0.1
 
 
 dev_dependencies:

@@ -43,74 +43,72 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Container(
+      alignment: Alignment.topCenter,
       child: Container(
-        alignment: Alignment.topCenter,
-        child: Container(
-          margin: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.black45,
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(color: Colors.white, width: 0.5),
-          ),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(bottom: 8),
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: Colors.white, width: 1),
-                    ),
-                  ),
-                  child: Text(
-                    "Organization Registration",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.normal,
-                    ),
+        margin: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.black45,
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(color: Colors.white, width: 0.5),
+        ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                margin: EdgeInsets.only(bottom: 8),
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.white, width: 1),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 20),
-                      _buildFormFields(),
-                      SizedBox(height: 20),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: _saveForm,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.cyan[700],
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 40,
-                              vertical: 12,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
+                child: Text(
+                  "Organization Registration",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    SizedBox(height: 20),
+                    _buildFormFields(),
+                    SizedBox(height: 20),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: _saveForm,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.cyan[700],
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 40,
+                            vertical: 12,
                           ),
-                          child: Text(
-                            "Save",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        child: Text(
+                          "Save",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
