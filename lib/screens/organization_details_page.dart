@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:fetosense_mis/services/excel_export_service.dart';
+import '../utils/format_date.dart';
 
 class OrganizationDetailsPage extends StatefulWidget {
   final Client client;
@@ -400,7 +401,7 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
                             ),
                             DataCell(
                               Text(
-                                data['created_on'] ?? '',
+                                formatDate(data['createdOn']),
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),

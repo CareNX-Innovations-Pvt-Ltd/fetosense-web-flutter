@@ -338,6 +338,8 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
             'state': selectedState,
             'city': selectedCity,
             'country': "India",
+            'type': 'organization',
+            'createdOn': DateTime.now().toIso8601String(),
           },
         );
         ScaffoldMessenger.of(context).showSnackBar(
