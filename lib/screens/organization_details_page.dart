@@ -1,9 +1,9 @@
-// lib/screens/organization_details_page.dart
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:fetosense_mis/services/excel_export_service.dart';
 import '../utils/format_date.dart';
+import '../utils/fetch_organizations.dart';
 
 class OrganizationDetailsPage extends StatefulWidget {
   final Client client;
@@ -17,13 +17,15 @@ class OrganizationDetailsPage extends StatefulWidget {
 
 class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
   late Databases db;
-  List<models.Document> organizations = [];
+  List<models.Document> allOrganizations = [];
+  List<models.Document> filteredOrganizations = [];
 
   DateTime? fromDate;
   DateTime? tillDate;
 
   late TextEditingController fromDateController;
   late TextEditingController tillDateController;
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -31,6 +33,7 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
     db = Databases(widget.client);
     fromDateController = TextEditingController();
     tillDateController = TextEditingController();
+    searchController.addListener(_applySearchFilter);
     _fetchOrganizations();
   }
 
@@ -38,20 +41,42 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
   void dispose() {
     fromDateController.dispose();
     tillDateController.dispose();
+    searchController.dispose();
     super.dispose();
   }
 
   Future<void> _fetchOrganizations() async {
     try {
-      final result = await db.listDocuments(
-        databaseId: '67e14dc00025fa9f71ad',
-        collectionId: '67e293bc001845f81688',
+      final result = await fetchOrganizations(
+        db,
+        fromDate: fromDate,
+        tillDate: tillDate,
       );
+
       setState(() {
-        organizations = result.documents;
+        allOrganizations = result;
+        filteredOrganizations = result;
       });
+
+      _applySearchFilter();
     } catch (e) {
       print("Error fetching organizations: $e");
+    }
+  }
+
+  void _applySearchFilter() {
+    final keyword = searchController.text.trim().toLowerCase();
+
+    if (keyword.isEmpty) {
+      setState(() => filteredOrganizations = allOrganizations);
+    } else {
+      setState(() {
+        filteredOrganizations =
+            allOrganizations.where((org) {
+              final name = org.data['name']?.toString().toLowerCase() ?? '';
+              return name.contains(keyword);
+            }).toList();
+      });
     }
   }
 
@@ -59,7 +84,7 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
     try {
       await ExcelExportService.exportOrganizationsToExcel(
         context,
-        organizations,
+        filteredOrganizations,
       );
     } catch (e) {
       ScaffoldMessenger.of(
@@ -226,9 +251,10 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  const TextField(
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
+                  TextField(
+                    controller: searchController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.search, color: Colors.white),
                       hintText: 'Search',
                       hintStyle: TextStyle(color: Colors.grey),
@@ -353,7 +379,7 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
                     ),
                   ],
                   rows:
-                      organizations.map((org) {
+                      filteredOrganizations.map((org) {
                         final data = org.data;
                         return DataRow(
                           cells: [

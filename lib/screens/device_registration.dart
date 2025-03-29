@@ -31,9 +31,15 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
     super.initState();
     db = Databases(widget.client);
 
-    fetchOrganizations(db).then((orgs) {
+    fetchOrganizations(db).then((docs) {
       setState(() {
-        organizationList = orgs;
+        organizationList =
+            docs.map((doc) {
+              return {
+                'id': doc.$id,
+                'name': doc.data['name']?.toString() ?? '',
+              };
+            }).toList();
       });
     });
   }
@@ -45,7 +51,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
       child: Container(
         margin: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.black45,
+          color: Color(0xFF272A2C),
           borderRadius: BorderRadius.circular(5),
           border: Border.all(color: Color(0xFF3E4346), width: 0.5),
         ),

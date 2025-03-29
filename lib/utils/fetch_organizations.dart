@@ -1,16 +1,38 @@
-Future<void> _fetchOrganizations() async {
-  try {
-    List<Query> queries = [];
+import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/models.dart' as models;
 
-    if (fromDate != null) {
-      queries.add(
-        Query.greaterThanEqual('createdOn', fromDate!.toIso8601String()),
-      );
-    }
-    if (tillDate != null) {
-      queries.add(
-        Query.lessThanEqual('createdOn', tillDate!.toIso8601String()),
-      );
+Future<List<models.Document>> fetchOrganizations(
+  Databases db, {
+  DateTime? fromDate,
+  DateTime? tillDate,
+}) async {
+  try {
+    final List<String> queries = [Query.equal('type', 'organization')];
+
+    final bool applyDateFilter = fromDate != null || tillDate != null;
+
+    if (applyDateFilter) {
+      queries.add(Query.isNotNull('createdOn'));
+
+      if (fromDate != null) {
+        queries.add(
+          Query.greaterThanEqual('createdOn', fromDate.toIso8601String()),
+        );
+      }
+
+      if (tillDate != null) {
+        final tillDateEnd = DateTime(
+          tillDate.year,
+          tillDate.month,
+          tillDate.day,
+          23,
+          59,
+          59,
+        );
+        queries.add(
+          Query.lessThanEqual('createdOn', tillDateEnd.toIso8601String()),
+        );
+      }
     }
 
     final result = await db.listDocuments(
@@ -19,10 +41,9 @@ Future<void> _fetchOrganizations() async {
       queries: queries,
     );
 
-    setState(() {
-      organizations = result.documents;
-    });
+    return result.documents;
   } catch (e) {
-    print("Error fetching organizations: $e");
+    print('❌ Error fetching organizations: $e');
+    return [];
   }
 }
