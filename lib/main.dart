@@ -47,6 +47,12 @@ class MyApp extends StatelessWidget {
             (context) => DashboardScreen(client: client, childIndex: 3),
         '/mis-organizations':
             (context) => DashboardScreen(client: client, childIndex: 4),
+        '/mis-devices':
+            (context) => DashboardScreen(client: client, childIndex: 5),
+        '/mis-doctors':
+            (context) => DashboardScreen(client: client, childIndex: 6),
+        '/mis-mothers':
+            (context) => DashboardScreen(client: client, childIndex: 7),
       },
     );
   }

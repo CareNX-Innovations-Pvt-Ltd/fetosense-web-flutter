@@ -2,25 +2,26 @@ import 'package:fetosense_mis/widget/custom_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
-import 'package:fetosense_mis/services/excel_services/devices_excel_download.dart';
+import 'package:fetosense_mis/services/excel_services/mothers_excel_download.dart';
 import '../utils/fetch_devices.dart';
+import '../utils/fetch_doctors.dart';
+import '../utils/fetch_mothers.dart';
 import '../utils/format_date.dart';
 import '../utils/fetch_organizations.dart';
 
-class DeviceDetailsPage extends StatefulWidget {
+class MotherDetailsPage extends StatefulWidget {
   final Client client;
 
-  const DeviceDetailsPage({super.key, required this.client});
+  const MotherDetailsPage({super.key, required this.client});
 
   @override
-  State<DeviceDetailsPage> createState() => _DeviceDetailsPageState();
+  State<MotherDetailsPage> createState() => _MotherDetailsPageState();
 }
 
-class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
+class _MotherDetailsPageState extends State<MotherDetailsPage> {
   late Databases db;
-
-  List<models.Document> allDevices = [];
-  List<models.Document> filteredDevices = [];
+  List<models.Document> allMothers = [];
+  List<models.Document> filteredMothers = [];
 
   DateTime? fromDate;
   DateTime? tillDate;
@@ -36,7 +37,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
     fromDateController = TextEditingController();
     tillDateController = TextEditingController();
     searchController.addListener(_applySearchFilter);
-    _fetchDevices();
+    _fetchMothers();
   }
 
   @override
@@ -47,22 +48,22 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
     super.dispose();
   }
 
-  Future<void> _fetchDevices() async {
+  Future<void> _fetchMothers() async {
     try {
-      final result = await fetchDevices(
+      final result = await fetchMothers(
         db,
         fromDate: fromDate,
         tillDate: tillDate,
       );
 
       setState(() {
-        allDevices = result;
-        filteredDevices = result;
+        allMothers = result;
+        filteredMothers = result;
       });
 
       _applySearchFilter();
     } catch (e) {
-      print("Error fetching devices: $e");
+      print("Error fetching mothers: $e");
     }
   }
 
@@ -70,11 +71,11 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
     final keyword = searchController.text.trim().toLowerCase();
 
     if (keyword.isEmpty) {
-      setState(() => filteredDevices = allDevices);
+      setState(() => filteredMothers = allMothers);
     } else {
       setState(() {
-        filteredDevices =
-            allDevices.where((org) {
+        filteredMothers =
+            allMothers.where((org) {
               final name =
                   org.data['organizationName']?.toString().toLowerCase() ?? '';
               return name.contains(keyword);
@@ -85,7 +86,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
 
   void _downloadExcel() async {
     try {
-      await ExcelExportService.exportDevicesToExcel(context, filteredDevices);
+      await ExcelExportService.exportMothersToExcel(context, filteredMothers);
     } catch (e) {
       ScaffoldMessenger.of(
         context,
@@ -124,7 +125,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                       Icon(Icons.apartment, color: Colors.white, size: 20),
                       SizedBox(width: 8),
                       Text(
-                        "Device Details",
+                        "Mother Details",
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                     ],
@@ -173,7 +174,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                       SizedBox(
                         height: 40,
                         child: ElevatedButton(
-                          onPressed: _fetchDevices,
+                          onPressed: _fetchMothers,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,
                             side: const BorderSide(color: Color(0xFF1A86AD)),
@@ -216,16 +217,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                   columns: const [
                     DataColumn(
                       label: Text(
-                        "Doppler Number",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        "Device Code",
+                        "Name",
                         style: TextStyle(
                           color: Colors.grey,
                           fontWeight: FontWeight.bold,
@@ -243,7 +235,16 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                     ),
                     DataColumn(
                       label: Text(
-                        "Mother",
+                        "Device",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        "Doctor",
                         style: TextStyle(
                           color: Colors.grey,
                           fontWeight: FontWeight.bold,
@@ -259,48 +260,15 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                         ),
                       ),
                     ),
-                    DataColumn(
-                      label: Text(
-                        "CreatedOn",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        "Version",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        "Action",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
                   ],
                   rows:
-                      filteredDevices.map((org) {
+                      filteredMothers.map((org) {
                         final data = org.data;
                         return DataRow(
                           cells: [
                             DataCell(
                               Text(
-                                data['deviceName'] ?? '',
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ),
-                            DataCell(
-                              Text(
-                                data['deviceCode']?.toString() ?? '',
+                                data['name'] ?? '',
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),
@@ -312,7 +280,13 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                             ),
                             DataCell(
                               Text(
-                                data['noOfMother']?.toString() ?? '',
+                                data['deviceName']?.toString() ?? '',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                data['doctorName']?.toString() ?? '',
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),
@@ -320,24 +294,6 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                               Text(
                                 data['noOfTests']?.toString() ?? '',
                                 style: const TextStyle(color: Colors.white),
-                              ),
-                            ),
-                            DataCell(
-                              Text(
-                                formatDate(data['createdOn']),
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ),
-                            DataCell(
-                              Text(
-                                data['appVersion']?.toString() ?? '',
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ),
-                            const DataCell(
-                              Text(
-                                "Edit",
-                                style: TextStyle(color: Colors.blue),
                               ),
                             ),
                           ],

@@ -2,25 +2,25 @@ import 'package:fetosense_mis/widget/custom_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
-import 'package:fetosense_mis/services/excel_services/devices_excel_download.dart';
+import 'package:fetosense_mis/services/excel_services/doctors_excel_download.dart';
 import '../utils/fetch_devices.dart';
+import '../utils/fetch_doctors.dart';
 import '../utils/format_date.dart';
 import '../utils/fetch_organizations.dart';
 
-class DeviceDetailsPage extends StatefulWidget {
+class DoctorDetailsPage extends StatefulWidget {
   final Client client;
 
-  const DeviceDetailsPage({super.key, required this.client});
+  const DoctorDetailsPage({super.key, required this.client});
 
   @override
-  State<DeviceDetailsPage> createState() => _DeviceDetailsPageState();
+  State<DoctorDetailsPage> createState() => _DoctorDetailsPageState();
 }
 
-class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
+class _DoctorDetailsPageState extends State<DoctorDetailsPage> {
   late Databases db;
-
-  List<models.Document> allDevices = [];
-  List<models.Document> filteredDevices = [];
+  List<models.Document> allDoctors = [];
+  List<models.Document> filteredDoctors = [];
 
   DateTime? fromDate;
   DateTime? tillDate;
@@ -36,7 +36,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
     fromDateController = TextEditingController();
     tillDateController = TextEditingController();
     searchController.addListener(_applySearchFilter);
-    _fetchDevices();
+    _fetchDoctors();
   }
 
   @override
@@ -47,22 +47,22 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
     super.dispose();
   }
 
-  Future<void> _fetchDevices() async {
+  Future<void> _fetchDoctors() async {
     try {
-      final result = await fetchDevices(
+      final result = await fetchDoctors(
         db,
         fromDate: fromDate,
         tillDate: tillDate,
       );
 
       setState(() {
-        allDevices = result;
-        filteredDevices = result;
+        allDoctors = result;
+        filteredDoctors = result;
       });
 
       _applySearchFilter();
     } catch (e) {
-      print("Error fetching devices: $e");
+      print("Error fetching doctors: $e");
     }
   }
 
@@ -70,11 +70,11 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
     final keyword = searchController.text.trim().toLowerCase();
 
     if (keyword.isEmpty) {
-      setState(() => filteredDevices = allDevices);
+      setState(() => filteredDoctors = allDoctors);
     } else {
       setState(() {
-        filteredDevices =
-            allDevices.where((org) {
+        filteredDoctors =
+            allDoctors.where((org) {
               final name =
                   org.data['organizationName']?.toString().toLowerCase() ?? '';
               return name.contains(keyword);
@@ -85,7 +85,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
 
   void _downloadExcel() async {
     try {
-      await ExcelExportService.exportDevicesToExcel(context, filteredDevices);
+      await ExcelExportService.exportDoctorsToExcel(context, filteredDoctors);
     } catch (e) {
       ScaffoldMessenger.of(
         context,
@@ -124,7 +124,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                       Icon(Icons.apartment, color: Colors.white, size: 20),
                       SizedBox(width: 8),
                       Text(
-                        "Device Details",
+                        "Doctor Details",
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                     ],
@@ -173,7 +173,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                       SizedBox(
                         height: 40,
                         child: ElevatedButton(
-                          onPressed: _fetchDevices,
+                          onPressed: _fetchDoctors,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,
                             side: const BorderSide(color: Color(0xFF1A86AD)),
@@ -216,7 +216,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                   columns: const [
                     DataColumn(
                       label: Text(
-                        "Doppler Number",
+                        "Name",
                         style: TextStyle(
                           color: Colors.grey,
                           fontWeight: FontWeight.bold,
@@ -225,7 +225,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                     ),
                     DataColumn(
                       label: Text(
-                        "Device Code",
+                        "Email",
                         style: TextStyle(
                           color: Colors.grey,
                           fontWeight: FontWeight.bold,
@@ -270,6 +270,15 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                     ),
                     DataColumn(
                       label: Text(
+                        "L.O.T",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
                         "Version",
                         style: TextStyle(
                           color: Colors.grey,
@@ -288,19 +297,19 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                     ),
                   ],
                   rows:
-                      filteredDevices.map((org) {
+                      filteredDoctors.map((org) {
                         final data = org.data;
                         return DataRow(
                           cells: [
                             DataCell(
                               Text(
-                                data['deviceName'] ?? '',
+                                data['name'] ?? '',
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),
                             DataCell(
                               Text(
-                                data['deviceCode']?.toString() ?? '',
+                                data['email']?.toString() ?? '',
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),
@@ -325,6 +334,12 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                             DataCell(
                               Text(
                                 formatDate(data['createdOn']),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                formatDate(data['lastLoginTime']),
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'device_details_page.dart';
+import 'doctors_detail_page.dart';
 import 'generate_qr_page.dart';
+import 'mothers_details_page.dart';
 import 'organization_registration.dart';
 import 'device_registration.dart';
 import 'sidebar.dart';
@@ -173,6 +176,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       return const GenerateQRPage();
     } else if (childIndex == 4) {
       return OrganizationDetailsPage(client: widget.client); // ✅ Correct
+    } else if (childIndex == 5) {
+      return DeviceDetailsPage(client: widget.client); // ✅ Correct
+    } else if (childIndex == 6) {
+      return DoctorDetailsPage(client: widget.client); // ✅ Correct
+    } else if (childIndex == 7) {
+      return MotherDetailsPage(client: widget.client); // ✅ Correct
     } else {
       return const Center(
         child: Text("Page not found", style: TextStyle(color: Colors.white)),
