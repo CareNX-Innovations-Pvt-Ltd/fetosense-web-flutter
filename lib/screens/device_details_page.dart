@@ -5,7 +5,6 @@ import 'package:appwrite/models.dart' as models;
 import 'package:fetosense_mis/services/excel_services/devices_excel_download.dart';
 import '../utils/fetch_devices.dart';
 import '../utils/format_date.dart';
-import '../utils/fetch_organizations.dart';
 
 class DeviceDetailsPage extends StatefulWidget {
   final Client client;

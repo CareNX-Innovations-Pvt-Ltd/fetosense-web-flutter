@@ -3,6 +3,7 @@ import 'device_details_page.dart';
 import 'doctors_detail_page.dart';
 import 'generate_qr_page.dart';
 import 'mothers_details_page.dart';
+import 'organization_edit_page.dart';
 import 'organization_registration.dart';
 import 'device_registration.dart';
 import 'sidebar.dart';

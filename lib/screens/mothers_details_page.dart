@@ -3,11 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:fetosense_mis/services/excel_services/mothers_excel_download.dart';
-import '../utils/fetch_devices.dart';
-import '../utils/fetch_doctors.dart';
 import '../utils/fetch_mothers.dart';
-import '../utils/format_date.dart';
-import '../utils/fetch_organizations.dart';
 
 class MotherDetailsPage extends StatefulWidget {
   final Client client;
