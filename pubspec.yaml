@@ -31,5 +31,11 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/login/fetosense.png
+    - assets/images/device/doppler.png
+    - assets/images/device/fetosense kit.png
+    - assets/images/device/tablet.png
+    - assets/images/doctor/48-481383_doctor-icon-png-transparent-png.png
+
+
 
  

@@ -31,6 +31,38 @@ InputDecoration _inputDecoration(String hintText) {
   );
 }
 
+Widget buildColumnWithTextField(
+  String label,
+  TextEditingController controller,
+  String hintText,
+  bool isRequired, {
+  bool isNumber = false,
+}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      _buildLabel(label, isRequired),
+      SizedBox(height: 6),
+      SizedBox(
+        height: 40,
+        child: TextFormField(
+          controller: controller,
+          style: TextStyle(color: Colors.grey),
+          keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+          decoration: _inputDecoration(hintText),
+          validator:
+              isRequired
+                  ? (value) =>
+                      (value == null || value.isEmpty)
+                          ? "$label is required"
+                          : null
+                  : null,
+        ),
+      ),
+    ],
+  );
+}
+
 Widget buildColumnWithDropdown(
   String label,
   List<String> items,

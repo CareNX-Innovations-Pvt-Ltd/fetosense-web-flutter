@@ -5,7 +5,7 @@ import 'package:appwrite/models.dart' as models;
 import 'package:fetosense_mis/services/excel_services/organizations_excel_download.dart';
 import '../utils/format_date.dart';
 import '../utils/fetch_organizations.dart';
-import 'organization_edit_page.dart';
+import 'organization_edit_popup.dart';
 
 class OrganizationDetailsPage extends StatefulWidget {
   final Client client;
@@ -396,8 +396,8 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
                                               MediaQuery.of(
                                                 context,
                                               ).size.width *
-                                              0.9,
-                                          height: 500,
+                                              0.6,
+                                          height: 600,
                                           child: OrganizationEditPopup(
                                             client: widget.client,
                                             data:

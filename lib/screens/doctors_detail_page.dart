@@ -5,6 +5,7 @@ import 'package:appwrite/models.dart' as models;
 import 'package:fetosense_mis/services/excel_services/doctors_excel_download.dart';
 import '../utils/fetch_doctors.dart';
 import '../utils/format_date.dart';
+import 'doctor_edit_popup.dart';
 
 class DoctorDetailsPage extends StatefulWidget {
   final Client client;
@@ -347,10 +348,40 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage> {
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),
-                            const DataCell(
-                              Text(
-                                "Edit",
-                                style: TextStyle(color: Colors.blue),
+                            DataCell(
+                              TextButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (context) {
+                                      return Dialog(
+                                        insetPadding: const EdgeInsets.all(20),
+                                        backgroundColor: Colors.transparent,
+                                        child: SizedBox(
+                                          width:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.width *
+                                              0.6,
+                                          height: 600,
+                                          child: DoctorEditPopup(
+                                            client: widget.client,
+                                            data:
+                                                org.data, // pass full org data here
+                                            documentId: org.$id,
+                                            onClose:
+                                                () => Navigator.pop(context),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: const Text(
+                                  "Edit",
+                                  style: TextStyle(color: Colors.blue),
+                                ),
                               ),
                             ),
                           ],
