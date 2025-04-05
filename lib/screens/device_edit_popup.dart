@@ -57,7 +57,7 @@ class _DeviceEditPopupState extends State<DeviceEditPopup> {
     }
   }
 
-  Future<void> _saveChanges() async {
+  Future<void> _updateChanges() async {
     try {
       // Update user collection (deviceCode, deviceId)
       await db.updateDocument(
@@ -111,6 +111,7 @@ class _DeviceEditPopupState extends State<DeviceEditPopup> {
       decoration: BoxDecoration(
         color: const Color(0xFF181A1B),
         borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: const Color(0xFF3E4346)),
       ),
       child: Row(
         children: [
@@ -123,6 +124,7 @@ class _DeviceEditPopupState extends State<DeviceEditPopup> {
               decoration: BoxDecoration(
                 color: const Color(0xFF181A1B),
                 borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: const Color(0xFF3E4346)),
               ),
               child: Column(
                 children: [
@@ -141,18 +143,6 @@ class _DeviceEditPopupState extends State<DeviceEditPopup> {
                     style: const TextStyle(color: Colors.white70),
                   ),
                   const SizedBox(height: 6),
-                  ElevatedButton.icon(
-                    onPressed: () => setState(() => showEditForm = true),
-                    icon: const Icon(Icons.edit, size: 15),
-                    label: const Text("Edit"),
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      backgroundColor: const Color(0xFF1A86AD),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
                   Row(
                     children: [
                       _statCard(
@@ -193,80 +183,79 @@ class _DeviceEditPopupState extends State<DeviceEditPopup> {
               ),
             ),
           ),
+          Expanded(
+            flex: 3,
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Device Details",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                  const Divider(),
+                  const SizedBox(height: 10),
 
-          if (showEditForm)
-            Expanded(
-              flex: 3,
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Device Details",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                    const Divider(),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: buildColumnWithTextField(
-                            "KIT Id",
-                            deviceCodeController,
-                            "Enter KIT Id",
-                            true,
+                  buildColumnWithTextField(
+                    "KIT Id",
+                    deviceCodeController,
+                    "Enter KIT Id",
+                    true,
+                  ),
+                  const SizedBox(height: 10),
+                  buildColumnWithTextField(
+                    "Serial number",
+                    tabletSerialNumberController,
+                    "Enter tablet serial number",
+                    false,
+                  ),
+                  const SizedBox(height: 10),
+                  buildColumnWithTextField(
+                    "Device Id",
+                    deviceNameController,
+                    "Enter bluetooth Id",
+                    true,
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Subtle Save Button
+                      OutlinedButton(
+                        onPressed: _updateChanges,
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Color(0xFF1A86AD)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
                           ),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: buildColumnWithTextField(
-                            "Serial number",
-                            tabletSerialNumberController,
-                            "Enter tablet serial number",
-                            false,
+                        child: const Text(
+                          "Update",
+                          style: TextStyle(color: Color(0xFF1A86AD)),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+
+                      // Highlighted Cancel Button
+                      ElevatedButton(
+                        onPressed: widget.onClose,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF1A86AD),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
                           ),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    buildColumnWithTextField(
-                      "Device Id",
-                      deviceNameController,
-                      "Enter bluetooth Id",
-                      true,
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: _saveChanges,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1A86AD),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          child: const Text("Save"),
-                        ),
-                        const SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: widget.onClose,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1A86AD),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          child: const Text("Cancel"),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                        child: const Text("Cancel"),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
+          ),
         ],
       ),
     );
