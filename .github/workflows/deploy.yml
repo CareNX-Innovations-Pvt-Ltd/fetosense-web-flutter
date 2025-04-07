@@ -1,32 +1,37 @@
-name: Deploy Flutter Web
+name: Deploy Flutter Web to GitHub Pages
 
 on:
   push:
     branches:
-      - main
+      - main  # Trigger deployment on every push to main branch
 
 jobs:
-  build:
+  build_and_deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      # Step 1: Checkout source code
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
+      # Step 2: Setup Flutter environment
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'beta'
+          flutter-version: '3.x' # or specific version you use
+          channel: 'stable'
 
+      # Step 3: Install dependencies
       - name: Install dependencies
         run: flutter pub get
 
+      # Step 4: Build web
       - name: Build Flutter Web
-        run: flutter build web
+        run: flutter build web --release
 
+      # Step 5: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: build/web
-          force_orphan: true
