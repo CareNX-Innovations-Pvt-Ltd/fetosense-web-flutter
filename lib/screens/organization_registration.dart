@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class OrganizationRegistration extends StatefulWidget {
   final Client client;
@@ -324,8 +325,8 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
     if (_formKey.currentState!.validate()) {
       try {
         final response = await db.createDocument(
-          databaseId: '67e14dc00025fa9f71ad',
-          collectionId: '67e293bc001845f81688',
+          databaseId: dotenv.env['FETOSENSE_DEVICE_DATABASE_ID']!,
+          collectionId: dotenv.env['USERS_COLLECTION_ID']!,
           documentId: ID.unique(),
           data: {
             'name': organizationController.text,

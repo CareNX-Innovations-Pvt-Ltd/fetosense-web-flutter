@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../widget/columns.dart';
 
 class OrganizationEditPopup extends StatefulWidget {
@@ -78,8 +79,8 @@ class _OrganizationEditPopupState extends State<OrganizationEditPopup> {
       };
 
       await db.updateDocument(
-        databaseId: '67e14dc00025fa9f71ad',
-        collectionId: '67e293bc001845f81688',
+        databaseId: dotenv.env['FETOSENSE_DEVICE_DATABASE_ID']!,
+        collectionId: dotenv.env['USERS_COLLECTION_ID']!,
         documentId: widget.documentId,
         data: updatedData,
       );
