@@ -8428,7 +8428,7 @@ _.b=b
 _.c=c
 _.d=d},
 aDg:function aDg(){},
-b70(){var s,r,q,p,o,n,m,l,k,j=null,i="https://cloud.appwrite.io/v1",h="https://",g="http://172.172.241.56/v1",f="67ecd82100347201f279",e=new A.a7d(i)
+b70(){var s,r,q,p,o,n,m,l,k,j=null,i="https://cloud.appwrite.io/v1",h="https://",g="https://appwrite.fetosense.com/v1",f="67ecd82100347201f279",e=new A.a7d(i)
 e.d=new A.a6m(new self.AbortController())
 B.c.pJ(B.c.pJ(i,h,"wss://"),"http://","ws://")
 s=t.N
