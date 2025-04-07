@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../widget/columns.dart';
 
 class DoctorEditPopup extends StatefulWidget {
@@ -47,8 +46,8 @@ class _DoctorEditPopupState extends State<DoctorEditPopup> {
       };
 
       await db.updateDocument(
-        databaseId: dotenv.env['FETOSENSE_DEVICE_DATABASE_ID']!,
-        collectionId: dotenv.env['USERS_COLLECTION_ID']!,
+        databaseId: '67ece4a7002a0a732dfd',
+        collectionId: '67f36a7e002c46ea05f0',
         documentId: widget.documentId,
         data: updatedData,
       );

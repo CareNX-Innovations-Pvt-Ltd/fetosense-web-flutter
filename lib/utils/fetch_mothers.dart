@@ -1,6 +1,5 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<List<models.Document>> fetchMothers(
   Databases db, {
@@ -37,8 +36,8 @@ Future<List<models.Document>> fetchMothers(
     }
 
     final result = await db.listDocuments(
-      databaseId: dotenv.env['FETOSENSE_DEVICE_DATABASE_ID']!,
-      collectionId: dotenv.env['USERS_COLLECTION_ID']!,
+      databaseId: '67ece4a7002a0a732dfd',
+      collectionId: '67f36a7e002c46ea05f0',
       queries: queries,
     );
 
