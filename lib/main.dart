@@ -77,8 +77,8 @@ Future<void> main() async {
 
   final client =
       Client()
-        ..setEndpoint(dotenv.env['APPWRITE_ENDPOINT']!)
-        ..setProject(dotenv.env['APPWRITE_PROJECT_ID']!);
+        ..setEndpoint('http://172.172.241.56/v1')
+        ..setProject('67d94dac003bd3e50fc8');
 
   runApp(MyApp(client: client));
 }
