@@ -47,7 +47,6 @@ Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
             _SidebarItem(title: "Device", route: '/mis-devices'),
             _SidebarItem(title: "Doctor", route: '/mis-doctors'),
             _SidebarItem(title: "Mother", route: '/mis-mothers'),
-            _SidebarItem(title: "Test", route: '/mis-tests'),
           ],
         ),
         _SidebarItem(icon: Icons.analytics, title: "Analytics"),
