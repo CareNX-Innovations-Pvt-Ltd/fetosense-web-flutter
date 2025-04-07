@@ -12,7 +12,7 @@ import 'screens/organization_details_page.dart';
 void main() {
   Client client =
       Client()
-        ..setEndpoint('http://172.172.241.56/v1')
+        ..setEndpoint('https://appwrite.fetosense.com/v1')
         ..setProject('67ecd82100347201f279');
 
   runApp(MyApp(client: client));
