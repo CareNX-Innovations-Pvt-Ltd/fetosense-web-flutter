@@ -35,7 +35,7 @@ Future<List<models.Document>> fetchDoctors(
         );
       }
     }
-
+    //for push
     final result = await db.listDocuments(
       databaseId: dotenv.env['FETOSENSE_DEVICE_DATABASE_ID']!,
       collectionId: dotenv.env['USERS_COLLECTION_ID']!,
