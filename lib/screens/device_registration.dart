@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../utils/fetch_organizations.dart';
 
 class DeviceRegistration extends StatefulWidget {
@@ -291,8 +292,9 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
     if (_formKey.currentState!.validate()) {
       try {
         await db.createDocument(
-          databaseId: '67e14dc00025fa9f71ad',
-          collectionId: '67e64eba00363f40d736', // Devices collection
+          databaseId: dotenv.env['FETOSENSE_DEVICE_DATABASE_ID']!,
+          collectionId: dotenv.env['DEVICES_COLLECTION_ID']!,
+
           documentId: ID.unique(),
           data: {
             'deviceCode': kitIdController.text,

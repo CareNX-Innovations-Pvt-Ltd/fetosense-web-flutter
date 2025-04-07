@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../widget/columns.dart';
 
 class DeviceEditPopup extends StatefulWidget {
@@ -43,7 +44,7 @@ class _DeviceEditPopupState extends State<DeviceEditPopup> {
   Future<void> _fetchTabletSerialNumber() async {
     try {
       final result = await db.listDocuments(
-        databaseId: '67e14dc00025fa9f71ad',
+        databaseId: dotenv.env['FETOSENSE_DEVICE_DATABASE_ID']!,
         collectionId: '67e676d9bd35888f7291',
         queries: [Query.equal('documentId', widget.documentId)],
       );
@@ -61,8 +62,8 @@ class _DeviceEditPopupState extends State<DeviceEditPopup> {
     try {
       // Update user collection (deviceCode, deviceId)
       await db.updateDocument(
-        databaseId: '67e14dc00025fa9f71ad',
-        collectionId: '67e293bc001845f81688',
+        databaseId: dotenv.env['FETOSENSE_DEVICE_DATABASE_ID']!,
+        collectionId: dotenv.env['USERS_COLLECTION_ID']!,
         documentId: widget.documentId,
         data: {
           'deviceCode': deviceCodeController.text.trim(),
@@ -72,16 +73,16 @@ class _DeviceEditPopupState extends State<DeviceEditPopup> {
 
       // Update tabletSerialNumber collection
       final tabletResult = await db.listDocuments(
-        databaseId: '67e14dc00025fa9f71ad',
-        collectionId: '67e293bc001845f81688',
+        databaseId: dotenv.env['FETOSENSE_DEVICE_DATABASE_ID']!,
+        collectionId: dotenv.env['USERS_COLLECTION_ID']!,
         queries: [Query.equal('documentId', widget.documentId)],
       );
 
       if (tabletResult.documents.isNotEmpty) {
         final tabletDocId = tabletResult.documents.first.$id;
         await db.updateDocument(
-          databaseId: '67e14dc00025fa9f71ad',
-          collectionId: '67e64eba00363f40d736',
+          databaseId: dotenv.env['FETOSENSE_DEVICE_DATABASE_ID']!,
+          collectionId: dotenv.env['DEVICES_COLLECTION_ID']!,
           documentId: tabletDocId,
           data: {
             'tabletSerialNumber': tabletSerialNumberController.text.trim(),
