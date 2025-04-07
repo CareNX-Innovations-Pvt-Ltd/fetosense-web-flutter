@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
+import '../services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
-  final Client client; // Accepts Appwrite Client
-
+  final Client client;
   LoginScreen({required this.client});
 
   @override
@@ -13,33 +13,40 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool obscurePassword = true;
   String message = "";
 
-  void loginUser() {
-    print("Logging in with: ${usernameController.text}");
-    setState(() {
-      message = "Login attempt made! (Replace with real API call)";
-    });
+  // Add loginUser function
+  void loginUser() async {
+    try {
+      await AuthService(
+        widget.client,
+      ).loginUser(usernameController.text, passwordController.text);
+
+      // If login is successful, navigate to the home page
+      Navigator.pushReplacementNamed(context, '/dashboard');
+    } catch (e) {
+      print("Error logging in: $e"); // Add this line for debugging
+      setState(() {
+        message = "Login failed. Please check credentials.";
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black87,
+      backgroundColor: Color(0xFF1E1E1E),
       body: Center(
         child: Container(
-          width: 800,
+          width: 850,
           height: 400,
           decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(color: Colors.grey.shade900, blurRadius: 10),
-            ],
+            color: Color(0xFF252525),
+            borderRadius: BorderRadius.circular(0),
           ),
           child: Row(
             children: [
-              // Left Side: Login Form
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
@@ -47,52 +54,154 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Login",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold)),
+                      Text(
+                        "Login",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          // fontWeight: FontWeight.bold
+                        ),
+                      ),
                       SizedBox(height: 20),
                       TextField(
                         controller: usernameController,
                         style: TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Colors.grey.shade900,
-                          prefixIcon: Icon(Icons.person, color: Colors.white),
+                          fillColor: Color(0xFF252525),
+                          prefixIcon: Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                right: BorderSide(
+                                  color: Colors.white, // White separator line
+                                  width: 1, // Thickness of separator
+                                ),
+                              ),
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            child: Icon(
+                              Icons.person,
+                              color: Colors.white,
+                            ), // White-bordered icon
+                          ),
                           hintText: "Username",
                           hintStyle: TextStyle(color: Colors.white54),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5)),
+                            borderRadius: BorderRadius.zero,
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                            ), // White outer border
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.zero,
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                            ), // White outer border
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.zero,
+                            borderSide: BorderSide(
+                              color: Colors.cyanAccent,
+                            ), // Highlight color on focus
+                          ),
                         ),
                       ),
                       SizedBox(height: 15),
                       TextField(
                         controller: passwordController,
-                        obscureText: true,
+                        obscureText: obscurePassword,
                         style: TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Colors.grey.shade900,
-                          prefixIcon: Icon(Icons.lock, color: Colors.white),
+                          fillColor: Color(0xFF252525),
+                          prefixIcon: Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                right: BorderSide(
+                                  color: Colors.white, // White separator line
+                                  width: 1.5, // Thickness of separator
+                                ),
+                              ),
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            child: Icon(
+                              Icons.lock,
+                              color: Colors.white,
+                            ), // White-bordered icon
+                          ),
                           hintText: "Password",
                           hintStyle: TextStyle(color: Colors.white54),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5)),
+                            borderRadius: BorderRadius.zero,
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                            ), // White outer border
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.zero,
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                            ), // White outer border
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.zero,
+                            borderSide: BorderSide(
+                              color: Colors.cyanAccent,
+                            ), // Highlight color on focus
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              obscurePassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                obscurePassword = !obscurePassword;
+                              });
+                            },
+                          ),
                         ),
                       ),
                       SizedBox(height: 15),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: loginUser,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueAccent,
-                            padding: EdgeInsets.symmetric(vertical: 12),
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: false,
+                            onChanged: (value) {},
+                            activeColor: Colors.blue,
                           ),
-                          child: Text("Login",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                          Text(
+                            "I'm not a robot",
+                            style: TextStyle(color: Colors.white54),
+                          ),
+                          Spacer(),
+                          Icon(Icons.security, color: Colors.white54),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(
+                        width: 100,
+                        child: ElevatedButton(
+                          onPressed:
+                              loginUser, // Call loginUser when the button is tapped
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.cyan[700],
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius
+                                      .zero, // Makes button corners square
+                            ),
+                          ),
+                          child: Text(
+                            "Login",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                       SizedBox(height: 10),
@@ -102,67 +211,57 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(color: Colors.redAccent),
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Center(
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/register');
-                          },
-                          child: Text("Create an Account",
-                              style: TextStyle(color: Colors.blueAccent)),
-                        ),
-                      ),
                     ],
                   ),
                 ),
               ),
-              // Right Side: Company Info
               Expanded(
                 child: Container(
                   padding: EdgeInsets.all(24.0),
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                  ),
+                  color: Color(0xFF252525),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.network(
-  'https://dummyimage.com/150x150/000/fff.png&text=Logo', // New placeholder
-  height: 80,
-  errorBuilder: (context, error, stackTrace) {
-    return Icon(Icons.image_not_supported, size: 80, color: Colors.grey);
-  },
-),
-
-                      SizedBox(height: 20),
-                      Text(
-                        "fetosense",
-                        style: TextStyle(
-                            color: Colors.tealAccent,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold),
+                      Image.asset(
+                        'assets/images/login/fetosense.png', // Remove the extra `/` at the beginning
+                        height: 80,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            Icons.image_not_supported,
+                            size: 80,
+                            color: Colors.grey,
+                          );
+                        },
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 20),
                       Text(
                         "Fetosense - India's most advanced product for Fetal Heart Monitoring",
                         textAlign: TextAlign.center,
-                        style:
-                            TextStyle(color: Colors.white60, fontSize: 14),
+                        style: TextStyle(color: Colors.white60, fontSize: 14),
                       ),
                       SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueAccent,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 12),
+                      SizedBox(
+                        width: 100,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.cyan[700],
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius
+                                      .zero, // Makes button corners square
+                            ),
+                          ),
+                          child: Text(
+                            "Home Page",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                        child: Text("Home Page"),
                       ),
                     ],
                   ),

@@ -1,12 +1,19 @@
+import 'package:fetosense_mis/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
-import 'screens/login_screen.dart'; // Import LoginScreen
-import 'screens/register_screen.dart'; // Import RegisterScreen
+import 'screens/login_screen.dart';
+import 'screens/register_screen.dart';
+import 'screens/home_screen.dart';
+import 'screens/organization_registration.dart';
+import 'screens/device_registration.dart';
+import 'screens/generate_qr_page.dart';
+import 'screens/organization_details_page.dart';
 
 void main() {
-  Client client = Client()
-    ..setEndpoint('https://cloud.appwrite.io/v1') // Appwrite API Endpoint
-    ..setProject('67d157b9003b4e1a231c'); // Your Appwrite Project ID
+  Client client =
+      Client()
+        ..setEndpoint('http://172.172.241.56/v1')
+        ..setProject('67d94dac003bd3e50fc8');
 
   runApp(MyApp(client: client));
 }
@@ -20,11 +27,32 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Web + Appwrite',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(), // Dark theme to match your login screen
+      theme: ThemeData.dark(),
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginScreen(client: client), // Default Login Screen
-        '/register': (context) => RegisterScreen(client: client), // Register Screen Route
+        '/': (context) => LoginScreen(client: client),
+        '/register': (context) => RegisterScreen(client: client),
+        // '/home': (context) => HomeScreen(client: client), // Home Page Route
+        '/dashboard':
+            (context) => DashboardScreen(
+              client: client,
+              childIndex: 0,
+            ), // Home Page Route
+        '/organization-registration':
+            (context) => DashboardScreen(client: client, childIndex: 1),
+
+        '/device-registration':
+            (context) => DashboardScreen(client: client, childIndex: 2),
+        '/generate-qr':
+            (context) => DashboardScreen(client: client, childIndex: 3),
+        '/mis-organizations':
+            (context) => DashboardScreen(client: client, childIndex: 4),
+        '/mis-devices':
+            (context) => DashboardScreen(client: client, childIndex: 5),
+        '/mis-doctors':
+            (context) => DashboardScreen(client: client, childIndex: 6),
+        '/mis-mothers':
+            (context) => DashboardScreen(client: client, childIndex: 7),
       },
     );
   }
