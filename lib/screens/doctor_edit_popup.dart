@@ -46,8 +46,8 @@ class _DoctorEditPopupState extends State<DoctorEditPopup> {
       };
 
       await db.updateDocument(
-        databaseId: '67ece4a7002a0a732dfd',
-        collectionId: '67f36a7e002c46ea05f0',
+        databaseId: '67e14dc00025fa9f71ad',
+        collectionId: '67e293bc001845f81688',
         documentId: widget.documentId,
         data: updatedData,
       );
