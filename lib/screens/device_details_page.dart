@@ -7,6 +7,15 @@ import '../utils/fetch_devices.dart';
 import '../utils/format_date.dart';
 import 'device_edit_popup.dart';
 
+/// A StatefulWidget that represents the Device Details page.
+///
+/// This page displays a table of device details, which includes columns like device name, device code,
+/// organization, mother, test, created date, and version. It also provides functionality for filtering the devices
+/// by date range and searching by organization name. Additionally, users can export the filtered device data as an Excel file.
+///
+/// The page also provides a button to open the device edit popup for modifying device details.
+///
+/// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
 class DeviceDetailsPage extends StatefulWidget {
   final Client client;
 
@@ -47,6 +56,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
     super.dispose();
   }
 
+  /// Fetches device data from the database, filtering by the selected date range.
   Future<void> _fetchDevices() async {
     try {
       final result = await fetchDevices(
@@ -66,6 +76,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
     }
   }
 
+  /// Applies the search filter to the list of devices based on the text entered in the search field.
   void _applySearchFilter() {
     final keyword = searchController.text.trim().toLowerCase();
 
@@ -83,6 +94,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
     }
   }
 
+  /// Downloads the filtered device data as an Excel file.
   void _downloadExcel() async {
     try {
       await ExcelExportService.exportDevicesToExcel(context, filteredDevices);

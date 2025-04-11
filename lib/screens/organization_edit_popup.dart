@@ -2,6 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import '../widget/columns.dart';
 
+/// A StatefulWidget that represents the Organization Edit Popup.
+///
+/// This widget is used to edit the details of an organization. It allows the user to update
+/// fields such as organization name, contact person, mobile number, email, address, status,
+/// designation, state, and city. It uses a form with various input fields, including text fields
+/// and dropdowns, to collect the new values. The changes are then sent to the database when the user
+/// presses the "Update" button.
+///
+/// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
+/// The [data] represents the current organization data that will be populated into the form fields.
+/// The [documentId] is the unique ID of the organization document that is being edited.
+/// The [onClose] is a callback that is called when the popup is closed.
 class OrganizationEditPopup extends StatefulWidget {
   final Client client;
   final Map<String, dynamic> data;
@@ -63,6 +75,8 @@ class _OrganizationEditPopupState extends State<OrganizationEditPopup> {
         ['Ahmedabad', 'Mumbai'].contains(data['city']) ? data['city'] : null;
   }
 
+  /// Updates the organization with the new values entered in the form fields.
+  /// This function sends the updated data to the database using the Appwrite client.
   Future<void> _updateChanges() async {
     try {
       final updatedData = {
@@ -98,6 +112,8 @@ class _OrganizationEditPopupState extends State<OrganizationEditPopup> {
     }
   }
 
+  /// Builds the widget layout for the organization edit popup, which includes the form fields
+  /// and buttons for submitting or canceling the changes.
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -138,20 +154,6 @@ class _OrganizationEditPopupState extends State<OrganizationEditPopup> {
                     style: const TextStyle(color: Colors.grey, fontSize: 13),
                   ),
                   const SizedBox(height: 8),
-                  // ElevatedButton.icon(
-                  //   onPressed: () => setState(() => showEditForm = true),
-                  //   style: ElevatedButton.styleFrom(
-                  //     backgroundColor: const Color(0xFF1A86AD),
-                  //     minimumSize: const Size(80, 40),
-                  //     padding: const EdgeInsets.symmetric(horizontal: 12),
-                  //   ),
-                  //   icon: const Icon(Icons.edit, size: 16, color: Colors.white),
-                  //   label: const Text(
-                  //     "Edit",
-                  //     style: TextStyle(color: Colors.white, fontSize: 16),
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 10),
                   const Divider(color: Colors.grey),
                   const SizedBox(height: 5),
                   Row(
@@ -172,16 +174,6 @@ class _OrganizationEditPopupState extends State<OrganizationEditPopup> {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  // const Align(
-                  //   alignment: Alignment.centerLeft,
-                  //   child: Text(
-                  //     "Address:",
-                  //     style: TextStyle(
-                  //       color: Colors.grey,
-                  //       fontWeight: FontWeight.bold,
-                  //     ),
-                  //   ),
-                  // ),
                   _tileCard(
                     label: "Address",
                     value:
@@ -190,13 +182,6 @@ class _OrganizationEditPopupState extends State<OrganizationEditPopup> {
                             : addressController.text,
                   ),
                   const SizedBox(height: 4),
-                  // Align(
-                  //   alignment: Alignment.centerLeft,
-                  //   child: Text(
-                  //     '${widget.data['addressLine'] ?? ''}, ${widget.data['city'] ?? ''}, ${widget.data['state'] ?? ''}, ${widget.data['country'] ?? ''}',
-                  //     style: const TextStyle(color: Colors.white),
-                  //   ),
-                  // ),
                 ],
               ),
             ),

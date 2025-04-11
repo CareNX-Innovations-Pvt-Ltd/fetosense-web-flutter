@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import '../services/auth_service.dart';
 
+/// A StatefulWidget that represents the login screen.
+///
+/// This screen allows the user to log in by entering their username and password. It includes form validation
+/// for required fields, as well as a checkbox for the "I'm not a robot" verification. Upon successful login,
+/// the user is redirected to the dashboard page.
+///
+/// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
 class LoginScreen extends StatefulWidget {
   final Client client;
   LoginScreen({required this.client});
@@ -16,7 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool obscurePassword = true;
   String message = "";
 
-  // Add loginUser function
+  /// Logs in the user using the provided username and password.
+  /// If successful, navigates to the dashboard screen. Otherwise, displays an error message.
   void loginUser() async {
     try {
       await AuthService(
@@ -44,6 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: BoxDecoration(
             color: Color(0xFF252525),
             borderRadius: BorderRadius.circular(0),
+            border: Border.all(color: Colors.white, width: 0.5),
           ),
           child: Row(
             children: [

@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 
+/// A StatefulWidget for the Organization Registration page.
+///
+/// This page allows users to register a new organization by providing details such as
+/// organization name, mobile number, contact person, email, address, and selecting
+/// various dropdowns for status, designation, state, and city. It uses form validation
+/// and sends the data to the Appwrite backend when the user presses the "Save" button.
 class OrganizationRegistration extends StatefulWidget {
   final Client client;
+
   const OrganizationRegistration({super.key, required this.client});
 
   @override
@@ -12,20 +19,22 @@ class OrganizationRegistration extends StatefulWidget {
 
 class _OrganizationRegistrationState extends State<OrganizationRegistration> {
   final _formKey = GlobalKey<FormState>();
-
   late Databases db;
 
+  // Text controllers for each form field
   TextEditingController organizationController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
   TextEditingController contactPersonController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController streetController = TextEditingController();
 
+  // Dropdown selection values
   String? selectedStatus;
   String? selectedDesignation;
   String? selectedState;
   String? selectedCity;
 
+  // Predefined lists for dropdowns
   List<String> statusList = ["Trial", "Demo", "Sold"];
   List<String> designationList = ["Manager", "Executive", "Admin"];
   List<String> stateList = ["Maharashtra", "Karnataka", "Gujarat"];
@@ -115,10 +124,12 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
     );
   }
 
+  /// Builds the form fields for the organization registration form.
   Widget _buildFormFields() {
     return Column(
       children: [
         _buildRow([
+          // Row for Organization and Mobile fields
           _buildColumnWithTextField(
             "Organization",
             organizationController,
@@ -134,6 +145,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
           ),
         ]),
         _buildRow([
+          // Row for Status and Designation dropdowns
           _buildColumnWithDropdown(
             "Status",
             statusList,
@@ -156,6 +168,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
           ),
         ]),
         _buildRow([
+          // Row for Contact Person and Email fields
           _buildColumnWithTextField(
             "Contact Person",
             contactPersonController,
@@ -170,6 +183,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
           ),
         ]),
         _buildRow([
+          // Row for Street field
           _buildColumnWithTextField(
             "Street",
             streetController,
@@ -178,6 +192,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
           ),
         ]),
         _buildRow([
+          // Row for Country, State, and City dropdowns
           _buildColumnWithDropdown(
             "Country",
             ["India"],
@@ -214,6 +229,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
     );
   }
 
+  /// Builds a row of form fields for the organization registration form.
   Widget _buildRow(List<Widget> children) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
@@ -233,6 +249,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
     );
   }
 
+  /// Builds a text field with validation for the given label, controller, and hint text.
   Widget _buildColumnWithTextField(
     String label,
     TextEditingController controller,
@@ -265,6 +282,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
     );
   }
 
+  /// Builds a dropdown widget with validation for the given label, list of items, and selected value.
   Widget _buildColumnWithDropdown(
     String label,
     List<String> items,
@@ -300,6 +318,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
     );
   }
 
+  /// Builds the input decoration for form fields.
   InputDecoration _inputDecoration(String hintText) {
     return InputDecoration(
       hintText: hintText,
@@ -311,6 +330,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
     );
   }
 
+  /// Builds the label for form fields with an optional required field indicator.
   Widget _buildLabel(String label, bool isRequired) {
     return Row(
       children: [
@@ -320,6 +340,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
     );
   }
 
+  /// Saves the form data to the Appwrite backend by creating a new document in the database.
   void _saveForm() async {
     if (_formKey.currentState!.validate()) {
       try {

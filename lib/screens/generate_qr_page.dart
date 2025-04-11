@@ -6,6 +6,13 @@ import 'dart:ui' as ui;
 import 'package:flutter/rendering.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+/// A StatefulWidget that represents the QR Code generation page.
+///
+/// This page provides a form where the user can enter a Kit ID, and upon submission, a QR code is generated
+/// based on the Kit ID. The page also provides functionality to download the generated QR code and display the Kit ID
+/// alongside the QR code. The user can choose to show or hide the Kit ID and download the QR code as an image.
+///
+/// The [key] is a unique identifier for the widget.
 class GenerateQRPage extends StatefulWidget {
   const GenerateQRPage({super.key});
 
@@ -106,6 +113,8 @@ class _GenerateQRPageState extends State<GenerateQRPage> {
     );
   }
 
+  /// Builds the section that displays the generated QR code.
+  /// This section includes the QR code itself, a checkbox to show/hide the Kit ID, and a button to download the QR code.
   Widget _buildQRSection() {
     return Column(
       children: [
@@ -149,6 +158,7 @@ class _GenerateQRPageState extends State<GenerateQRPage> {
     );
   }
 
+  /// Handles the logic to generate the QR code when the form is valid.
   void _handleGenerate() {
     if (_formKey.currentState!.validate()) {
       final trimmed = _kitIdController.text.trim();
@@ -160,6 +170,7 @@ class _GenerateQRPageState extends State<GenerateQRPage> {
     }
   }
 
+  /// Provides the input decoration style for the text fields in the form.
   InputDecoration _inputDecoration(String hintText) {
     return InputDecoration(
       hintText: hintText,
@@ -171,6 +182,7 @@ class _GenerateQRPageState extends State<GenerateQRPage> {
     );
   }
 
+  /// Builds the label for the form fields, adding an asterisk if the field is required.
   Widget _buildLabel(String label, bool isRequired) {
     return Row(
       children: [
@@ -180,6 +192,7 @@ class _GenerateQRPageState extends State<GenerateQRPage> {
     );
   }
 
+  /// Downloads the QR code as an image file.
   Future<void> _downloadQR() async {
     try {
       RenderRepaintBoundary boundary =

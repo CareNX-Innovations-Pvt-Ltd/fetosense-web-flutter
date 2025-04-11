@@ -14,6 +14,17 @@ import 'package:appwrite/appwrite.dart';
 import 'bottom_navigation_bar.dart';
 import 'organization_details_page.dart';
 
+/// A StatefulWidget that represents the Dashboard screen.
+///
+/// The [DashboardScreen] widget is the main entry point for the Dashboard, displaying various child screens
+/// such as the organization registration, device registration, and detailed views of devices, organizations, and other data.
+///
+/// This widget manages authentication, user data, and the state of the sidebar (whether it's open or closed).
+/// It also handles the display of top statistics, graphs, and the navigation to different sections.
+///
+/// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
+/// The [childIndex] is used to determine which child screen to display.
+
 class DashboardScreen extends StatefulWidget {
   final Client client;
   final int childIndex;
@@ -40,6 +51,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _getUserData();
   }
 
+  /// Fetches the current user's data and sets the [userEmail].
+
   Future<void> _getUserData() async {
     try {
       final user = await _authService.getCurrentUser();
@@ -54,11 +67,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
+  /// Toggles the state of the sidebar (open or closed).
+
   void _toggleSidebar() {
     setState(() {
       isSidebarOpen = !isSidebarOpen;
     });
   }
+
+  /// Logs out the user by calling the [AuthService]'s logout function
+  /// and navigates the user back to the login screen.
 
   void _logout() async {
     await _authService.logoutUser();
@@ -86,6 +104,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  /// Builds the top statistics section for the Dashboard.
+  ///
+  /// This section includes statistics such as the number of organizations, devices, mothers, and tests.
+
   Widget _buildTopStats() {
     return Container(
       padding: EdgeInsets.all(16),
@@ -101,6 +123,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+
+  /// Builds a stat card widget for displaying individual statistics.
+  ///
+  /// [icon] The icon to represent the statistic.
+  /// [title] The title of the stat (e.g., "Organizations").
+  /// [count] The count value of the stat (e.g., "1").
 
   Widget _statCard(IconData icon, String title, String count) {
     return Container(
@@ -127,6 +155,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+
+  /// Builds the graph section for the Dashboard.
+  ///
+  /// This section displays a line chart showing data trends.
 
   Widget _buildGraphSection() {
     return Container(
@@ -163,6 +195,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+
+  /// Returns the appropriate child widget based on the [childIndex].
+  ///
+  /// Each [childIndex] corresponds to a specific screen or page within the dashboard.
+  /// The method dynamically returns the corresponding widget for each screen.
 
   Widget getChild(int childIndex) {
     if (childIndex == 0) {

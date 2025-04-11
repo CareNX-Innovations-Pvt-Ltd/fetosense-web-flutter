@@ -9,55 +9,91 @@ import 'screens/device_registration.dart';
 import 'screens/generate_qr_page.dart';
 import 'screens/organization_details_page.dart';
 
+/// The entry point of the application.
 void main() {
+  // Create and configure the Appwrite client
   Client client =
       Client()
+        // Uncomment for production environment
         // ..setEndpoint('https://appwrite.fetosense.com/v1')
+        // Local environment setup
         ..setEndpoint('http://172.172.241.56/v1')
-        ..setProject('67d94dac003bd3e50fc8');
+        ..setProject('67d94dac003bd3e50fc8'); // Appwrite Project ID
 
+  // Run the Flutter app
   runApp(MyApp(client: client));
 }
 
+/// Main application widget that provides routing to different screens.
+///
+/// The `MyApp` widget is the root of the application and defines the routes for navigation.
+/// It takes an instance of the [Client] as a parameter to be used across the app.
 class MyApp extends StatelessWidget {
   final Client client;
+
+  // Constructor to accept the client instance.
   MyApp({required this.client});
 
   @override
   Widget build(BuildContext context) {
+    // Return the MaterialApp with defined routes and initial screen.
     return MaterialApp(
-      title: 'Flutter Web + Appwrite',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
-      initialRoute: '/',
+      title: 'Flutter Web + Appwrite', // Title for the app
+      debugShowCheckedModeBanner:
+          false, // Hide the debug banner in the top right
+      theme: ThemeData.dark(), // Use dark theme for the app
+      initialRoute: '/', // The initial route when the app is launched
       routes: {
-        '/': (context) => LoginScreen(client: client),
-        '/register': (context) => RegisterScreen(client: client),
-        // '/home': (context) => HomeScreen(client: client), // Home Page Route
+        '/': (context) => LoginScreen(client: client), // Login screen route
+        '/register':
+            (context) =>
+                RegisterScreen(client: client), // Register screen route
+        // '/home': (context) => HomeScreen(client: client), // Home screen route (commented out)
         '/dashboard':
             (context) => DashboardScreen(
               client: client,
               childIndex: 0,
-            ), // Home Page Route
+            ), // Dashboard screen with an initial index of 0
         '/organization-registration':
-            (context) => DashboardScreen(client: client, childIndex: 1),
-
+            (context) => DashboardScreen(
+              client: client,
+              childIndex: 1,
+            ), // Organization Registration route
         '/device-registration':
-            (context) => DashboardScreen(client: client, childIndex: 2),
+            (context) => DashboardScreen(
+              client: client,
+              childIndex: 2,
+            ), // Device Registration route
         '/generate-qr':
-            (context) => DashboardScreen(client: client, childIndex: 3),
+            (context) => DashboardScreen(
+              client: client,
+              childIndex: 3,
+            ), // Generate QR Code route
         '/mis-organizations':
-            (context) => DashboardScreen(client: client, childIndex: 4),
+            (context) => DashboardScreen(
+              client: client,
+              childIndex: 4,
+            ), // MIS Organizations route
         '/mis-devices':
-            (context) => DashboardScreen(client: client, childIndex: 5),
+            (context) => DashboardScreen(
+              client: client,
+              childIndex: 5,
+            ), // MIS Devices route
         '/mis-doctors':
-            (context) => DashboardScreen(client: client, childIndex: 6),
+            (context) => DashboardScreen(
+              client: client,
+              childIndex: 6,
+            ), // MIS Doctors route
         '/mis-mothers':
-            (context) => DashboardScreen(client: client, childIndex: 7),
+            (context) => DashboardScreen(
+              client: client,
+              childIndex: 7,
+            ), // MIS Mothers route
       },
     );
   }
 }
 
-//main
-//RANDOM COMMENT
+// main function
+// This is the entry point for the application and sets up the Appwrite client
+// to be used by the various routes and screens in the application.

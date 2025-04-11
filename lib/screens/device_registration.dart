@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import '../utils/fetch_organizations.dart';
 
+/// A StatefulWidget that represents the Device Registration form.
+///
+/// This widget provides a form to register a new device by entering information such as the device name, kit ID,
+/// tablet serial number, and organization. The form includes validation and allows the user to select an organization
+/// from a dropdown list. Upon submission, the form data is saved to the Appwrite database.
+///
+/// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
 class DeviceRegistration extends StatefulWidget {
   final Client client;
   const DeviceRegistration({super.key, required this.client});
@@ -31,6 +38,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
     super.initState();
     db = Databases(widget.client);
 
+    // Fetch organizations from the database and populate the dropdown list.
     fetchOrganizations(db).then((docs) {
       setState(() {
         organizationList =
@@ -107,6 +115,9 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
     );
   }
 
+  /// Builds the form fields for the device registration form.
+  /// This includes dropdowns for selecting the organization and product type,
+  /// along with text fields for entering the device name, kit ID, tablet serial number, and Toco ID.
   Widget _buildFormFields() {
     return Column(
       children: [
@@ -153,6 +164,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
     );
   }
 
+  /// Builds the organization dropdown widget for selecting an organization.
   Widget _buildOrganizationDropdown() {
     return _buildColumnWithDropdown(
       "Organization",
@@ -170,6 +182,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
     );
   }
 
+  /// Builds a row of widgets with equal spacing between them.
   Widget _buildRow(List<Widget> children) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
@@ -189,6 +202,11 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
     );
   }
 
+  /// Builds a column with a text field widget for input.
+  /// [label] The label for the text field.
+  /// [controller] The text editing controller for the field.
+  /// [hintText] The placeholder text for the field.
+  /// [isRequired] Whether the field is required for form validation.
   Widget _buildColumnWithTextField(
     String label,
     TextEditingController controller,
@@ -221,6 +239,13 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
     );
   }
 
+  /// Builds a column with a dropdown widget for selection.
+  /// [label] The label for the dropdown.
+  /// [items] The list of items for the dropdown.
+  /// [selectedValue] The currently selected value.
+  /// [hintText] The placeholder text for the dropdown.
+  /// [onChanged] The callback to handle selection changes.
+  /// [isRequired] Whether the dropdown is required for form validation.
   Widget _buildColumnWithDropdown(
     String label,
     List<String> items,
@@ -256,6 +281,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
     );
   }
 
+  /// Creates the input decoration for form fields with hints and styling.
   InputDecoration _inputDecoration(String hintText) {
     return InputDecoration(
       hintText: hintText,
@@ -278,6 +304,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
     );
   }
 
+  /// Builds the label for the form fields, optionally including an asterisk if required.
   Widget _buildLabel(String label, bool isRequired) {
     return Row(
       children: [
@@ -287,13 +314,13 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
     );
   }
 
+  /// Handles the saving of the form by submitting the device data to the database.
   void _saveForm() async {
     if (_formKey.currentState!.validate()) {
       try {
         await db.createDocument(
           databaseId: '67e14dc00025fa9f71ad',
           collectionId: '67e64eba00363f40d736',
-
           documentId: ID.unique(),
           data: {
             'deviceCode': kitIdController.text,

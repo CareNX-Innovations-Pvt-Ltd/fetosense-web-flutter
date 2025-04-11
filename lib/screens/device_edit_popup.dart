@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import '../widget/columns.dart';
 
+/// A StatefulWidget that represents the device edit popup dialog.
+///
+/// This popup allows the user to edit the details of a device, such as the device code, tablet serial number,
+/// and device name. It also provides functionality to update the device information in the database and close the popup.
+///
+/// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
+/// The [data] contains the current device data that is being edited.
+/// The [documentId] is the unique identifier of the device document in the database.
+/// The [onClose] callback is triggered when the user closes the popup.
 class DeviceEditPopup extends StatefulWidget {
   final Client client;
   final Map<String, dynamic> data;
@@ -40,6 +49,7 @@ class _DeviceEditPopupState extends State<DeviceEditPopup> {
     _fetchTabletSerialNumber();
   }
 
+  /// Fetches the tablet serial number associated with the device from the database.
   Future<void> _fetchTabletSerialNumber() async {
     try {
       final result = await db.listDocuments(
@@ -57,6 +67,7 @@ class _DeviceEditPopupState extends State<DeviceEditPopup> {
     }
   }
 
+  /// Updates the device information in the database.
   Future<void> _updateChanges() async {
     try {
       // Update user collection (deviceCode, deviceId)
@@ -261,6 +272,11 @@ class _DeviceEditPopupState extends State<DeviceEditPopup> {
     );
   }
 
+  /// A helper widget for building a tile card with an image, label, and value.
+  ///
+  /// [imagePath] The path to the image to be displayed on the tile.
+  /// [label] The label for the tile.
+  /// [value] The value to be displayed on the tile.
   Widget _tileCardWithImage({
     required String imagePath,
     required String label,
@@ -293,6 +309,12 @@ class _DeviceEditPopupState extends State<DeviceEditPopup> {
     );
   }
 
+  /// A helper widget for building a stat card that displays a count and label with an icon.
+  ///
+  /// [count] The count value to be displayed on the stat card.
+  /// [label] The label for the stat card.
+  /// [icon] The icon associated with the stat.
+  /// [color] The background color of the stat card.
   Widget _statCard({
     required String count,
     required String label,

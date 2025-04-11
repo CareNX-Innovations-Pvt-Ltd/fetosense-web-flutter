@@ -1,8 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// A StatelessWidget that represents the Bottom Navigation Bar.
+///
+/// This widget contains two main sections:
+/// 1. The left side displays the company name with the current year and a copyright icon.
+/// 2. The right side displays the app version and "Powered by" information, with a clickable link to the company website.
+///
+/// The [BottomNavBar] widget also provides functionality to launch external URLs when the company name or "CareNX" is tapped.
+///
+/// The [currentYear] is dynamically fetched using the `DateTime.now().year` function to always show the current year.
+
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
+
+  /// Launches the provided URL in an external application (browser).
+  ///
+  /// Uses the `url_launcher` package to launch the URL.
+  /// If the URL cannot be launched, it prints a debug message.
+  ///
+  /// [url] The URL to be opened in the browser.
 
   // Function to launch a URL
   void _launchURL(String url) async {

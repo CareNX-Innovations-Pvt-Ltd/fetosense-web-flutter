@@ -1,25 +1,18 @@
 import 'package:flutter/material.dart';
 
+/// Builds a sidebar for navigation with expandable menus and hover effects.
+///
+/// This widget is a sidebar that contains various items such as navigation links.
+/// It supports expandable menus and a hover effect on items. When an item is hovered,
+/// it changes the background color. The sidebar is typically used in the main layout
+/// for navigating between different sections of the app.
 Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
   return Container(
     width: 210,
     color: Colors.grey[850],
-    // padding: const EdgeInsets.symmetric(vertical: 20),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // const Padding(
-        //   padding: EdgeInsets.symmetric(horizontal: 16),
-        //   // child: Text(
-        //   //   "fetosense",
-        //   //   style: TextStyle(
-        //   //     color: Colors.tealAccent,
-        //   //     fontSize: 20,
-        //   //     fontWeight: FontWeight.normal,
-        //   //   ),
-        //   // ),
-        // ),
-        // const SizedBox(height: 20),
         _SidebarItem(
           icon: Icons.dashboard,
           title: "Dashboard",
@@ -54,17 +47,16 @@ Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
         _SidebarItem(icon: Icons.settings, title: "Operations"),
         _SidebarItem(icon: Icons.people, title: "Users"),
         const Spacer(),
-        // _SidebarItem(
-        //   icon: Icons.logout,
-        //   title: "Logout",
-        //   onTap: logoutCallback,
-        // ),
       ],
     ),
   );
 }
 
-// Sidebar item with hover effect
+/// A Sidebar item with hover effect.
+///
+/// This widget represents an individual item in the sidebar. It can be a navigation link
+/// or an action, and includes hover effects that change the background color and text color
+/// when hovered over.
 class _SidebarItem extends StatefulWidget {
   final IconData? icon;
   final String title;
@@ -130,7 +122,11 @@ class _SidebarItemState extends State<_SidebarItem> {
   }
 }
 
-// Expandable menu with hover effect
+/// An expandable menu with hover effect.
+///
+/// This widget represents an expandable menu in the sidebar. When clicked, the menu
+/// expands to show additional child items. It supports hover effects on the menu item
+/// and expansion toggle with an icon.
 class _ExpandableMenu extends StatefulWidget {
   final IconData icon;
   final String title;
