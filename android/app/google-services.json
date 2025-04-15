@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "65542773642",
+    "firebase_url": "https://admin-cnx.firebaseio.com",
+    "project_id": "admin-cnx",
+    "storage_bucket": "admin-cnx.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65542773642:android:807d895d637d16fa",
+        "android_client_info": {
+          "package_name": "com.carenx.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "65542773642-uhnhvkouj5e9bm08arc9l8hmn4jghlr7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.carenx.admin",
+            "certificate_hash": "f1510b91cd0be53a8872cd9a01021827ab67399a"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLI1VxTln7Sla-2vh7dBP8vmyCMC0kuBg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65542773642:android:9b178bd20d17b779",
+        "android_client_info": {
+          "package_name": "com.carenx.onedemo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLI1VxTln7Sla-2vh7dBP8vmyCMC0kuBg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65542773642:android:d3803af0c93817a7190673",
+        "android_client_info": {
+          "package_name": "com.example.fetosense_mis"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLI1VxTln7Sla-2vh7dBP8vmyCMC0kuBg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

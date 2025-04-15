@@ -89,6 +89,10 @@ class MyApp extends StatelessWidget {
               client: client,
               childIndex: 7,
             ), // MIS Mothers route
+        '/analytics-doctors':
+            (context) => DashboardScreen(client: client, childIndex: 8),
+        '/analytics-organizations':
+            (context) => DashboardScreen(client: client, childIndex: 9),
       },
     );
   }

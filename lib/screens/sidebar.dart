@@ -36,13 +36,44 @@ Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
           icon: Icons.pie_chart,
           title: "MIS",
           children: [
-            _SidebarItem(title: "Organizations", route: '/mis-organizations'),
-            _SidebarItem(title: "Device", route: '/mis-devices'),
-            _SidebarItem(title: "Doctor", route: '/mis-doctors'),
-            _SidebarItem(title: "Mother", route: '/mis-mothers'),
+            _SidebarItem(
+              icon: Icons.business,
+              title: "Organizations",
+              route: '/mis-organizations',
+            ),
+            _SidebarItem(
+              icon: Icons.tablet_mac,
+              title: "Device",
+              route: '/mis-devices',
+            ),
+            _SidebarItem(
+              icon: Icons.medical_services,
+              title: "Doctor",
+              route: '/mis-doctors',
+            ),
+            _SidebarItem(
+              icon: Icons.pregnant_woman,
+              title: "Mother",
+              route: '/mis-mothers',
+            ),
           ],
         ),
-        _SidebarItem(icon: Icons.analytics, title: "Analytics"),
+        _ExpandableMenu(
+          icon: Icons.analytics,
+          title: "Analytics",
+          children: [
+            _SidebarItem(
+              icon: Icons.medical_services,
+              title: "Doctors",
+              route: '/analytics-doctors',
+            ),
+            _SidebarItem(
+              icon: Icons.business,
+              title: "Organizations",
+              route: '/analytics-organizations',
+            ),
+          ],
+        ),
         _SidebarItem(icon: Icons.article, title: "Reports"),
         _SidebarItem(icon: Icons.settings, title: "Operations"),
         _SidebarItem(icon: Icons.people, title: "Users"),
