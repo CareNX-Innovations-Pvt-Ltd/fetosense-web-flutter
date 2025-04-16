@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -41,8 +39,8 @@ class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
   Future<void> fetchAnalyticsData() async {
     try {
       final response = await database.listDocuments(
-        databaseId: '67e14dc00025fa9f71ad',
-        collectionId: '67e293bc001845f81688',
+        databaseId: '67ece4a7002a0a732dfd',
+        collectionId: '67f36a7e002c46ea05f0',
         queries: [Query.equal('type', 'doctor')],
       );
 

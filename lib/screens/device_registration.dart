@@ -319,8 +319,8 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
     if (_formKey.currentState!.validate()) {
       try {
         await db.createDocument(
-          databaseId: '67e14dc00025fa9f71ad',
-          collectionId: '67e64eba00363f40d736',
+          databaseId: '67ece4a7002a0a732dfd',
+          collectionId: '67f36766002068046589',
           documentId: ID.unique(),
           data: {
             'deviceCode': kitIdController.text,

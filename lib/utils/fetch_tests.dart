@@ -1,49 +1,49 @@
-// import 'package:appwrite/appwrite.dart';
-// import 'package:appwrite/models.dart' as models;
-//
-// Future<List<models.Document>> fetchTests(
-//   Databases db, {
-//   DateTime? fromDate,
-//   DateTime? tillDate,
-// }) async {
-//   try {
-//     final List<String> queries = [Query.equal('type', 'organization')];
-//
-//     final bool applyDateFilter = fromDate != null || tillDate != null;
-//
-//     if (applyDateFilter) {
-//       queries.add(Query.isNotNull('createdOn'));
-//
-//       if (fromDate != null) {
-//         queries.add(
-//           Query.greaterThanEqual('createdOn', fromDate.toIso8601String()),
-//         );
-//       }
-//
-//       if (tillDate != null) {
-//         final tillDateEnd = DateTime(
-//           tillDate.year,
-//           tillDate.month,
-//           tillDate.day,
-//           23,
-//           59,
-//           59,
-//         );
-//         queries.add(
-//           Query.lessThanEqual('createdOn', tillDateEnd.toIso8601String()),
-//         );
-//       }
-//     }
-//
-//     final result = await db.listDocuments(
-//       databaseId: '67e14dc00025fa9f71ad',
-//       collectionId: '67eb7f3900295db538f0',
-//       queries: queries,
-//     );
-//
-//     return result.documents;
-//   } catch (e) {
-//     print('❌ Error fetching mothers: $e');
-//     return [];
-//   }
-// }
+import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/models.dart' as models;
+
+Future<List<models.Document>> fetchTests(
+  Databases db, {
+  DateTime? fromDate,
+  DateTime? tillDate,
+}) async {
+  try {
+    final List<String> queries = [];
+
+    final bool applyDateFilter = fromDate != null || tillDate != null;
+
+    if (applyDateFilter) {
+      queries.add(Query.isNotNull('createdOn'));
+
+      if (fromDate != null) {
+        queries.add(
+          Query.greaterThanEqual('createdOn', fromDate.toIso8601String()),
+        );
+      }
+
+      if (tillDate != null) {
+        final tillDateEnd = DateTime(
+          tillDate.year,
+          tillDate.month,
+          tillDate.day,
+          23,
+          59,
+          59,
+        );
+        queries.add(
+          Query.lessThanEqual('createdOn', tillDateEnd.toIso8601String()),
+        );
+      }
+    }
+
+    final result = await db.listDocuments(
+      databaseId: '67ece4a7002a0a732dfd',
+      collectionId: '67f3790a0024f8f61684',
+      queries: queries,
+    );
+
+    return result.documents;
+  } catch (e) {
+    print('Error fetching tests: $e');
+    return [];
+  }
+}

@@ -18,7 +18,7 @@ void main() {
         // ..setEndpoint('https://appwrite.fetosense.com/v1')
         // Local environment setup
         ..setEndpoint('http://172.172.241.56/v1')
-        ..setProject('67d94dac003bd3e50fc8'); // Appwrite Project ID
+        ..setProject('67ecd82100347201f279'); // Appwrite Project ID
 
   // Run the Flutter app
   runApp(MyApp(client: client));

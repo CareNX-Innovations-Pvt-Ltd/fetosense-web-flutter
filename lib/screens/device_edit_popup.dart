@@ -53,8 +53,8 @@ class _DeviceEditPopupState extends State<DeviceEditPopup> {
   Future<void> _fetchTabletSerialNumber() async {
     try {
       final result = await db.listDocuments(
-        databaseId: '67e14dc00025fa9f71ad',
-        collectionId: '67e676d9bd35888f7291',
+        databaseId: '67ece4a7002a0a732dfd',
+        collectionId: '67f36766002068046589',
         queries: [Query.equal('documentId', widget.documentId)],
       );
 
@@ -72,8 +72,8 @@ class _DeviceEditPopupState extends State<DeviceEditPopup> {
     try {
       // Update user collection (deviceCode, deviceId)
       await db.updateDocument(
-        databaseId: '67e14dc00025fa9f71ad',
-        collectionId: '67e293bc001845f81688',
+        databaseId: '67ece4a7002a0a732dfd',
+        collectionId: '67f36a7e002c46ea05f0',
         documentId: widget.documentId,
         data: {
           'deviceCode': deviceCodeController.text.trim(),
@@ -83,16 +83,16 @@ class _DeviceEditPopupState extends State<DeviceEditPopup> {
 
       // Update tabletSerialNumber collection
       final tabletResult = await db.listDocuments(
-        databaseId: '67e14dc00025fa9f71ad',
-        collectionId: '67e293bc001845f81688',
+        databaseId: '67ece4a7002a0a732dfd',
+        collectionId: '67f36a7e002c46ea05f0',
         queries: [Query.equal('documentId', widget.documentId)],
       );
 
       if (tabletResult.documents.isNotEmpty) {
         final tabletDocId = tabletResult.documents.first.$id;
         await db.updateDocument(
-          databaseId: '67e14dc00025fa9f71ad',
-          collectionId: '67e64eba00363f40d736',
+          databaseId: '67ece4a7002a0a732dfd',
+          collectionId: '67f36766002068046589',
           documentId: tabletDocId,
           data: {
             'tabletSerialNumber': tabletSerialNumberController.text.trim(),
