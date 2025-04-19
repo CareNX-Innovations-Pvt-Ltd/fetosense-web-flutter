@@ -7,6 +7,14 @@ import '../utils/format_date.dart';
 import '../utils/fetch_organizations.dart';
 import 'organization_edit_popup.dart';
 
+/// A StatefulWidget that represents the Organization Details page.
+///
+/// This page displays a list of organizations and their associated details such as name, device, doctor,
+/// mother, test, and other fields. It provides search and filtering functionality based on date range
+/// and allows the user to download the filtered organizations data in Excel format. The page fetches, filters,
+/// and displays organization-related data.
+///
+/// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
 class OrganizationDetailsPage extends StatefulWidget {
   final Client client;
 
@@ -47,6 +55,7 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
     super.dispose();
   }
 
+  /// Fetches the list of organizations from the database based on the date range and updates the state with the results.
   Future<void> _fetchOrganizations() async {
     try {
       final result = await fetchOrganizations(
@@ -66,6 +75,8 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
     }
   }
 
+  /// Applies the search filter based on the text entered in the search input field.
+  /// It filters the organizations list by the organization name.
   void _applySearchFilter() {
     final keyword = searchController.text.trim().toLowerCase();
 
@@ -82,6 +93,7 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
     }
   }
 
+  /// Downloads the filtered organizations data in Excel format.
   void _downloadExcel() async {
     try {
       await ExcelExportService.exportOrganizationsToExcel(
@@ -95,6 +107,8 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
     }
   }
 
+  /// Builds the layout for the Organization Details page, including the date pickers, search field,
+  /// and a data table displaying the filtered organization details.
   @override
   Widget build(BuildContext context) {
     return Container(

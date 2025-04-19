@@ -5,6 +5,13 @@ import 'package:appwrite/models.dart' as models;
 import 'package:fetosense_mis/services/excel_services/mothers_excel_download.dart';
 import '../utils/fetch_mothers.dart';
 
+/// A StatefulWidget that represents the Mother Details page.
+///
+/// This page displays a list of mothers along with their details such as name, organization, device, doctor, and tests.
+/// It provides search and filtering functionality based on date range and allows the user to download the filtered
+/// mothers data in Excel format. The page is responsible for fetching, filtering, and displaying mother-related data.
+///
+/// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
 class MotherDetailsPage extends StatefulWidget {
   final Client client;
 
@@ -44,6 +51,7 @@ class _MotherDetailsPageState extends State<MotherDetailsPage> {
     super.dispose();
   }
 
+  /// Fetches the list of mothers from the database based on the date range and updates the state with the results.
   Future<void> _fetchMothers() async {
     try {
       final result = await fetchMothers(
@@ -63,6 +71,8 @@ class _MotherDetailsPageState extends State<MotherDetailsPage> {
     }
   }
 
+  /// Applies the search filter based on the text entered in the search input field.
+  /// It filters the mothers list by the organization name.
   void _applySearchFilter() {
     final keyword = searchController.text.trim().toLowerCase();
 
@@ -80,6 +90,7 @@ class _MotherDetailsPageState extends State<MotherDetailsPage> {
     }
   }
 
+  /// Downloads the filtered mothers data in Excel format.
   void _downloadExcel() async {
     try {
       await ExcelExportService.exportMothersToExcel(context, filteredMothers);
@@ -90,7 +101,8 @@ class _MotherDetailsPageState extends State<MotherDetailsPage> {
     }
   }
 
-  //random comment
+  /// Builds the layout for the Mother Details page, including the date pickers, search field,
+  /// and a data table displaying the filtered mother details.
   @override
   Widget build(BuildContext context) {
     return Container(

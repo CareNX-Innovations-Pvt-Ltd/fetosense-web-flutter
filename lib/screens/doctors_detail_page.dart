@@ -7,6 +7,14 @@ import '../utils/fetch_doctors.dart';
 import '../utils/format_date.dart';
 import 'doctor_edit_popup.dart';
 
+/// A StatefulWidget that represents the Doctor Details page.
+///
+/// This page displays a list of doctors along with their details such as name, email, organization, number of mothers,
+/// number of tests, creation date, and version. It provides search and filtering functionality based on date range
+/// and allows the user to download the filtered doctor data in Excel format. The page also allows editing of doctor details
+/// via a popup when an edit button is pressed.
+///
+/// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
 class DoctorDetailsPage extends StatefulWidget {
   final Client client;
 
@@ -46,6 +54,7 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage> {
     super.dispose();
   }
 
+  /// Fetches the list of doctors from the database based on the date range and updates the state with the results.
   Future<void> _fetchDoctors() async {
     try {
       final result = await fetchDoctors(
@@ -65,6 +74,8 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage> {
     }
   }
 
+  /// Applies the search filter based on the text entered in the search input field.
+  /// It filters the doctors list by the organization name.
   void _applySearchFilter() {
     final keyword = searchController.text.trim().toLowerCase();
 
@@ -82,6 +93,7 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage> {
     }
   }
 
+  /// Downloads the filtered doctor data in Excel format.
   void _downloadExcel() async {
     try {
       await ExcelExportService.exportDoctorsToExcel(context, filteredDoctors);

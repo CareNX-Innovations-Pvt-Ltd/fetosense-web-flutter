@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import '../widget/columns.dart';
 
+/// A StatefulWidget that represents the Doctor Edit popup dialog.
+///
+/// This widget allows the user to edit the details of a doctor, such as their name, mobile number, and email.
+/// It provides a form for editing the doctor's information and allows for resetting the doctor's password.
+/// Upon successful editing, the doctor’s data is updated in the database.
+///
+/// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
+/// The [data] contains the current doctor's data that is being edited.
+/// The [documentId] is the unique identifier of the doctor document in the database.
+/// The [onClose] callback is triggered when the user closes the popup.
 class DoctorEditPopup extends StatefulWidget {
   final Client client;
   final Map<String, dynamic> data;
@@ -37,6 +47,7 @@ class _DoctorEditPopupState extends State<DoctorEditPopup> {
     emailController = TextEditingController(text: data['email'] ?? '');
   }
 
+  /// Updates the doctor’s details in the database with the new data entered in the form.
   Future<void> _updateChanges() async {
     try {
       final updatedData = {
@@ -102,15 +113,6 @@ class _DoctorEditPopupState extends State<DoctorEditPopup> {
                     style: const TextStyle(color: Colors.white),
                   ),
                   const SizedBox(height: 10),
-                  // ElevatedButton.icon(
-                  //   onPressed: () => setState(() => showEditForm = true),
-                  //   icon: const Icon(Icons.edit, size: 14),
-                  //   label: const Text("Edit"),
-                  //   style: ElevatedButton.styleFrom(
-                  //     backgroundColor: const Color(0xFF1A86AD),
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -227,6 +229,12 @@ class _DoctorEditPopupState extends State<DoctorEditPopup> {
     );
   }
 
+  /// Builds a stat card that displays a count and label with an icon.
+  ///
+  /// [count] The count value to be displayed on the stat card.
+  /// [label] The label for the stat card.
+  /// [icon] The icon associated with the stat.
+  /// [color] The background color of the stat card.
   Widget _statCard({
     required String count,
     required String label,
@@ -263,6 +271,10 @@ class _DoctorEditPopupState extends State<DoctorEditPopup> {
     );
   }
 
+  /// Helper widget for displaying label-value pairs.
+  ///
+  /// [label] The label for the value.
+  /// [value] The value to be displayed.
   Widget _labelValueColumn(String label, dynamic value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,25 +294,29 @@ class _DoctorEditPopupState extends State<DoctorEditPopup> {
       ],
     );
   }
-}
 
-Widget _infoRow(String label, String value) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 2),
-    child: Row(
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.grey,
-            fontWeight: FontWeight.bold,
+  /// Helper widget for displaying a row with a label and value.
+  ///
+  /// [label] The label for the value.
+  /// [value] The value to be displayed.
+  Widget _infoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        const SizedBox(width: 5),
-        Expanded(
-          child: Text(value, style: const TextStyle(color: Colors.white)),
-        ),
-      ],
-    ),
-  );
+          const SizedBox(width: 5),
+          Expanded(
+            child: Text(value, style: const TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
 }

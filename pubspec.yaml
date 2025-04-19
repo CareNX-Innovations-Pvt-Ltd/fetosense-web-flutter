@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   appwrite: ^15.0.0
-  fl_chart: ^0.70.2
+  fl_chart: ^0.70.0
   cupertino_icons: ^1.0.8
   dropdown_button2: ^2.3.9
   qr_flutter: ^4.1.0
