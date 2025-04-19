@@ -1,3 +1,5 @@
+/// Flutter page that shows weekly or monthly test analytics for organizations
+/// using Appwrite as the backend and fl_chart for graph visualization.
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
@@ -6,8 +8,12 @@ import 'package:fl_chart/fl_chart.dart';
 import '../../utils/fetch_organizations.dart';
 import '../../utils/fetch_tests.dart';
 
+/// A page that displays test trends for selected organizations in weekly/monthly charts.
 class OrganizationAnalyticsPage extends StatefulWidget {
+  /// The Appwrite client used for fetching data.
   final Client client;
+
+  /// Creates an [OrganizationAnalyticsPage] instance.
   const OrganizationAnalyticsPage({super.key, required this.client});
 
   @override
@@ -16,13 +22,28 @@ class OrganizationAnalyticsPage extends StatefulWidget {
 }
 
 class _OrganizationAnalyticsPageState extends State<OrganizationAnalyticsPage> {
+  /// Instance of Appwrite [Databases].
   late Databases db;
+
+  /// List of available organizations.
   List<models.Document> organizations = [];
+
+  /// List of test count per week/month.
   List<TestData> testData = [];
+
+  /// Currently selected organization ID.
   String? selectedOrgId;
+
+  /// From-date filter for the chart.
   DateTime? fromDate;
+
+  /// To-date filter for the chart.
   DateTime? toDate = DateTime.now();
+
+  /// Whether data is being fetched.
   bool isLoading = false;
+
+  /// Toggle between weekly and monthly view.
   bool isWeekly = true;
 
   @override
@@ -33,11 +54,13 @@ class _OrganizationAnalyticsPageState extends State<OrganizationAnalyticsPage> {
     fetchGraphData();
   }
 
+  /// Fetches the list of organizations from Appwrite.
   Future<void> fetchOrganizationsList() async {
     final orgs = await fetchOrganizations(db);
     setState(() => organizations = orgs);
   }
 
+  /// Generates weekly labels between [start] and [end].
   List<String> generateWeeklyBuckets(DateTime start, DateTime end) {
     final buckets = <String>[];
     DateTime current = start.subtract(Duration(days: start.weekday % 7));
@@ -52,6 +75,7 @@ class _OrganizationAnalyticsPageState extends State<OrganizationAnalyticsPage> {
     return buckets;
   }
 
+  /// Generates monthly labels between [start] and [end].
   List<String> generateMonthlyBuckets(DateTime start, DateTime end) {
     final buckets = <String>[];
     DateTime current = DateTime(start.year, start.month);
@@ -62,6 +86,7 @@ class _OrganizationAnalyticsPageState extends State<OrganizationAnalyticsPage> {
     return buckets;
   }
 
+  /// Fetches test data from Appwrite and builds graph points.
   Future<void> fetchGraphData() async {
     final now = DateTime.now();
     final effectiveFromDate =
@@ -122,13 +147,14 @@ class _OrganizationAnalyticsPageState extends State<OrganizationAnalyticsPage> {
     return Scaffold(
       backgroundColor: const Color(0xFF181A1B),
       appBar: AppBar(
-        backgroundColor: Color(0xff1F2223),
+        backgroundColor: const Color(0xff1F2223),
         title: const Text("Organization Analytics"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
+            /// Filters and dropdowns for organization and date range
             Row(
               children: [
                 Expanded(
@@ -217,34 +243,30 @@ class _OrganizationAnalyticsPageState extends State<OrganizationAnalyticsPage> {
                 ElevatedButton(
                   onPressed: fetchGraphData,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent, // No background color
-                    foregroundColor: const Color(
-                      0xFF167292,
-                    ), // Text color (blue)
-                    side: BorderSide(
-                      color: const Color(0xFF167292),
-                      width: 1,
-                    ), // Border color and width
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: const Color(0xFF167292),
+                    side: const BorderSide(color: Color(0xFF167292), width: 1),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        8,
-                      ), // Optional: add rounded corners
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       vertical: 12,
                       horizontal: 24,
-                    ), // Optional: Add padding for better look
+                    ),
                   ),
                   child: const Text("Get Data"),
                 ),
               ],
             ),
+
             const SizedBox(height: 20),
+
+            /// Toggle buttons for chart type
             Row(
-              mainAxisAlignment: MainAxisAlignment.center, // Center the row
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ToggleButtons(
-                  isSelected: [isWeekly, !isWeekly], // Control selected state
+                  isSelected: [isWeekly, !isWeekly],
                   selectedColor: Colors.white,
                   color: Colors.white70,
                   borderColor: Colors.transparent,
@@ -252,32 +274,29 @@ class _OrganizationAnalyticsPageState extends State<OrganizationAnalyticsPage> {
                   children: [
                     Row(
                       children: const [
-                        const SizedBox(width: 16),
-
+                        SizedBox(width: 16),
                         Icon(Icons.trending_up, color: Colors.white70),
                         SizedBox(width: 5),
                         Text("Weekly", style: TextStyle(color: Colors.white70)),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16),
                       ],
                     ),
                     Row(
                       children: const [
-                        const SizedBox(width: 16),
-
+                        SizedBox(width: 16),
                         Icon(Icons.trending_up, color: Colors.white70),
                         SizedBox(width: 5),
                         Text(
                           "Monthly",
                           style: TextStyle(color: Colors.white70),
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16),
                       ],
                     ),
                   ],
                   onPressed: (index) {
                     setState(() {
-                      isWeekly =
-                          index == 0; // Toggle between weekly and monthly
+                      isWeekly = index == 0;
                     });
                   },
                 ),
@@ -285,6 +304,8 @@ class _OrganizationAnalyticsPageState extends State<OrganizationAnalyticsPage> {
             ),
 
             const SizedBox(height: 16),
+
+            /// Chart or loader
             Expanded(
               child:
                   isLoading
@@ -315,15 +336,27 @@ class _OrganizationAnalyticsPageState extends State<OrganizationAnalyticsPage> {
   }
 }
 
+/// Represents test data per time unit.
 class TestData {
+  /// X-axis label (e.g., week or month).
   final String label;
+
+  /// Number of tests taken.
   final int tests;
+
+  /// Creates a [TestData] instance.
   TestData({required this.label, required this.tests});
 }
 
+/// Widget to render a line chart from test data.
 class TestLineChart extends StatelessWidget {
+  /// List of data points to show.
   final List<TestData> data;
+
+  /// Whether the chart is weekly (true) or monthly (false).
   final bool isWeekly;
+
+  /// Creates a [TestLineChart] widget.
   const TestLineChart({super.key, required this.data, required this.isWeekly});
 
   @override
@@ -392,9 +425,7 @@ class TestLineChart extends StatelessWidget {
         maxX: data.length - 1.0,
         minY: 0,
         maxY:
-            (data
-                .map((e) => e.tests)
-                .reduce((a, b) => a > b ? a : b)).toDouble(),
+            data.map((e) => e.tests).reduce((a, b) => a > b ? a : b).toDouble(),
         lineBarsData: [
           LineChartBarData(
             spots: List.generate(
@@ -408,9 +439,7 @@ class TestLineChart extends StatelessWidget {
             dotData: FlDotData(show: true),
             belowBarData: BarAreaData(
               show: true,
-              color: const Color(
-                0xFF167292,
-              ).withOpacity(0.1), // Correctly apply opacity to the color
+              color: const Color(0xFF167292).withOpacity(0.1),
             ),
           ),
         ],
@@ -422,7 +451,7 @@ class TestLineChart extends StatelessWidget {
                 if (index >= 0 && index < data.length) {
                   String weekRange = isWeekly ? '${data[index].label}' : '';
                   return LineTooltipItem(
-                    '${weekRange}: ${data[index].tests} tests',
+                    '$weekRange: ${data[index].tests} tests',
                     const TextStyle(color: Colors.white),
                   );
                 }
