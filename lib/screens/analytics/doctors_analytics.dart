@@ -1,3 +1,5 @@
+/// A Flutter widget that displays weekly and monthly analytics charts for doctors,
+/// using Appwrite as the backend and FL Chart for visualization.
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +8,12 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:intl/intl.dart';
 
+/// The main page that renders doctor registration trends in weekly and monthly charts.
 class DoctorAnalyticsPage extends StatefulWidget {
+  /// The Appwrite client to use for fetching data.
   final Client client;
+
+  /// Constructor for [DoctorAnalyticsPage].
   const DoctorAnalyticsPage({super.key, required this.client});
 
   @override
@@ -16,16 +22,28 @@ class DoctorAnalyticsPage extends StatefulWidget {
 
 class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
     with TickerProviderStateMixin {
+  /// Controller for switching between weekly and monthly tabs.
   late TabController _tabController;
+
+  /// Whether data is currently being loaded.
   bool isLoading = true;
+
+  /// Whether chart data is available.
   bool isChartDataAvailable = false;
 
+  /// Weekly data points for the line chart.
   List<FlSpot> weeklySpots = [];
+
+  /// Labels for the X-axis of the weekly chart.
   List<String> weeklyLabels = [];
 
+  /// Monthly data points for the line chart.
   List<FlSpot> monthlySpots = [];
+
+  /// Labels for the X-axis of the monthly chart.
   List<String> monthlyLabels = [];
 
+  /// Instance of Appwrite [Databases] for data access.
   late final Databases database;
 
   @override
@@ -36,6 +54,7 @@ class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
     fetchAnalyticsData();
   }
 
+  /// Fetches doctor registration data from Appwrite and prepares data for both weekly and monthly charts.
   Future<void> fetchAnalyticsData() async {
     try {
       final response = await database.listDocuments(
@@ -71,6 +90,10 @@ class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
     }
   }
 
+  /// Processes a list of documents and returns a time-bucketed list of doctor registrations.
+  ///
+  /// [docs] - List of Appwrite documents.
+  /// [type] - Either `'weekly'` or `'monthly'`.
   List<Map<String, dynamic>> prepareTrend(
     List<models.Document> docs,
     String type,
@@ -101,6 +124,9 @@ class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
     return result;
   }
 
+  /// Converts trend data into a list of [FlSpot] for chart rendering.
+  ///
+  /// [data] - List of maps with `createdOn` and `noOfDoctors`.
   List<FlSpot> buildSpots(List<Map<String, dynamic>> data) {
     return data.asMap().entries.map((e) {
       return FlSpot(
@@ -110,12 +136,19 @@ class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
     }).toList();
   }
 
+  /// Calculates the week number for a given [date].
+  ///
+  /// Week starts from the first day of the year.
   int getWeek(DateTime date) {
     final firstDayOfYear = DateTime(date.year, 1, 1);
     final days = date.difference(firstDayOfYear).inDays;
     return ((days + firstDayOfYear.weekday) / 7).ceil();
   }
 
+  /// Builds the line chart widget for the provided data.
+  ///
+  /// [spots] - Y-axis points.
+  /// [labels] - X-axis labels.
   Widget buildChart(List<FlSpot> spots, List<String> labels) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -160,6 +193,7 @@ class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
   Widget build(BuildContext context) {
     return Column(
       children: [
+        /// Tab bar to switch between Weekly and Monthly views.
         TabBar(
           controller: _tabController,
           labelColor: Colors.teal,
@@ -169,6 +203,8 @@ class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
             Tab(icon: Icon(Icons.trending_up), text: 'Monthly Downloads'),
           ],
         ),
+
+        /// Body of the page that shows either a chart or a loading indicator.
         Expanded(
           child:
               isLoading
