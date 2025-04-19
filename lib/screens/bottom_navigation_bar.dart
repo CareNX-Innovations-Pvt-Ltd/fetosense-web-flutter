@@ -37,7 +37,7 @@ class BottomNavBar extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-      color: Colors.black54, // Background color
+      color: const Color(0xFF181A1B),
       child: Row(
         mainAxisAlignment:
             MainAxisAlignment.spaceBetween, // Space elements properly

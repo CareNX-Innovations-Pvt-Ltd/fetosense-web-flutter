@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
   return Container(
     width: 210,
-    color: Colors.grey[850],
+    color: const Color(0xFF282B2C),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

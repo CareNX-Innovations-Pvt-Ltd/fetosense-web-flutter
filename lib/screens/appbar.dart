@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 
 PreferredSizeWidget buildAppBar(VoidCallback toggleSidebar, String userEmail) {
   return AppBar(
-    backgroundColor: Colors.black54,
+    backgroundColor: const Color(0xFF181A1B),
     title: Image.asset('assets/images/login/fetosense.png', height: 30),
     leading: IconButton(
       icon: Icon(Icons.menu, color: Colors.grey[600]),
