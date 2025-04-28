@@ -20,9 +20,12 @@ dependencies:
   path_provider: ^2.0.14
   permission_handler: ^11.0.1
   intl: ^0.18.1
-
-
-
+  url_launcher: any
+  go_router:
+  get_it: ^8.0.3
+  flutter_bloc: ^9.1.0
+  shared_preferences: any
+  bloc: ^9.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

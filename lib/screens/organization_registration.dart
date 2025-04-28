@@ -1,6 +1,7 @@
+import 'package:fetosense_mis/core/network/appwrite_config.dart';
+import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/models.dart' as models;
 
 /// A StatefulWidget for the Organization Registration page.
 ///
@@ -9,9 +10,7 @@ import 'package:appwrite/models.dart' as models;
 /// various dropdowns for status, designation, state, and city. It uses form validation
 /// and sends the data to the Appwrite backend when the user presses the "Save" button.
 class OrganizationRegistration extends StatefulWidget {
-  final Client client;
-
-  const OrganizationRegistration({super.key, required this.client});
+  const OrganizationRegistration({super.key});
 
   @override
   State createState() => _OrganizationRegistrationState();
@@ -20,7 +19,7 @@ class OrganizationRegistration extends StatefulWidget {
 class _OrganizationRegistrationState extends State<OrganizationRegistration> {
   final _formKey = GlobalKey<FormState>();
   late Databases db;
-
+  final client = locator<AppwriteService>().client;
   // Text controllers for each form field
   TextEditingController organizationController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
@@ -47,7 +46,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
   @override
   void initState() {
     super.initState();
-    db = Databases(widget.client);
+    db = Databases(client);
   }
 
   @override
@@ -55,7 +54,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
     return Container(
       alignment: Alignment.topCenter,
       child: Container(
-        margin: EdgeInsets.all(16),
+        margin: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.black45,
           borderRadius: BorderRadius.circular(5),
@@ -69,14 +68,14 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                margin: EdgeInsets.only(bottom: 8),
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
                   border: Border(
                     bottom: BorderSide(color: Colors.white, width: 1),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   "Organization Registration",
                   style: TextStyle(
                     color: Colors.white,
@@ -86,18 +85,18 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     _buildFormFields(),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Center(
                       child: ElevatedButton(
                         onPressed: _saveForm,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.cyan[700],
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                             horizontal: 40,
                             vertical: 12,
                           ),
@@ -105,7 +104,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           "Save",
                           style: TextStyle(
                             fontSize: 16,
@@ -261,12 +260,12 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildLabel(label, isRequired),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         SizedBox(
           height: 40,
           child: TextFormField(
             controller: controller,
-            style: TextStyle(color: Colors.grey),
+            style: const TextStyle(color: Colors.grey),
             keyboardType: isNumber ? TextInputType.number : TextInputType.text,
             decoration: _inputDecoration(hintText),
             validator:
@@ -295,7 +294,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildLabel(label, isRequired),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         SizedBox(
           height: 40,
           child: DropdownButtonFormField<String>(
@@ -305,7 +304,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
                     .map(
                       (e) => DropdownMenuItem(
                         value: e,
-                        child: Text(e, style: TextStyle(color: Colors.white)),
+                        child: Text(e, style: const TextStyle(color: Colors.white)),
                       ),
                     )
                     .toList(),
@@ -326,7 +325,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
       filled: true,
       fillColor: Colors.black54,
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
     );
   }
 
@@ -334,8 +333,8 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
   Widget _buildLabel(String label, bool isRequired) {
     return Row(
       children: [
-        Text(label, style: TextStyle(color: Colors.white)),
-        if (isRequired) Text(' *', style: TextStyle(color: Colors.red)),
+        Text(label, style: const TextStyle(color: Colors.white)),
+        if (isRequired) const Text(' *', style: TextStyle(color: Colors.red)),
       ],
     );
   }
@@ -344,7 +343,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
   void _saveForm() async {
     if (_formKey.currentState!.validate()) {
       try {
-        final response = await db.createDocument(
+        await db.createDocument(
           databaseId: '67ece4a7002a0a732dfd',
           collectionId: '67f36a7e002c46ea05f0',
           documentId: ID.unique(),
@@ -364,7 +363,7 @@ class _OrganizationRegistrationState extends State<OrganizationRegistration> {
           },
         );
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Organization saved successfully!')),
+          const SnackBar(content: Text('Organization saved successfully!')),
         );
       } catch (e) {
         ScaffoldMessenger.of(

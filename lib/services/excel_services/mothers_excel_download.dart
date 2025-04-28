@@ -28,7 +28,7 @@ class ExcelExportService {
     try {
       // Create a new Excel file and select the first sheet
       final excel = Excel.createExcel();
-      final Sheet sheet = excel['Sheet1']!;
+      final Sheet sheet = excel['Sheet1'];
 
       // Add headers to the sheet
       sheet.appendRow(['Name', 'Organization', 'Device', 'Doctor', 'Test']);

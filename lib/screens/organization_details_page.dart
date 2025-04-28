@@ -1,3 +1,5 @@
+import 'package:fetosense_mis/core/network/appwrite_config.dart';
+import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/widget/custom_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
@@ -16,9 +18,8 @@ import 'organization_edit_popup.dart';
 ///
 /// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
 class OrganizationDetailsPage extends StatefulWidget {
-  final Client client;
 
-  const OrganizationDetailsPage({super.key, required this.client});
+  const OrganizationDetailsPage({super.key,});
 
   @override
   State<OrganizationDetailsPage> createState() =>
@@ -29,7 +30,7 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
   late Databases db;
   List<models.Document> allOrganizations = [];
   List<models.Document> filteredOrganizations = [];
-
+  final client = locator<AppwriteService>().client;
   DateTime? fromDate;
   DateTime? tillDate;
 
@@ -40,7 +41,7 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
   @override
   void initState() {
     super.initState();
-    db = Databases(widget.client);
+    db = Databases(client);
     fromDateController = TextEditingController();
     tillDateController = TextEditingController();
     searchController.addListener(_applySearchFilter);
@@ -135,8 +136,8 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       Icon(Icons.apartment, color: Colors.white, size: 20),
                       SizedBox(width: 8),
                       Text(
@@ -226,7 +227,7 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
               child: SingleChildScrollView(
                 child: DataTable(
                   columnSpacing: 16,
-                  headingRowColor: MaterialStateProperty.all(
+                  headingRowColor: WidgetStateProperty.all(
                     const Color(0xFF181A1B),
                   ),
                   columns: const [
@@ -413,7 +414,7 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
                                               0.6,
                                           height: 600,
                                           child: OrganizationEditPopup(
-                                            client: widget.client,
+                                            client: client,
                                             data:
                                                 org.data, // pass full org data here
                                             documentId: org.$id,

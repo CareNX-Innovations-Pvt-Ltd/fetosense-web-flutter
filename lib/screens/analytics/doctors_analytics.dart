@@ -1,7 +1,8 @@
 /// A Flutter widget that displays weekly and monthly analytics charts for doctors,
 /// using Appwrite as the backend and FL Chart for visualization.
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
+library;
+import 'package:fetosense_mis/core/network/appwrite_config.dart';
+import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:appwrite/appwrite.dart';
@@ -10,11 +11,8 @@ import 'package:intl/intl.dart';
 
 /// The main page that renders doctor registration trends in weekly and monthly charts.
 class DoctorAnalyticsPage extends StatefulWidget {
-  /// The Appwrite client to use for fetching data.
-  final Client client;
-
   /// Constructor for [DoctorAnalyticsPage].
-  const DoctorAnalyticsPage({super.key, required this.client});
+  const DoctorAnalyticsPage({super.key});
 
   @override
   State<DoctorAnalyticsPage> createState() => _DoctorAnalyticsPageState();
@@ -46,11 +44,12 @@ class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
   /// Instance of Appwrite [Databases] for data access.
   late final Databases database;
 
+  final client = locator<AppwriteService>().client;
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    database = Databases(widget.client);
+    database = Databases(client);
     fetchAnalyticsData();
   }
 
@@ -85,7 +84,7 @@ class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
         isLoading = false;
       });
     } catch (e) {
-      print("Error fetching data: $e");
+      debugPrint("Error fetching data: $e");
       setState(() => isLoading = false);
     }
   }
@@ -154,9 +153,9 @@ class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
       padding: const EdgeInsets.all(16.0),
       child: LineChart(
         LineChartData(
-          gridData: FlGridData(show: false),
+          gridData: const FlGridData(show: false),
           titlesData: FlTitlesData(
-            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true)),
+            leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: true)),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
@@ -181,7 +180,7 @@ class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
               isCurved: true,
               color: Colors.blueAccent,
               barWidth: 3,
-              dotData: FlDotData(show: false),
+              dotData: const FlDotData(show: false),
             ),
           ],
         ),

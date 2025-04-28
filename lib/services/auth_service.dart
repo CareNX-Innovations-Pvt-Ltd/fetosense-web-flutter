@@ -1,5 +1,8 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
+import 'package:fetosense_mis/core/network/appwrite_config.dart';
+import 'package:fetosense_mis/core/network/dependency_injection.dart';
+import 'package:flutter/cupertino.dart';
 
 /// A service for handling user authentication using Appwrite.
 ///
@@ -9,13 +12,12 @@ import 'package:appwrite/models.dart' as models;
 /// Appwrite account API for user management.
 class AuthService {
   /// The Appwrite [Account] instance used for authentication operations.
-  final Account account;
 
   /// Creates an [AuthService] instance with the given [client].
   ///
   /// [client] is used to initialize the [Account] instance for interacting with
   /// the Appwrite API.
-  AuthService(Client client) : account = Account(client);
+  final Account account = Account(locator<AppwriteService>().client);
 
   /// Registers a new user with the given email and password.
   ///
@@ -71,6 +73,12 @@ class AuthService {
   ///
   /// Returns a [models.User] object representing the current user.
   Future<models.User> getCurrentUser() async {
-    return await account.get();
+    try {
+      final user = await account.get();
+      debugPrint('Logged in user: ${user.email}');
+      return user;
+    } on AppwriteException catch (e) {
+      throw Exception('Failed to get user: ${e.message}');
+    }
   }
 }

@@ -7,16 +7,15 @@ import 'package:appwrite/appwrite.dart';
 /// This screen allows a user to register by providing their email and password.
 /// It uses the `AuthService` class to handle user registration through the Appwrite backend.
 class RegisterScreen extends StatefulWidget {
-  final Client client;
 
   /// Constructor to pass the [Client] object to the widget.
-  RegisterScreen({required this.client});
+  const RegisterScreen({super.key});
 
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  RegisterScreenState createState() => RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class RegisterScreenState extends State<RegisterScreen> {
   late final AuthService authService;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -25,7 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void initState() {
     super.initState();
-    authService = AuthService(widget.client);
+    authService = AuthService();
   }
 
   /// Registers the user by calling the [AuthService]'s `registerUser` method.
@@ -47,28 +46,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Register")),
+      appBar: AppBar(title: const Text("Register")),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             // Email Text Field for user input
             TextField(
               controller: emailController,
-              decoration: InputDecoration(labelText: "Email"),
+              decoration: const InputDecoration(labelText: "Email"),
             ),
             // Password Text Field for user input
             TextField(
               controller: passwordController,
-              decoration: InputDecoration(labelText: "Password"),
+              decoration: const InputDecoration(labelText: "Password"),
               obscureText: true,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // Register Button to trigger user registration
-            ElevatedButton(onPressed: registerUser, child: Text("Register")),
-            SizedBox(height: 20),
+            ElevatedButton(onPressed: registerUser, child: const Text("Register")),
+            const SizedBox(height: 20),
             // Message displaying success or failure
-            Text(message, style: TextStyle(color: Colors.red)),
+            Text(message, style: const TextStyle(color: Colors.red)),
           ],
         ),
       ),

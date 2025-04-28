@@ -1,3 +1,5 @@
+import 'package:fetosense_mis/core/network/appwrite_config.dart';
+import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/widget/custom_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
@@ -13,9 +15,8 @@ import '../utils/fetch_mothers.dart';
 ///
 /// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
 class MotherDetailsPage extends StatefulWidget {
-  final Client client;
 
-  const MotherDetailsPage({super.key, required this.client});
+  const MotherDetailsPage({super.key});
 
   @override
   State<MotherDetailsPage> createState() => _MotherDetailsPageState();
@@ -25,7 +26,7 @@ class _MotherDetailsPageState extends State<MotherDetailsPage> {
   late Databases db;
   List<models.Document> allMothers = [];
   List<models.Document> filteredMothers = [];
-
+  final client = locator<AppwriteService>().client;
   DateTime? fromDate;
   DateTime? tillDate;
 
@@ -36,7 +37,7 @@ class _MotherDetailsPageState extends State<MotherDetailsPage> {
   @override
   void initState() {
     super.initState();
-    db = Databases(widget.client);
+    db = Databases(client);
     fromDateController = TextEditingController();
     tillDateController = TextEditingController();
     searchController.addListener(_applySearchFilter);
@@ -129,8 +130,8 @@ class _MotherDetailsPageState extends State<MotherDetailsPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       Icon(Icons.apartment, color: Colors.white, size: 20),
                       SizedBox(width: 8),
                       Text(
@@ -220,7 +221,7 @@ class _MotherDetailsPageState extends State<MotherDetailsPage> {
               child: SingleChildScrollView(
                 child: DataTable(
                   columnSpacing: 16,
-                  headingRowColor: MaterialStateProperty.all(
+                  headingRowColor: WidgetStateProperty.all(
                     const Color(0xFF181A1B),
                   ),
                   columns: const [
