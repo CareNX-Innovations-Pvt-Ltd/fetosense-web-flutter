@@ -1,3 +1,4 @@
+/*
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:flutter/material.dart';
@@ -346,4 +347,4 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
       }
     }
   }
-}
+}*/

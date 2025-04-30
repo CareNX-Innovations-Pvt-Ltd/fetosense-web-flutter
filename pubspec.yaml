@@ -26,6 +26,7 @@ dependencies:
   flutter_bloc: ^9.1.0
   shared_preferences: any
   bloc: ^9.0.0
+  equatable:
 dev_dependencies:
   flutter_test:
     sdk: flutter

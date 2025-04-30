@@ -2,6 +2,7 @@
 
 import 'package:fetosense_mis/core/models/models.dart';
 import 'package:fetosense_mis/screens/device_details/device_details_view.dart';
+import 'package:fetosense_mis/screens/organization_details/organization_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -14,17 +15,15 @@ import 'package:fetosense_mis/core/utils/preferences.dart';
 import '../services/auth_service.dart';
 import '../widget/appbar.dart';
 import '../widget/bottom_navigation_bar.dart';
+import 'device_registration/device_registration_view.dart';
+import 'organization_registration/organization_registration_view.dart';
 import 'sidebar.dart';
 
 import 'analytics/doctors_analytics.dart';
 import 'analytics/organizations_analytics.dart';
-import 'device_details_page.dart';
-import 'device_registration.dart';
 import 'doctors_detail_page.dart';
 import 'generate_qr_page.dart';
 import 'mothers_details_page.dart';
-import 'organization_details_page.dart';
-import 'organization_registration.dart';
 
 class DashboardScreen extends StatefulWidget {
   final int childIndex;
@@ -122,13 +121,13 @@ class _DashboardScreenState extends State<DashboardScreen>
           children: [_buildTopStats(), Expanded(child: _buildGraphSection())],
         );
       case 1:
-        return const OrganizationRegistration();
+        return const OrganizationRegistrationView();
       case 2:
         return const DeviceRegistration();
       case 3:
         return const GenerateQRPage();
       case 4:
-        return const OrganizationDetailsPage();
+        return const OrganizationDetailsPageView();
       case 5:
         return const DeviceDetailsView();
       case 6:

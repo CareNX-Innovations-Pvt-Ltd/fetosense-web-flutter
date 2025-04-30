@@ -1,8 +1,12 @@
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/core/utils/app_routes.dart';
 import 'package:fetosense_mis/core/utils/preferences.dart';
+import 'package:fetosense_mis/screens/device_details/device_details_cubit.dart';
+import 'package:fetosense_mis/screens/login/login_cubit.dart';
+import 'package:fetosense_mis/screens/organization_registration/organization_registration_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// The entry point of the application.
 void main() {
@@ -20,12 +24,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Flutter Web + Appwrite',
-      debugShowCheckedModeBanner:
-          false,
-      theme: ThemeData.dark(),
-      routerConfig: AppRouter().router,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => LoginCubit(),
+        ),
+        BlocProvider(
+          create: (context) => OrganizationRegistrationCubit(),
+        ),
+        BlocProvider(
+          create: (context) => DeviceDetailsCubit(),
+        ),
+      ],
+      child: MaterialApp.router(
+        title: 'Flutter Web + Appwrite',
+        debugShowCheckedModeBanner:
+            false,
+        theme: ThemeData.dark(),
+        routerConfig: AppRouter().router,
+      ),
     );
   }
 }
