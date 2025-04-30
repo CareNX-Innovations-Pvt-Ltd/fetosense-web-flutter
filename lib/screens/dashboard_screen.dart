@@ -2,6 +2,7 @@
 
 import 'package:fetosense_mis/core/models/models.dart';
 import 'package:fetosense_mis/screens/device_details/device_details_view.dart';
+import 'package:fetosense_mis/screens/doctor_details/doctor_details_view.dart';
 import 'package:fetosense_mis/screens/organization_details/organization_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -21,7 +22,6 @@ import 'sidebar.dart';
 
 import 'analytics/doctors_analytics.dart';
 import 'analytics/organizations_analytics.dart';
-import 'doctors_detail_page.dart';
 import 'generate_qr_page.dart';
 import 'mothers_details_page.dart';
 
@@ -131,7 +131,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       case 5:
         return const DeviceDetailsView();
       case 6:
-        return const DoctorDetailsPage();
+        return const DoctorDetailsView();
       case 7:
         return const MotherDetailsPage();
       case 8:

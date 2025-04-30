@@ -378,7 +378,6 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage> {
                                               0.6,
                                           height: 600,
                                           child: DoctorEditPopup(
-                                            client: client,
                                             data:
                                                 org.data, // pass full org data here
                                             documentId: org.$id,
