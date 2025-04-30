@@ -1,4 +1,6 @@
+import 'package:fetosense_mis/core/utils/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// Builds a sidebar for navigation with expandable menus and hover effects.
 ///
@@ -17,10 +19,11 @@ Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
           icon: Icons.dashboard,
           title: "Dashboard",
           onTap: () {
-            Navigator.pushNamed(context, '/dashboard');
+            // Navigator.pushNamed(context, '/dashboard');
+            context.pushReplacement(AppRoutes.dashboard);
           },
         ),
-        _ExpandableMenu(
+        const _ExpandableMenu(
           icon: Icons.app_registration,
           title: "Registration",
           children: [
@@ -32,7 +35,7 @@ Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
             _SidebarItem(title: "Generate QR", route: '/generate-qr'),
           ],
         ),
-        _ExpandableMenu(
+        const _ExpandableMenu(
           icon: Icons.pie_chart,
           title: "MIS",
           children: [
@@ -58,7 +61,7 @@ Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
             ),
           ],
         ),
-        _ExpandableMenu(
+        const _ExpandableMenu(
           icon: Icons.analytics,
           title: "Analytics",
           children: [
@@ -74,9 +77,9 @@ Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
             ),
           ],
         ),
-        _SidebarItem(icon: Icons.article, title: "Reports"),
-        _SidebarItem(icon: Icons.settings, title: "Operations"),
-        _SidebarItem(icon: Icons.people, title: "Users"),
+        const _SidebarItem(icon: Icons.article, title: "Reports"),
+        const _SidebarItem(icon: Icons.settings, title: "Operations"),
+        const _SidebarItem(icon: Icons.people, title: "Users"),
         const Spacer(),
       ],
     ),
@@ -95,12 +98,11 @@ class _SidebarItem extends StatefulWidget {
   final VoidCallback? onTap;
 
   const _SidebarItem({
-    Key? key,
     this.icon,
     required this.title,
     this.route,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   _SidebarItemState createState() => _SidebarItemState();
@@ -117,7 +119,7 @@ class _SidebarItemState extends State<_SidebarItem> {
       child: GestureDetector(
         onTap: () {
           if (widget.route != null) {
-            Navigator.pushNamed(context, widget.route!);
+            context.go(widget.route!);
           } else if (widget.onTap != null) {
             widget.onTap!();
           }
@@ -164,11 +166,10 @@ class _ExpandableMenu extends StatefulWidget {
   final List<Widget> children;
 
   const _ExpandableMenu({
-    Key? key,
     required this.icon,
     required this.title,
     required this.children,
-  }) : super(key: key);
+  });
 
   @override
   _ExpandableMenuState createState() => _ExpandableMenuState();

@@ -1,5 +1,8 @@
 /// Flutter page that shows weekly or monthly test analytics for organizations
 /// using Appwrite as the backend and fl_chart for graph visualization.
+library;
+import 'package:fetosense_mis/core/network/appwrite_config.dart';
+import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
@@ -10,11 +13,9 @@ import '../../utils/fetch_tests.dart';
 
 /// A page that displays test trends for selected organizations in weekly/monthly charts.
 class OrganizationAnalyticsPage extends StatefulWidget {
-  /// The Appwrite client used for fetching data.
-  final Client client;
 
   /// Creates an [OrganizationAnalyticsPage] instance.
-  const OrganizationAnalyticsPage({super.key, required this.client});
+  const OrganizationAnalyticsPage({super.key,});
 
   @override
   State<OrganizationAnalyticsPage> createState() =>
@@ -24,6 +25,8 @@ class OrganizationAnalyticsPage extends StatefulWidget {
 class _OrganizationAnalyticsPageState extends State<OrganizationAnalyticsPage> {
   /// Instance of Appwrite [Databases].
   late Databases db;
+
+  final client = locator<AppwriteService>().client;
 
   /// List of available organizations.
   List<models.Document> organizations = [];
@@ -49,7 +52,7 @@ class _OrganizationAnalyticsPageState extends State<OrganizationAnalyticsPage> {
   @override
   void initState() {
     super.initState();
-    db = Databases(widget.client);
+    db = Databases(client);
     fetchOrganizationsList();
     fetchGraphData();
   }
@@ -66,7 +69,7 @@ class _OrganizationAnalyticsPageState extends State<OrganizationAnalyticsPage> {
     DateTime current = start.subtract(Duration(days: start.weekday % 7));
     while (current.isBefore(end)) {
       final weekStart = current;
-      final weekEnd = current.add(Duration(days: 6));
+      final weekEnd = current.add(const Duration(days: 6));
       final label =
           '${DateFormat('dd-MM-yyyy').format(weekStart)} - ${DateFormat('dd-MM-yyyy').format(weekEnd)}';
       buckets.add(label);
@@ -271,9 +274,9 @@ class _OrganizationAnalyticsPageState extends State<OrganizationAnalyticsPage> {
                   color: Colors.white70,
                   borderColor: Colors.transparent,
                   borderRadius: BorderRadius.circular(8),
-                  children: [
+                  children: const [
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(width: 16),
                         Icon(Icons.trending_up, color: Colors.white70),
                         SizedBox(width: 5),
@@ -282,7 +285,7 @@ class _OrganizationAnalyticsPageState extends State<OrganizationAnalyticsPage> {
                       ],
                     ),
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(width: 16),
                         Icon(Icons.trending_up, color: Colors.white70),
                         SizedBox(width: 5),
@@ -363,7 +366,7 @@ class TestLineChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return LineChart(
       LineChartData(
-        gridData: FlGridData(
+        gridData: const FlGridData(
           show: true,
           drawHorizontalLine: true,
           horizontalInterval: 1,
@@ -397,6 +400,7 @@ class TestLineChart extends StatelessWidget {
                             ),
                           );
                   return SideTitleWidget(
+                    meta: meta,
                     child: Text(
                       label,
                       style: const TextStyle(
@@ -404,15 +408,14 @@ class TestLineChart extends StatelessWidget {
                         fontSize: 10,
                       ),
                     ),
-                    meta: meta,
                   );
                 }
                 return const SizedBox.shrink();
               },
             ),
           ),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         ),
         borderData: FlBorderData(
           show: true,
@@ -436,7 +439,7 @@ class TestLineChart extends StatelessWidget {
             color: const Color(0xFF167292),
             barWidth: 3,
             preventCurveOverShooting: true,
-            dotData: FlDotData(show: true),
+            dotData: const FlDotData(show: true),
             belowBarData: BarAreaData(
               show: true,
               color: const Color(0xFF167292).withOpacity(0.1),
@@ -449,13 +452,13 @@ class TestLineChart extends StatelessWidget {
               return lineBarSpots.map((lineBarSpot) {
                 final index = lineBarSpot.spotIndex.toInt();
                 if (index >= 0 && index < data.length) {
-                  String weekRange = isWeekly ? '${data[index].label}' : '';
+                  String weekRange = isWeekly ? data[index].label : '';
                   return LineTooltipItem(
                     '$weekRange: ${data[index].tests} tests',
                     const TextStyle(color: Colors.white),
                   );
                 }
-                return LineTooltipItem('', const TextStyle());
+                return const LineTooltipItem('', TextStyle());
               }).toList();
             },
           ),

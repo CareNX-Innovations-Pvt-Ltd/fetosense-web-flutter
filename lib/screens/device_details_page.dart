@@ -1,3 +1,5 @@
+import 'package:fetosense_mis/core/network/appwrite_config.dart';
+import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/widget/custom_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
@@ -5,6 +7,7 @@ import 'package:appwrite/models.dart' as models;
 import 'package:fetosense_mis/services/excel_services/devices_excel_download.dart';
 import '../utils/fetch_devices.dart';
 import '../utils/format_date.dart';
+import 'device_edit/device_edit_view.dart';
 import 'device_edit_popup.dart';
 
 /// A StatefulWidget that represents the Device Details page.
@@ -17,9 +20,7 @@ import 'device_edit_popup.dart';
 ///
 /// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
 class DeviceDetailsPage extends StatefulWidget {
-  final Client client;
-
-  const DeviceDetailsPage({super.key, required this.client});
+  const DeviceDetailsPage({super.key});
 
   @override
   State<DeviceDetailsPage> createState() => _DeviceDetailsPageState();
@@ -27,6 +28,7 @@ class DeviceDetailsPage extends StatefulWidget {
 
 class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
   late Databases db;
+  final client = locator<AppwriteService>().client;
 
   List<models.Document> allDevices = [];
   List<models.Document> filteredDevices = [];
@@ -41,7 +43,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
   @override
   void initState() {
     super.initState();
-    db = Databases(widget.client);
+    db = Databases(client);
     fromDateController = TextEditingController();
     tillDateController = TextEditingController();
     searchController.addListener(_applySearchFilter);
@@ -131,8 +133,8 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       Icon(Icons.apartment, color: Colors.white, size: 20),
                       SizedBox(width: 8),
                       Text(
@@ -222,7 +224,7 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
               child: SingleChildScrollView(
                 child: DataTable(
                   columnSpacing: 16,
-                  headingRowColor: MaterialStateProperty.all(
+                  headingRowColor: WidgetStateProperty.all(
                     const Color(0xFF181A1B),
                   ),
                   columns: const [
@@ -364,7 +366,6 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
                                               0.6,
                                           height: 600,
                                           child: DeviceEditPopup(
-                                            client: widget.client,
                                             data:
                                                 org.data, // pass full org data here
                                             documentId: org.$id,

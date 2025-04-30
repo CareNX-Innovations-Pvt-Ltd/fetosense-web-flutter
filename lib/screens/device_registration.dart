@@ -1,3 +1,6 @@
+/*
+import 'package:fetosense_mis/core/network/appwrite_config.dart';
+import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import '../utils/fetch_organizations.dart';
@@ -10,8 +13,7 @@ import '../utils/fetch_organizations.dart';
 ///
 /// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
 class DeviceRegistration extends StatefulWidget {
-  final Client client;
-  const DeviceRegistration({super.key, required this.client});
+  const DeviceRegistration({super.key});
 
   @override
   State createState() => _DeviceRegistrationState();
@@ -20,7 +22,7 @@ class DeviceRegistration extends StatefulWidget {
 class _DeviceRegistrationState extends State<DeviceRegistration> {
   final _formKey = GlobalKey<FormState>();
   late Databases db;
-
+  final client = locator<AppwriteService>().client;
   TextEditingController deviceNameController = TextEditingController();
   TextEditingController kitIdController = TextEditingController();
   TextEditingController tabletSerialNumberController = TextEditingController();
@@ -36,7 +38,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
   @override
   void initState() {
     super.initState();
-    db = Databases(widget.client);
+    db = Databases(client);
 
     // Fetch organizations from the database and populate the dropdown list.
     fetchOrganizations(db).then((docs) {
@@ -57,11 +59,11 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
     return Container(
       alignment: Alignment.topCenter,
       child: Container(
-        margin: EdgeInsets.all(16),
+        margin: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Color(0xFF272A2C),
+          color: const Color(0xFF272A2C),
           borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: Color(0xFF3E4346), width: 0.5),
+          border: Border.all(color: const Color(0xFF3E4346), width: 0.5),
         ),
         child: Form(
           key: _formKey,
@@ -69,32 +71,32 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
                   color: Color(0xFF1F2223),
                   border: Border(
                     bottom: BorderSide(color: Colors.white, width: 0.5),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   "Device Registration",
                   style: TextStyle(color: Colors.white, fontSize: 15),
                 ),
               ),
               Container(
-                color: Color(0xFF181A1B),
-                padding: EdgeInsets.all(16.0),
+                color: const Color(0xFF181A1B),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     _buildFormFields(),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Center(
                       child: ElevatedButton(
                         onPressed: _saveForm,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF19607A),
-                          padding: EdgeInsets.symmetric(
+                          backgroundColor: const Color(0xFF19607A),
+                          padding: const EdgeInsets.symmetric(
                             horizontal: 80,
                             vertical: 14,
                           ),
@@ -102,7 +104,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
-                        child: Text("Save", style: TextStyle(fontSize: 16)),
+                        child: const Text("Save", style: TextStyle(fontSize: 16)),
                       ),
                     ),
                   ],
@@ -218,12 +220,12 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildLabel(label, isRequired),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         SizedBox(
           height: 40,
           child: TextFormField(
             controller: controller,
-            style: TextStyle(color: Colors.grey),
+            style: const TextStyle(color: Colors.grey),
             keyboardType: isNumber ? TextInputType.number : TextInputType.text,
             decoration: _inputDecoration(hintText),
             validator:
@@ -258,7 +260,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildLabel(label, isRequired),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         SizedBox(
           height: 40,
           child: DropdownButtonFormField<String>(
@@ -268,7 +270,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
                     .map(
                       (e) => DropdownMenuItem(
                         value: e,
-                        child: Text(e, style: TextStyle(color: Colors.white)),
+                        child: Text(e, style: const TextStyle(color: Colors.white)),
                       ),
                     )
                     .toList(),
@@ -285,21 +287,21 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
   InputDecoration _inputDecoration(String hintText) {
     return InputDecoration(
       hintText: hintText,
-      hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+      hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
       filled: true,
-      fillColor: Color(0xFF181A1B),
-      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      fillColor: const Color(0xFF181A1B),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(1),
-        borderSide: BorderSide(color: Color(0xFF373B3E)),
+        borderSide: const BorderSide(color: Color(0xFF373B3E)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(1),
-        borderSide: BorderSide(color: Color(0xFF373B3E)),
+        borderSide: const BorderSide(color: Color(0xFF373B3E)),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(1),
-        borderSide: BorderSide(color: Color(0xFF373B3E), width: 1),
+        borderSide: const BorderSide(color: Color(0xFF373B3E), width: 1),
       ),
     );
   }
@@ -308,8 +310,8 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
   Widget _buildLabel(String label, bool isRequired) {
     return Row(
       children: [
-        Text(label, style: TextStyle(color: Colors.white)),
-        if (isRequired) Text(' *', style: TextStyle(color: Colors.red)),
+        Text(label, style: const TextStyle(color: Colors.white)),
+        if (isRequired) const Text(' *', style: TextStyle(color: Colors.red)),
       ],
     );
   }
@@ -336,7 +338,7 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
         );
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Device registered successfully!')),
+          const SnackBar(content: Text('Device registered successfully!')),
         );
       } catch (e) {
         ScaffoldMessenger.of(
@@ -345,4 +347,4 @@ class _DeviceRegistrationState extends State<DeviceRegistration> {
       }
     }
   }
-}
+}*/

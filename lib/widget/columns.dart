@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 Widget _buildLabel(String label, bool isRequired) {
   return Row(
     children: [
-      Text(label, style: TextStyle(color: Colors.white)),
-      if (isRequired) Text(' *', style: TextStyle(color: Colors.red)),
+      Text(label, style: const TextStyle(color: Colors.white)),
+      if (isRequired) const Text(' *', style: TextStyle(color: Colors.red)),
     ],
   );
 }
@@ -25,21 +25,21 @@ Widget _buildLabel(String label, bool isRequired) {
 InputDecoration _inputDecoration(String hintText) {
   return InputDecoration(
     hintText: hintText,
-    hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+    hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
     filled: true,
-    fillColor: Color(0xFF181A1B),
-    contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+    fillColor: const Color(0xFF181A1B),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(1),
-      borderSide: BorderSide(color: Color(0xFF373B3E)),
+      borderSide: const BorderSide(color: Color(0xFF373B3E)),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(1),
-      borderSide: BorderSide(color: Color(0xFF373B3E)),
+      borderSide: const BorderSide(color: Color(0xFF373B3E)),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(1),
-      borderSide: BorderSide(color: Color(0xFF373B3E), width: 1),
+      borderSide: const BorderSide(color: Color(0xFF373B3E), width: 1),
     ),
   );
 }
@@ -64,12 +64,12 @@ Widget buildColumnWithTextField(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       _buildLabel(label, isRequired),
-      SizedBox(height: 6),
+      const SizedBox(height: 6),
       SizedBox(
         height: 40,
         child: TextFormField(
           controller: controller,
-          style: TextStyle(color: Colors.grey),
+          style: const TextStyle(color: Colors.grey),
           keyboardType: isNumber ? TextInputType.number : TextInputType.text,
           decoration: _inputDecoration(hintText),
           validator:
@@ -107,7 +107,7 @@ Widget buildColumnWithDropdown(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       _buildLabel(label, isRequired),
-      SizedBox(height: 8),
+      const SizedBox(height: 8),
       SizedBox(
         height: 40,
         child: DropdownButtonFormField<String>(
@@ -117,7 +117,7 @@ Widget buildColumnWithDropdown(
                   .map(
                     (e) => DropdownMenuItem(
                       value: e,
-                      child: Text(e, style: TextStyle(color: Colors.white)),
+                      child: Text(e, style: const TextStyle(color: Colors.white)),
                     ),
                   )
                   .toList(),

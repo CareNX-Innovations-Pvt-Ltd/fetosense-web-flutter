@@ -29,7 +29,7 @@ class _GenerateQRPageState extends State<GenerateQRPage> {
   bool _showKitId = false;
   String _qrData = '';
   String _kitId = '';
-  int _qrWidth = 200;
+  final int _qrWidth = 200;
 
   @override
   Widget build(BuildContext context) {

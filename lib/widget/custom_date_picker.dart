@@ -55,9 +55,9 @@ Widget customDatePicker({
         borderSide: BorderSide.none, // Remove border line.
       ),
       suffixIcon: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF1A86AD), // Button background color.
-          borderRadius: const BorderRadius.only(
+        decoration: const BoxDecoration(
+          color: Color(0xFF1A86AD), // Button background color.
+          borderRadius: BorderRadius.only(
             topRight: Radius.circular(4),
             bottomRight: Radius.circular(4),
           ),
