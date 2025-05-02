@@ -1,8 +1,10 @@
 // File: dashboard_screen.dart
 
 import 'package:fetosense_mis/core/models/models.dart';
+import 'package:fetosense_mis/core/services/auth_service.dart';
 import 'package:fetosense_mis/screens/device_details/device_details_view.dart';
 import 'package:fetosense_mis/screens/doctor_details/doctor_details_view.dart';
+import 'package:fetosense_mis/screens/mother_details/mother_details_view.dart';
 import 'package:fetosense_mis/screens/organization_details/organization_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -11,19 +13,16 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/core/utils/app_routes.dart';
-import 'package:fetosense_mis/core/utils/preferences.dart';
 
-import '../services/auth_service.dart';
 import '../widget/appbar.dart';
 import '../widget/bottom_navigation_bar.dart';
 import 'device_registration/device_registration_view.dart';
 import 'organization_registration/organization_registration_view.dart';
-import 'sidebar.dart';
+import '../widget/sidebar.dart';
 
 import 'analytics/doctors_analytics.dart';
 import 'analytics/organizations_analytics.dart';
 import 'generate_qr_page.dart';
-import 'mothers_details_page.dart';
 
 class DashboardScreen extends StatefulWidget {
   final int childIndex;
@@ -36,7 +35,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen>
     with SingleTickerProviderStateMixin {
-  late final AuthService _authService;
+  final AuthService _authService = AuthService();
   final client = locator<AppwriteService>().client;
   late final AnimationController _sidebarAnimationController;
 
@@ -46,7 +45,6 @@ class _DashboardScreenState extends State<DashboardScreen>
   @override
   void initState() {
     super.initState();
-    _authService = AuthService();
     _getUserData();
 
     _sidebarAnimationController = AnimationController(
@@ -62,15 +60,11 @@ class _DashboardScreenState extends State<DashboardScreen>
   }
 
   Future<void> _getUserData() async {
-    try {
-      final user = await _authService.getCurrentUser();
-      setState(() {
-        userEmail = user.email;
-      });
-      locator<PreferenceHelper>().saveUser(user);
-    } catch (e) {
-      debugPrint("Error fetching user: $e");
-    }
+    final user = await _authService.getCurrentUser();
+    setState(() {
+      userEmail = user.email;
+    });
+    // locator<PreferenceHelper>().saveUser(user);
   }
 
   void _toggleSidebar() {
@@ -133,7 +127,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       case 6:
         return const DoctorDetailsView();
       case 7:
-        return const MotherDetailsPage();
+        return const MotherDetailsView();
       case 8:
         return const DoctorAnalyticsPage();
       case 9:

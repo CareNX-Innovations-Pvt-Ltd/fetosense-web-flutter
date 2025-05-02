@@ -1,13 +1,11 @@
-import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
-import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/screens/doctor_details/doctor_details_cubit.dart';
 import 'package:fetosense_mis/screens/doctor_edit_popup.dart' show DoctorEditPopup;
+import 'package:fetosense_mis/core/services/excel_services.dart';
 import 'package:fetosense_mis/utils/format_date.dart';
 import 'package:fetosense_mis/widget/custom_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fetosense_mis/services/excel_services/doctors_excel_download.dart';
 
 class DoctorDetailsView extends StatelessWidget {
   const DoctorDetailsView({super.key});
@@ -15,7 +13,7 @@ class DoctorDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<DoctorDetailsCubit>();
-
+    cubit.fetchDoctorsId();
     final fromDateController = TextEditingController();
     final tillDateController = TextEditingController();
     final searchController = TextEditingController();
@@ -161,6 +159,14 @@ class DoctorDetailsView extends StatelessWidget {
   }
 
   Widget _buildDataTable(BuildContext context, List<models.Document> doctors) {
+    if (doctors.isEmpty) {
+      return const Center(
+        child: Text(
+          "No data available",
+          style: TextStyle(color: Colors.white),
+        ),
+      );
+    }
     return SingleChildScrollView(
       child: DataTable(
         columnSpacing: 16,

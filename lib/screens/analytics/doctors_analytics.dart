@@ -3,6 +3,7 @@
 library;
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
+import 'package:fetosense_mis/core/utils/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:appwrite/appwrite.dart';
@@ -57,8 +58,8 @@ class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
   Future<void> fetchAnalyticsData() async {
     try {
       final response = await database.listDocuments(
-        databaseId: '67ece4a7002a0a732dfd',
-        collectionId: '67f36a7e002c46ea05f0',
+        databaseId: AppConstants.appwriteDatabaseId,
+        collectionId: AppConstants.userCollectionId,
         queries: [Query.equal('type', 'doctor')],
       );
 

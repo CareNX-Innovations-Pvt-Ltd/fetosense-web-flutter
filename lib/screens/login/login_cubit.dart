@@ -1,9 +1,8 @@
-import 'package:appwrite/models.dart';
 import 'package:bloc/bloc.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/core/utils/app_routes.dart';
 import 'package:fetosense_mis/core/utils/preferences.dart';
-import 'package:fetosense_mis/services/auth_service.dart';
+import 'package:fetosense_mis/core/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

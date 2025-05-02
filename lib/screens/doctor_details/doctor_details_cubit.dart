@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/core/utils/app_constants.dart';
+import 'package:flutter/cupertino.dart';
 
 part 'doctor_details_state.dart';
 
@@ -63,7 +64,9 @@ class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
         collectionId: AppConstants.userCollectionId,
         queries: queries,
       );
-
+      emit(state.copyWith(isLoading: false));
+      emit(state.copyWith(filteredDoctors: result.documents));
+      debugPrint(result.documents.toString());
       return result.documents;
     } catch (e) {
       print(' Error fetching doctors: $e');

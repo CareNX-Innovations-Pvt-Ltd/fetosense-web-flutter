@@ -52,11 +52,17 @@ class AuthService {
   /// [password] is the user's password.
   ///
   /// Returns a [models.Session] object representing the created session.
-  Future<models.Session> loginUser(String email, String password) async {
-    return await account.createEmailPasswordSession(
-      email: email,
-      password: password,
-    );
+  Future<String> loginUser(String email, String password) async {
+    try {
+      final session = await account.createEmailPasswordSession(
+        email: email,
+        password: password,
+      );
+      debugPrint('Login successful. Session ID: ${session.$id}');
+      return session.userId;
+    } on AppwriteException catch (e) {
+      throw Exception('Failed to sign in: ${e.message}');
+    }
   }
 
   /// Logs out the currently logged-in user.
