@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Web + Appwrite',
         debugShowCheckedModeBanner:
             false,
-        theme: ThemeData.dark(),
+        theme: ThemeData.light(),
         routerConfig: AppRouter().router,
       ),
     );

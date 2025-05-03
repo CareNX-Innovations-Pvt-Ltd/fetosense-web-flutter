@@ -1,4 +1,4 @@
-import 'package:fetosense_mis/screens/dashboard_screen.dart';
+import 'package:fetosense_mis/screens/dashboard/dashboard_view.dart';
 import 'package:fetosense_mis/screens/login/login_view.dart';
 import 'package:fetosense_mis/screens/register/register_view.dart';
 import 'package:fetosense_mis/screens/splash/splash_view.dart';
