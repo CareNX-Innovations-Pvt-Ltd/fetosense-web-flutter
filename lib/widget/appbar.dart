@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 ///
 /// Returns a [PreferredSizeWidget] that is used to display the AppBar.
 
-PreferredSizeWidget buildAppBar(VoidCallback toggleSidebar, String userEmail) {
+PreferredSizeWidget buildAppBar(VoidCallback toggleSidebar, String userEmail, VoidCallback onLogout) {
   return AppBar(
     backgroundColor: const Color(0xFF181A1B),
     title: Image.asset('assets/images/login/fetosense.png', height: 30),
@@ -27,8 +27,21 @@ PreferredSizeWidget buildAppBar(VoidCallback toggleSidebar, String userEmail) {
             Text(userEmail, style: const TextStyle(color: Colors.white)),
             const SizedBox(width: 8),
 
-            /// Icon representing the user's account.
-            Icon(Icons.account_circle, color: Colors.grey[600]),
+            /// Dropdown icon with logout option
+            PopupMenuButton<String>(
+              icon: Icon(Icons.account_circle, color: Colors.grey[600]),
+              onSelected: (value) {
+                if (value == 'logout') {
+                  onLogout();
+                }
+              },
+              itemBuilder: (context) => [
+                const PopupMenuItem<String>(
+                  value: 'logout',
+                  child: Text('Logout'),
+                ),
+              ],
+            ),
           ],
         ),
       ),

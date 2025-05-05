@@ -1,7 +1,11 @@
 import 'package:appwrite/models.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fetosense_mis/core/models/user_model.dart';
+import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/core/utils/app_constants.dart';
+import 'package:fetosense_mis/core/utils/preferences.dart';
+import 'package:fetosense_mis/core/utils/user_role.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:appwrite/appwrite.dart';
 part 'device_registration_state.dart';
@@ -13,6 +17,8 @@ class DeviceRegistrationCubit extends Cubit<DeviceRegistrationState> {
 
   DeviceRegistrationCubit({required this.db})
       : super(const DeviceRegistrationState());
+
+  final prefs = locator<PreferenceHelper>();
 
   /// Fetches organizations from the database.
   Future<void> fetchOrganizations() async {
@@ -96,35 +102,42 @@ class DeviceRegistrationCubit extends Cubit<DeviceRegistrationState> {
     }
 
     emit(state.copyWith(isSubmitting: true, clearErrorMessage: () => null));
+    UserModel? userModel = prefs.getUser();
+    if(userModel?.role == UserRoles.admin){
+      try {
+        await db.createDocument(
+          databaseId: AppConstants.appwriteDatabaseId,
+          collectionId: AppConstants.deviceCollectionId,
+          documentId: ID.unique(),
+          data: {
+            'deviceCode': state.kitId,
+            'deviceName': state.deviceName,
+            'organizationId': state.selectedOrganizationId,
+            'hospitalName': state.selectedOrganizationName,
+            'tabletSerialNumber': state.tabletSerialNumber,
+            'productType': state.selectedProductType,
+            'tocoId': state.tocoId,
+            'isValid': true,
+            'isDeleted': false,
+            'createdBy': 'admin',
+            'createdOn': DateTime.now().toIso8601String(),
+          },
+        );
 
-    try {
-      await db.createDocument(
-        databaseId: AppConstants.appwriteDatabaseId,
-        collectionId: AppConstants.deviceCollectionId,
-        documentId: ID.unique(),
-        data: {
-          'deviceCode': state.kitId,
-          'deviceName': state.deviceName,
-          'organizationId': state.selectedOrganizationId,
-          'hospitalName': state.selectedOrganizationName,
-          'tabletSerialNumber': state.tabletSerialNumber,
-          'productType': state.selectedProductType,
-          'tocoId': state.tocoId,
-          'isValid': true,
-          'isDeleted': false,
-          'createdBy': 'admin',
-          'createdOn': DateTime.now().toIso8601String(),
-        },
-      );
-
+        emit(state.copyWith(
+          isSubmitting: false,
+          isSuccess: true,
+        ));
+      } catch (e) {
+        emit(state.copyWith(
+          isSubmitting: false,
+          errorMessage: 'Error: $e',
+        ));
+      }
+    } else {
       emit(state.copyWith(
         isSubmitting: false,
-        isSuccess: true,
-      ));
-    } catch (e) {
-      emit(state.copyWith(
-        isSubmitting: false,
-        errorMessage: 'Error: $e',
+        errorMessage: '${userModel?.role} role cannot register device',
       ));
     }
   }

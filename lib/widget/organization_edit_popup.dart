@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
-import '../widget/columns.dart';
+import 'columns.dart';
 
 /// A StatefulWidget that represents the Organization Edit Popup.
 ///

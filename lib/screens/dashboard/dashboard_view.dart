@@ -1,4 +1,7 @@
 import 'package:fetosense_mis/core/models/models.dart';
+import 'package:fetosense_mis/core/models/user_model.dart';
+import 'package:fetosense_mis/core/network/dependency_injection.dart';
+import 'package:fetosense_mis/core/utils/preferences.dart';
 import 'package:fetosense_mis/screens/analytics/doctors_analytics.dart';
 import 'package:fetosense_mis/screens/analytics/organizations_analytics.dart';
 import 'package:fetosense_mis/screens/device_details/device_details_view.dart';
@@ -45,6 +48,8 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView>
     with SingleTickerProviderStateMixin {
   late final AnimationController _sidebarAnimationController;
+  final prefs = locator<PreferenceHelper>();
+  UserModel? userModel;
 
   @override
   void initState() {
@@ -53,6 +58,8 @@ class _DashboardViewState extends State<DashboardView>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+    userModel = prefs.getUser();
+    debugPrint('UserModel: ${userModel?.toJson()}');
   }
 
   @override
@@ -75,6 +82,7 @@ class _DashboardViewState extends State<DashboardView>
           appBar: buildAppBar(
                 () => context.read<DashboardCubit>().toggleSidebar(),
             state.userEmail,
+            () => context.read<DashboardCubit>().logout(context),
           ),
           body: Column(
             children: [

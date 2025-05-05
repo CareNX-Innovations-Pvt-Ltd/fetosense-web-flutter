@@ -2,7 +2,7 @@ import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
-import '../widget/columns.dart';
+import 'columns.dart';
 
 /// A StatefulWidget that represents the Doctor Edit popup dialog.
 ///

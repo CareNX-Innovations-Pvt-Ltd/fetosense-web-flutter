@@ -1,18 +1,18 @@
-import 'package:fetosense_mis/core/network/appwrite_config.dart';
-import 'package:fetosense_mis/core/network/dependency_injection.dart';
-import 'package:flutter/material.dart';
-import 'package:appwrite/appwrite.dart';
-import '../widget/columns.dart';
-
-/// A StatefulWidget that represents the device edit popup dialog.
-///
-/// This popup allows the user to edit the details of a device, such as the device code, tablet serial number,
-/// and device name. It also provides functionality to update the device information in the database and close the popup.
-///
-/// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
-/// The [data] contains the current device data that is being edited.
-/// The [documentId] is the unique identifier of the device document in the database.
-/// The [onClose] callback is triggered when the user closes the popup.
+// import 'package:fetosense_mis/core/network/appwrite_config.dart';
+// import 'package:fetosense_mis/core/network/dependency_injection.dart';
+// import 'package:flutter/material.dart';
+// import 'package:appwrite/appwrite.dart';
+// import '../widget/columns.dart';
+//
+// /// A StatefulWidget that represents the device edit popup dialog.
+// ///
+// /// This popup allows the user to edit the details of a device, such as the device code, tablet serial number,
+// /// and device name. It also provides functionality to update the device information in the database and close the popup.
+// ///
+// /// The [client] is the Appwrite client instance used to interact with the Appwrite backend.
+// /// The [data] contains the current device data that is being edited.
+// /// The [documentId] is the unique identifier of the device document in the database.
+// /// The [onClose] callback is triggered when the user closes the popup.
 // class DeviceEditPopup extends StatefulWidget {
 //   final Map<String, dynamic> data;
 //   final String documentId;
