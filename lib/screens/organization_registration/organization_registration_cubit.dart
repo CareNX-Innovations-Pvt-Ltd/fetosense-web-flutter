@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:fetosense_mis/core/models/user_model.dart';
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/core/utils/app_constants.dart';
+import 'package:fetosense_mis/core/utils/preferences.dart';
+import 'package:fetosense_mis/core/utils/user_role.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 
@@ -17,6 +20,7 @@ class OrganizationRegistrationCubit extends Cubit<OrganizationRegistrationState>
   final TextEditingController contactPersonController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController streetController = TextEditingController();
+  final prefs = locator<PreferenceHelper>();
 
   OrganizationRegistrationCubit()
       : db = Databases(locator<AppwriteService>().client),
@@ -40,32 +44,39 @@ class OrganizationRegistrationCubit extends Cubit<OrganizationRegistrationState>
 
   Future<void> saveForm(BuildContext context) async {
     if (formKey.currentState?.validate() ?? false) {
-      try {
-        await db.createDocument(
-          databaseId: AppConstants.appwriteDatabaseId,
-          collectionId: AppConstants.userCollectionId,
-          documentId: ID.unique(),
-          data: {
-            'name': organizationController.text,
-            'mobile': mobileController.text,
-            'status': state.selectedStatus,
-            'designation': state.selectedDesignation,
-            'contactPerson': contactPersonController.text,
-            'email': emailController.text,
-            'addressLine': streetController.text,
-            'state': state.selectedState,
-            'city': state.selectedCity,
-            'country': "India",
-            'type': 'organization',
-            'createdOn': DateTime.now().toIso8601String(),
-          },
-        );
+      UserModel? user = prefs.getUser();
+      if(user?.role == UserRoles.admin) {
+        try {
+          await db.createDocument(
+            databaseId: AppConstants.appwriteDatabaseId,
+            collectionId: AppConstants.userCollectionId,
+            documentId: ID.unique(),
+            data: {
+              'name': organizationController.text,
+              'mobile': mobileController.text,
+              'status': state.selectedStatus,
+              'designation': state.selectedDesignation,
+              'contactPerson': contactPersonController.text,
+              'email': emailController.text,
+              'addressLine': streetController.text,
+              'state': state.selectedState,
+              'city': state.selectedCity,
+              'country': "India",
+              'type': 'organization',
+              'createdOn': DateTime.now().toIso8601String(),
+            },
+          );
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Organization saved successfully!')),
+          );
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: $e')),
+          );
+        }
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Organization saved successfully!')),
-        );
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+          SnackBar(content: Text('${user?.role} role cannot register organization')),
         );
       }
     }

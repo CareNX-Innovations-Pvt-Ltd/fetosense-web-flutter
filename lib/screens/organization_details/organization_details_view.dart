@@ -1,7 +1,7 @@
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/screens/organization_details/organization_details_cubit.dart';
-import 'package:fetosense_mis/screens/organization_edit_popup.dart';
+import 'package:fetosense_mis/widget/organization_edit_popup.dart';
 import 'package:fetosense_mis/utils/format_date.dart';
 import 'package:fetosense_mis/widget/custom_date_picker.dart';
 import 'package:flutter/material.dart';

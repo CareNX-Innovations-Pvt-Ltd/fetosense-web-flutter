@@ -1,6 +1,8 @@
+import 'package:fetosense_mis/core/network/appwrite_config.dart';
+import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
-import '../widget/columns.dart';
+import 'columns.dart';
 
 /// A StatefulWidget that represents the Doctor Edit popup dialog.
 ///
@@ -13,14 +15,12 @@ import '../widget/columns.dart';
 /// The [documentId] is the unique identifier of the doctor document in the database.
 /// The [onClose] callback is triggered when the user closes the popup.
 class DoctorEditPopup extends StatefulWidget {
-  final Client client;
   final Map<String, dynamic> data;
   final String documentId;
   final VoidCallback onClose;
 
   const DoctorEditPopup({
     super.key,
-    required this.client,
     required this.data,
     required this.documentId,
     required this.onClose,
@@ -40,7 +40,7 @@ class _DoctorEditPopupState extends State<DoctorEditPopup> {
   @override
   void initState() {
     super.initState();
-    db = Databases(widget.client);
+    db = Databases(locator<AppwriteService>().client);
     final data = widget.data;
     nameController = TextEditingController(text: data['name'] ?? '');
     mobileController = TextEditingController(text: data['mobile'] ?? '');

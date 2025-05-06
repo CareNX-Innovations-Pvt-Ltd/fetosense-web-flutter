@@ -155,7 +155,7 @@ class _DeviceRegistrationViewState extends State<DeviceRegistrationView> {
                             ),
                             child: state.isSubmitting
                                 ? const CircularProgressIndicator(color: Colors.white)
-                                : const Text("Save", style: TextStyle(fontSize: 16)),
+                                : const Text("Save", style: TextStyle(fontSize: 16, color: Colors.white)),
                           ),
                         ),
                       ],
@@ -267,19 +267,16 @@ class _DeviceRegistrationViewState extends State<DeviceRegistrationView> {
       children: [
         _buildLabel(label, isRequired),
         const SizedBox(height: 6),
-        SizedBox(
-          height: 40,
-          child: TextFormField(
-            controller: controller,
-            style: const TextStyle(color: Colors.grey),
-            keyboardType: isNumber ? TextInputType.number : TextInputType.text,
-            decoration: _inputDecoration(hintText),
-            validator: isRequired
-                ? (value) => (value == null || value.isEmpty)
-                ? "$label is required"
-                : null
-                : null,
-          ),
+        TextFormField(
+          controller: controller,
+          style: const TextStyle(color: Colors.grey),
+          keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+          decoration: _inputDecoration(hintText),
+          validator: isRequired
+              ? (value) => (value == null || value.isEmpty)
+              ? "$label is required"
+              : null
+              : null,
         ),
       ],
     );
@@ -299,27 +296,28 @@ class _DeviceRegistrationViewState extends State<DeviceRegistrationView> {
       children: [
         _buildLabel(label, isRequired),
         const SizedBox(height: 8),
-        SizedBox(
-          height: 40,
-          child: DropdownButtonFormField<String>(
-            value: selectedValue,
-            items: items
-                .map(
-                  (e) => DropdownMenuItem(
-                value: e,
-                child: Text(e, style: const TextStyle(color: Colors.white)),
-              ),
-            )
-                .toList(),
-            onChanged: onChanged,
-            decoration: _inputDecoration(hintText),
-            dropdownColor: Colors.black45,
-            validator: isRequired
-                ? (value) => (value == null || value.isEmpty)
-                ? "$label is required"
-                : null
-                : null,
+        DropdownButtonFormField<String>(
+          value: selectedValue,
+          items: items
+              .map(
+                (e) => DropdownMenuItem(
+              value: e,
+              child: Text(e, style: const TextStyle(color: Colors.white)),
+            ),
+          )
+              .toList(),
+          hint: Text(
+            hintText,
+            style: const TextStyle(color: Colors.grey),
           ),
+          onChanged: onChanged,
+          decoration: _inputDecoration(hintText),
+          dropdownColor: Colors.black45,
+          validator: isRequired
+              ? (value) => (value == null || value.isEmpty)
+              ? "$label is required"
+              : null
+              : null,
         ),
       ],
     );

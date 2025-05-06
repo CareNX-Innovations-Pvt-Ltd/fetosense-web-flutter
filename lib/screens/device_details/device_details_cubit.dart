@@ -3,8 +3,8 @@ import 'package:appwrite/models.dart' as models;
 import 'package:bloc/bloc.dart';
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
+import 'package:fetosense_mis/core/services/excel_services.dart' show ExcelExportService;
 
-import '../../services/excel_services/devices_excel_download.dart';
 import '../../utils/fetch_devices.dart';
 
 part 'device_details_state.dart';

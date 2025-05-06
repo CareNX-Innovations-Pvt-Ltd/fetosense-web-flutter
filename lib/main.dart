@@ -2,6 +2,7 @@ import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/core/utils/app_routes.dart';
 import 'package:fetosense_mis/core/utils/preferences.dart';
 import 'package:fetosense_mis/screens/device_details/device_details_cubit.dart';
+import 'package:fetosense_mis/screens/doctor_details/doctor_details_cubit.dart';
 import 'package:fetosense_mis/screens/login/login_cubit.dart';
 import 'package:fetosense_mis/screens/organization_registration/organization_registration_cubit.dart';
 import 'package:flutter/material.dart';
@@ -35,12 +36,15 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => DeviceDetailsCubit(),
         ),
+        BlocProvider(
+          create: (context) => DoctorDetailsCubit(),
+        ),
       ],
       child: MaterialApp.router(
         title: 'Flutter Web + Appwrite',
         debugShowCheckedModeBanner:
             false,
-        theme: ThemeData.dark(),
+        theme: ThemeData.light(),
         routerConfig: AppRouter().router,
       ),
     );

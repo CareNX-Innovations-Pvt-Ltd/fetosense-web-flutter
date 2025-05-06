@@ -13,6 +13,7 @@ abstract class AppConstants {
   static const String deviceCollectionId = '67f36766002068046589';
   static const String testsCollectionId = '67f3790a0024f8f61684';
   static const String configCollectionId = '67fe36d100234405442e';
+  static const String misUserCollectionId = '681857100017b4b2e416';
 
   ///app settings keys
   ///test section

@@ -1,6 +1,6 @@
-import 'package:fetosense_mis/screens/dashboard_screen.dart';
+import 'package:fetosense_mis/screens/dashboard/dashboard_view.dart';
 import 'package:fetosense_mis/screens/login/login_view.dart';
-import 'package:fetosense_mis/screens/register_screen.dart';
+import 'package:fetosense_mis/screens/register/register_view.dart';
 import 'package:fetosense_mis/screens/splash/splash_view.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,7 +22,6 @@ abstract class AppRoutes {
 }
 
 class AppRouter {
-
   late final GoRouter router = GoRouter(
     initialLocation: '/',
     routes: [
@@ -30,7 +29,8 @@ class AppRouter {
         path: AppRoutes.splash,
         name: '/',
         builder: (context, state) => const SplashView(),
-      ), GoRoute(
+      ),
+      GoRoute(
         path: AppRoutes.login,
         name: '/login',
         builder: (context, state) => const LoginView(),
@@ -38,57 +38,57 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.register,
         name: '/register',
-        builder: (context, state) => const RegisterScreen( ),
+        builder: (context, state) => const RegisterScreen(),
       ),
       GoRoute(
         path: AppRoutes.dashboard,
         name: '/dashboard',
-        builder: (context, state) => const DashboardScreen( childIndex: 0),
+        builder: (context, state) => const DashboardScreen(childIndex: 0),
       ),
       GoRoute(
         path: AppRoutes.organizationRegistration,
         name: '/organization-registration',
-        builder: (context, state) => const DashboardScreen( childIndex: 1),
+        builder: (context, state) => const DashboardScreen(childIndex: 1),
       ),
       GoRoute(
         path: AppRoutes.deviceRegistration,
         name: '/device-registration',
-        builder: (context, state) => const DashboardScreen( childIndex: 2),
+        builder: (context, state) => const DashboardScreen(childIndex: 2),
       ),
       GoRoute(
         path: AppRoutes.generateQr,
         name: '/generate-qr',
-        builder: (context, state) => const DashboardScreen( childIndex: 3),
+        builder: (context, state) => const DashboardScreen(childIndex: 3),
       ),
       GoRoute(
         path: AppRoutes.misOrganizations,
         name: '/mis-organizations',
-        builder: (context, state) => const DashboardScreen( childIndex: 4),
+        builder: (context, state) => const DashboardScreen(childIndex: 4),
       ),
       GoRoute(
         path: AppRoutes.misDevices,
         name: '/mis-devices',
-        builder: (context, state) => const DashboardScreen( childIndex: 5),
+        builder: (context, state) => const DashboardScreen(childIndex: 5),
       ),
       GoRoute(
         path: AppRoutes.misDoctors,
         name: '/mis-doctors',
-        builder: (context, state) => const DashboardScreen( childIndex: 6),
+        builder: (context, state) => const DashboardScreen(childIndex: 6),
       ),
       GoRoute(
         path: AppRoutes.misMothers,
         name: '/mis-mothers',
-        builder: (context, state) => const DashboardScreen( childIndex: 7),
+        builder: (context, state) => const DashboardScreen(childIndex: 7),
       ),
       GoRoute(
         path: AppRoutes.analyticsDoctors,
         name: '/analytics-doctors',
-        builder: (context, state) => const DashboardScreen( childIndex: 8),
+        builder: (context, state) => const DashboardScreen(childIndex: 8),
       ),
       GoRoute(
         path: AppRoutes.analyticsOrganizations,
         name: '/analytics-organizations',
-        builder: (context, state) => const DashboardScreen( childIndex: 9),
+        builder: (context, state) => const DashboardScreen(childIndex: 9),
       ),
     ],
   );

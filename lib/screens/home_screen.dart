@@ -1,25 +1,21 @@
+// import 'package:fetosense_mis/core/services/auth_service.dart';
 // import 'package:flutter/material.dart';
-// import 'package:appwrite/appwrite.dart';
 // import 'package:fl_chart/fl_chart.dart';
-// import '../services/auth_service.dart';
 //
 // class HomeScreen extends StatefulWidget {
-//   final Client client;
-//
-//   HomeScreen({required this.client});
+//   const HomeScreen({super.key});
 //
 //   @override
-//   _HomeScreenState createState() => _HomeScreenState();
+//   HomeScreenState createState() => HomeScreenState();
 // }
 //
-// class _HomeScreenState extends State<HomeScreen> {
-//   late AuthService _authService;
+// class HomeScreenState extends State<HomeScreen> {
+//   final AuthService _authService = AuthService();
 //   String userEmail = "";
 //
 //   @override
 //   void initState() {
 //     super.initState();
-//     _authService = AuthService(widget.client);
 //     _getUserData();
 //   }
 //
@@ -36,7 +32,7 @@
 //
 //   void _logout() async {
 //     await _authService.logoutUser();
-//     Navigator.pushReplacementNamed(context, '/');
+//
 //   }
 //
 //   @override
@@ -63,11 +59,11 @@
 //     return Container(
 //       width: 250,
 //       color: Colors.grey[850],
-//       padding: EdgeInsets.symmetric(vertical: 20),
+//       padding: const EdgeInsets.symmetric(vertical: 20),
 //       child: Column(
 //         crossAxisAlignment: CrossAxisAlignment.start,
 //         children: [
-//           Padding(
+//           const Padding(
 //             padding: EdgeInsets.symmetric(horizontal: 16),
 //             child: Text(
 //               "fetosense",
@@ -78,7 +74,7 @@
 //               ),
 //             ),
 //           ),
-//           SizedBox(height: 20),
+//           const SizedBox(height: 20),
 //
 //           _sidebarItem(
 //             Icons.dashboard,
@@ -106,7 +102,7 @@
 //           _sidebarItem(Icons.settings, "Operations"),
 //           _sidebarItem(Icons.people, "Users"),
 //
-//           Spacer(),
+//           const Spacer(),
 //           _sidebarItem(Icons.logout, "Logout", onTap: _logout),
 //         ],
 //       ),
@@ -116,14 +112,14 @@
 //   Widget _sidebarItem(IconData icon, String title, {VoidCallback? onTap}) {
 //     return ListTile(
 //       leading: Icon(icon, color: Colors.white),
-//       title: Text(title, style: TextStyle(color: Colors.white)),
+//       title: Text(title, style: const TextStyle(color: Colors.white)),
 //       onTap: onTap,
 //     );
 //   }
 //
 //   Widget _buildTopStats() {
 //     return Container(
-//       padding: EdgeInsets.all(16),
+//       padding: const EdgeInsets.all(16),
 //       color: Colors.black54,
 //       child: Row(
 //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -139,7 +135,7 @@
 //
 //   Widget _statCard(IconData icon, String title, String count) {
 //     return Container(
-//       padding: EdgeInsets.all(16),
+//       padding: const EdgeInsets.all(16),
 //       decoration: BoxDecoration(
 //         color: Colors.grey.shade900,
 //         borderRadius: BorderRadius.circular(8),
@@ -147,12 +143,12 @@
 //       child: Column(
 //         children: [
 //           Icon(icon, color: Colors.tealAccent, size: 36),
-//           SizedBox(height: 10),
-//           Text(title, style: TextStyle(color: Colors.white, fontSize: 16)),
-//           SizedBox(height: 5),
+//           const SizedBox(height: 10),
+//           Text(title, style: const TextStyle(color: Colors.white, fontSize: 16)),
+//           const SizedBox(height: 5),
 //           Text(
 //             count,
-//             style: TextStyle(
+//             style: const TextStyle(
 //               color: Colors.tealAccent,
 //               fontSize: 20,
 //               fontWeight: FontWeight.bold,
@@ -165,32 +161,32 @@
 //
 //   Widget _buildGraphSection() {
 //     return Container(
-//       padding: EdgeInsets.all(16),
+//       padding: const EdgeInsets.all(16),
 //       child: LineChart(
 //         LineChartData(
-//           gridData: FlGridData(show: false),
-//           titlesData: FlTitlesData(show: false),
+//           gridData: const FlGridData(show: false),
+//           titlesData: const FlTitlesData(show: false),
 //           borderData: FlBorderData(show: false),
 //           lineBarsData: [
 //             LineChartBarData(
 //               spots: [
-//                 FlSpot(0, 200),
-//                 FlSpot(1, 350),
-//                 FlSpot(2, 270),
-//                 FlSpot(3, 310),
-//                 FlSpot(4, 290),
-//                 FlSpot(5, 340),
-//                 FlSpot(6, 380),
-//                 FlSpot(7, 330),
-//                 FlSpot(8, 360),
-//                 FlSpot(9, 390),
+//                 const FlSpot(0, 200),
+//                 const FlSpot(1, 350),
+//                 const FlSpot(2, 270),
+//                 const FlSpot(3, 310),
+//                 const FlSpot(4, 290),
+//                 const FlSpot(5, 340),
+//                 const FlSpot(6, 380),
+//                 const FlSpot(7, 330),
+//                 const FlSpot(8, 360),
+//                 const FlSpot(9, 390),
 //               ],
 //               isCurved: true,
-//               gradient: LinearGradient(
+//               gradient: const LinearGradient(
 //                 colors: [Colors.tealAccent, Colors.blueAccent],
 //               ), // ✅ Correct way
 //               barWidth: 3,
-//               dotData: FlDotData(show: false),
+//               dotData: const FlDotData(show: false),
 //               belowBarData: BarAreaData(show: false),
 //             ),
 //           ],
@@ -208,7 +204,7 @@
 //       data: ThemeData().copyWith(dividerColor: Colors.transparent),
 //       child: ExpansionTile(
 //         leading: Icon(icon, color: Colors.white),
-//         title: Text(title, style: TextStyle(color: Colors.white)),
+//         title: Text(title, style: const TextStyle(color: Colors.white)),
 //         children: children,
 //       ),
 //     );
@@ -216,7 +212,7 @@
 //
 //   Widget _sidebarSubItem(String title, String route) {
 //     return ListTile(
-//       title: Text(title, style: TextStyle(color: Colors.white)),
+//       title: Text(title, style: const TextStyle(color: Colors.white)),
 //       onTap: () {
 //         Navigator.pushNamed(context, route);
 //       },

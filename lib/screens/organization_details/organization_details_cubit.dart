@@ -2,18 +2,18 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fetosense_mis/core/services/excel_services.dart';
 import 'package:fetosense_mis/core/utils/app_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:fetosense_mis/services/excel_services/organizations_excel_download.dart';
-part 'organization_details_state.dart';
 
+part 'organization_details_state.dart';
 
 class OrganizationCubit extends Cubit<OrganizationState> {
   final Databases db;
   final BuildContext context;
 
   OrganizationCubit({required this.db, required this.context})
-      : super(const OrganizationState()) {
+    : super(const OrganizationState()) {
     fetchOrganizations();
   }
 
@@ -27,19 +27,23 @@ class OrganizationCubit extends Cubit<OrganizationState> {
         tillDate: state.tillDate,
       );
 
-      emit(state.copyWith(
-        organizations: result,
-        filteredOrganizations: result,
-        status: OrganizationStatus.loaded,
-        clearError: true,
-      ));
+      emit(
+        state.copyWith(
+          organizations: result,
+          filteredOrganizations: result,
+          status: OrganizationStatus.loaded,
+          clearError: true,
+        ),
+      );
 
       applySearchFilter();
     } catch (e) {
-      emit(state.copyWith(
-        status: OrganizationStatus.error,
-        errorMessage: "Error fetching organizations: $e",
-      ));
+      emit(
+        state.copyWith(
+          status: OrganizationStatus.error,
+          errorMessage: "Error fetching organizations: $e",
+        ),
+      );
     }
   }
 
@@ -104,10 +108,11 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     if (keyword.isEmpty) {
       emit(state.copyWith(filteredOrganizations: state.organizations));
     } else {
-      final filtered = state.organizations.where((org) {
-        final name = org.data['name']?.toString().toLowerCase() ?? '';
-        return name.contains(keyword);
-      }).toList();
+      final filtered =
+          state.organizations.where((org) {
+            final name = org.data['name']?.toString().toLowerCase() ?? '';
+            return name.contains(keyword);
+          }).toList();
 
       emit(state.copyWith(filteredOrganizations: filtered));
     }
@@ -115,18 +120,12 @@ class OrganizationCubit extends Cubit<OrganizationState> {
 
   /// Sets the from date for filtering.
   void setFromDate(DateTime? date) {
-    emit(state.copyWith(
-      fromDate: date,
-      clearFromDate: date == null,
-    ));
+    emit(state.copyWith(fromDate: date, clearFromDate: date == null));
   }
 
   /// Sets the till date for filtering.
   void setTillDate(DateTime? date) {
-    emit(state.copyWith(
-      tillDate: date,
-      clearTillDate: date == null,
-    ));
+    emit(state.copyWith(tillDate: date, clearTillDate: date == null));
   }
 
   /// Downloads the filtered organizations data in Excel format.
@@ -137,9 +136,9 @@ class OrganizationCubit extends Cubit<OrganizationState> {
         state.filteredOrganizations,
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to export: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Failed to export: $e")));
     }
   }
 }
