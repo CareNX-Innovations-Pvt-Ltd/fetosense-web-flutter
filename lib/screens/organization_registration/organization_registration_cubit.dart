@@ -52,7 +52,7 @@ class OrganizationRegistrationCubit extends Cubit<OrganizationRegistrationState>
             collectionId: AppConstants.userCollectionId,
             documentId: ID.unique(),
             data: {
-              'name': organizationController.text,
+              'organizationName': organizationController.text,
               'mobile': mobileController.text,
               'status': state.selectedStatus,
               'designation': state.selectedDesignation,

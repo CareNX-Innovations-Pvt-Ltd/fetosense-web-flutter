@@ -2,6 +2,7 @@ import 'package:fetosense_mis/core/models/models.dart';
 import 'package:fetosense_mis/core/models/user_model.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/core/utils/preferences.dart';
+import 'package:fetosense_mis/core/utils/user_role.dart';
 import 'package:fetosense_mis/screens/analytics/doctors_analytics.dart';
 import 'package:fetosense_mis/screens/analytics/organizations_analytics.dart';
 import 'package:fetosense_mis/screens/device_details/device_details_view.dart';
@@ -148,43 +149,79 @@ class _DashboardViewState extends State<DashboardView>
       color: Colors.black54,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: stats.map((stat) => _statCard(stat)).toList(),
+        children: stats.map((stat) => _buildCountItem(stat)).toList(),
       ),
     );
   }
 
-  Widget _statCard(DashboardStat stat) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade900,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        children: [
-          Icon(stat.icon, color: Colors.tealAccent, size: 36),
-          const SizedBox(height: 10),
-          Text(
-            stat.title,
-            style: const TextStyle(color: Colors.white, fontSize: 16),
+  // Widget _statCard(DashboardStat stat) {
+  //   return Container(
+  //     padding: const EdgeInsets.all(16),
+  //     decoration: BoxDecoration(
+  //       color: Colors.grey.shade900,
+  //       borderRadius: BorderRadius.circular(8),
+  //     ),
+  //     child: Column(
+  //       children: [
+  //         Icon(stat.icon, color: Colors.tealAccent, size: 36),
+  //         const SizedBox(height: 10),
+  //         Text(
+  //           stat.title,
+  //           style: const TextStyle(color: Colors.white, fontSize: 16),
+  //         ),
+  //         const SizedBox(height: 5),
+  //         Text(
+  //           stat.count,
+  //           style: const TextStyle(
+  //             color: Colors.tealAccent,
+  //             fontSize: 20,
+  //             fontWeight: FontWeight.bold,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  Widget _buildCountItem(
+      DashboardStat state
+      ) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.blueGrey,
+            borderRadius: BorderRadius.circular(8),
           ),
-          const SizedBox(height: 5),
-          Text(
-            stat.count,
-            style: const TextStyle(
-              color: Colors.tealAccent,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+          child: Column(
+            children: [
+              Icon(state.icon, color: Colors.black),
+              const SizedBox(height: 6),
+              Text(
+                state.count.toString(),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              Text(
+                state.title,
+                style: const TextStyle(color: Colors.black, fontSize: 14),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
-
 
   List<DashboardStat> _getDashboardStats(DashboardState state) {
+    final role = prefs.getUserRole();
     return [
+    if(role == UserRoles.superAdmin)
       DashboardStat(
         icon: Icons.business,
         title: "Organizations",
