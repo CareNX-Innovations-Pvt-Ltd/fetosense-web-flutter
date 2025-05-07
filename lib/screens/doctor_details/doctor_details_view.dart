@@ -115,8 +115,6 @@ class DoctorDetailsView extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
-    final _ = context.read<DoctorDetailsCubit>();
-
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(16),
