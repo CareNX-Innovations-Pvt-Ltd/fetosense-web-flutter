@@ -2,7 +2,7 @@
 
 Fetosense MIS is a web-based Management Information System built with **Flutter Web** and **Appwrite**, designed to manage organizational data, devices, doctors, and mothers efficiently in healthcare settings.
 
->  This app includes modules like QR code generation, device registration, organization management, Excel exports, and more — all tailored for internal admin use.
+> 🛠️ This app is strictly intended for **internal use by the Fetosense team** to track registered organizations, mothers, fetal tests, and Doppler/tablet devices — and to view associated analytics and operational insights.
 
 ---
 
@@ -65,24 +65,37 @@ flutter pub get
 flutter run -d chrome
 ```
 
->  Make sure you have Chrome installed and `flutter doctor` shows no issues.
+> Make sure you have Chrome installed and `flutter doctor` shows no issues.
 
 ---
 
 ##  Features
 
--  Secure login and registration using Appwrite
--  Register and manage hospitals/organizations
--  Register and manage Doppler/Tablet devices
--  Generate QR codes for kits
--  Dashboard with charts and insights
--  Export data to Excel
--  Manage doctors and mothers (patients)
--  Filter by custom date ranges
--  Fully responsive Flutter Web UI
+- Secure login and registration using Appwrite
+- Register and manage hospitals/organizations
+- Register and manage Doppler/Tablet devices
+- Generate QR codes for kits
+- Dashboard with charts and insights
+- Export data to Excel
+- Manage doctors and mothers (patients)
+- Filter by custom date ranges
+- Fully responsive Flutter Web UI
 
 ---
 
+##  Documentation
+
+Documentation is auto-generated using [`dartdoc`](https://dart.dev/tools/dartdoc).  
+To generate the latest documentation, run:
+
+```bash
+dart pub global activate dartdoc
+dart doc
+```
+
+Output will be available in the `/doc/api` directory.
+
+---
 
 ##  Testing
 
@@ -107,7 +120,6 @@ This project can be deployed using:
 This project is intended for internal use at Fetosense. If you'd like to suggest improvements or collaborate, feel free to fork the repo and create a pull request.
 
 ---
-
 
 ##  About Fetosense
 
