@@ -3,8 +3,8 @@ part of 'organization_details_cubit.dart';
 enum OrganizationStatus { initial, loading, loaded, error }
 
 class OrganizationState extends Equatable {
-  final List<models.Document> organizations;
-  final List<models.Document> filteredOrganizations;
+  final List<OrganizationDetailsModel> organizationDetails;
+  final List<OrganizationDetailsModel> filteredOrganizationDetails;
   final OrganizationStatus status;
   final DateTime? fromDate;
   final DateTime? tillDate;
@@ -12,8 +12,8 @@ class OrganizationState extends Equatable {
   final String? errorMessage;
 
   const OrganizationState({
-    this.organizations = const [],
-    this.filteredOrganizations = const [],
+    this.organizationDetails = const [],
+    this.filteredOrganizationDetails = const [],
     this.status = OrganizationStatus.initial,
     this.fromDate,
     this.tillDate,
@@ -22,8 +22,8 @@ class OrganizationState extends Equatable {
   });
 
   OrganizationState copyWith({
-    List<models.Document>? organizations,
-    List<models.Document>? filteredOrganizations,
+    List<OrganizationDetailsModel>? organizationDetails,
+    List<OrganizationDetailsModel>? filteredOrganizationDetails,
     OrganizationStatus? status,
     DateTime? fromDate,
     bool clearFromDate = false,
@@ -34,8 +34,8 @@ class OrganizationState extends Equatable {
     bool clearError = false,
   }) {
     return OrganizationState(
-      organizations: organizations ?? this.organizations,
-      filteredOrganizations: filteredOrganizations ?? this.filteredOrganizations,
+      organizationDetails: organizationDetails ?? this.organizationDetails,
+      filteredOrganizationDetails: filteredOrganizationDetails ?? this.filteredOrganizationDetails,
       status: status ?? this.status,
       fromDate: clearFromDate ? null : (fromDate ?? this.fromDate),
       tillDate: clearTillDate ? null : (tillDate ?? this.tillDate),
@@ -46,8 +46,8 @@ class OrganizationState extends Equatable {
 
   @override
   List<Object?> get props => [
-    organizations,
-    filteredOrganizations,
+    organizationDetails,
+    filteredOrganizationDetails,
     status,
     fromDate,
     tillDate,

@@ -21,7 +21,7 @@ class _LoginViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<LoginCubit>();
-    cubit.usernameController.text = 'pranav@carenx.com';
+    cubit.usernameController.text = 'mgm@belapur.com';
     cubit.passwordController.text = '12345678';
     return Scaffold(
       backgroundColor: const Color(0xFF1E1E1E),
@@ -84,22 +84,22 @@ class _LoginViewBody extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 15),
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: false,
-                                onChanged: (value) {},
-                                activeColor: Colors.blue,
-                              ),
-                              const Text(
-                                "I'm not a robot",
-                                style: TextStyle(color: Colors.white54),
-                              ),
-                              const Spacer(),
-                              const Icon(Icons.security, color: Colors.white54),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
+                          // Row(
+                          //   children: [
+                          //     Checkbox(
+                          //       value: false,
+                          //       onChanged: (value) {},
+                          //       activeColor: Colors.blue,
+                          //     ),
+                          //     const Text(
+                          //       "I'm not a robot",
+                          //       style: TextStyle(color: Colors.white54),
+                          //     ),
+                          //     const Spacer(),
+                          //     const Icon(Icons.security, color: Colors.white54),
+                          //   ],
+                          // ),
+                          // const SizedBox(height: 10),
                           SizedBox(
                             width: 100,
                             child: ElevatedButton(
@@ -107,8 +107,8 @@ class _LoginViewBody extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.cyan[700],
                                 padding: const EdgeInsets.symmetric(vertical: 10),
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.zero,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
                               child: state is LoginLoading
@@ -167,28 +167,28 @@ class _LoginViewBody extends StatelessWidget {
                         style: TextStyle(color: Colors.white60, fontSize: 14),
                       ),
                       const SizedBox(height: 20),
-                      SizedBox(
-                        width: 100,
-                        child: ElevatedButton(
-                          onPressed: () {
-
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.cyan[700],
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero,
-                            ),
-                          ),
-                          child: const Text(
-                            "Home Page",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
+                      // SizedBox(
+                      //   width: 100,
+                      //   child: ElevatedButton(
+                      //     onPressed: () {
+                      //
+                      //     },
+                      //     style: ElevatedButton.styleFrom(
+                      //       backgroundColor: Colors.cyan[700],
+                      //       padding: const EdgeInsets.symmetric(vertical: 10),
+                      //       shape: const RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.zero,
+                      //       ),
+                      //     ),
+                      //     child: const Text(
+                      //       "Home Page",
+                      //       style: TextStyle(
+                      //         fontSize: 14,
+                      //         fontWeight: FontWeight.bold,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'dart:html' as html;
+import 'package:fetosense_mis/core/models/org_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:excel/excel.dart';
 import 'package:appwrite/models.dart' as models;
@@ -171,7 +172,7 @@ class ExcelExportService {
 
   static Future<void> exportOrganizationsToExcel(
       BuildContext context,
-      List<models.Document> documents,
+      List<OrganizationDetailsModel> documents,
       ) async {
     try {
       // Create a new Excel file and select the first sheet
@@ -194,16 +195,16 @@ class ExcelExportService {
 
       // Add data rows based on the documents provided
       for (var doc in documents) {
-        final data = doc.data;
+        final data = doc.organizations.first.data;
         final address =
             '${data['addressLine'] ?? ''}, ${data['city'] ?? ''}, ${data['state'] ?? ''}, ${data['country'] ?? ''}';
 
         sheet.appendRow([
           data['name'] ?? '',
-          data['device']?.toString() ?? '',
-          data['doctors']?.toString() ?? '',
-          data['mother']?.toString() ?? '',
-          data['test']?.toString() ?? '',
+          doc.deviceCount ?? '',
+          doc.doctorCount ?? '',
+          doc.motherCount?? '',
+          doc.testCount ?? '',
           data['mobile'] ?? '',
           data['status'] ?? '',
           data['created_on'] ?? '',
