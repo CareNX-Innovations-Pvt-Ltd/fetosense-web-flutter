@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:fetosense_mis/core/models/user_model.dart';
-import 'package:fetosense_mis/core/utils/user_role.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferenceHelper {
@@ -51,13 +50,5 @@ class PreferenceHelper {
 
   void setString(String key, String value) => _prefsInstance.setString(key, value);
   String? getString(String key) => _prefsInstance.getString(key);
-
- String getUserRole() {
-    final user = getUser();
-    if (user != null) {
-      return user.role;
-    }
-    return UserRoles.admin;
-  }
 }
 

@@ -62,7 +62,11 @@ class _OrganizationRegistrationForm extends StatelessWidget {
                 ),
                 child: const Text(
                   "Save",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -133,14 +137,14 @@ class _OrganizationRegistrationForm extends StatelessWidget {
 
   Widget _row(List<Widget> children) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 20),
       child: Row(
         children:
             children
                 .map(
                   (e) => Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: e,
                     ),
                   ),
@@ -164,7 +168,8 @@ class _OrganizationRegistrationForm extends StatelessWidget {
         TextFormField(
           controller: controller,
           keyboardType: isNumber ? TextInputType.number : TextInputType.text,
-          style: const TextStyle(color: Colors.grey),
+          style: const TextStyle(color: Colors.white),
+          cursorColor: Colors.tealAccent,
           decoration: _inputDecoration(label),
           validator:
               required
@@ -202,8 +207,10 @@ class _OrganizationRegistrationForm extends StatelessWidget {
                   )
                   .toList(),
           onChanged: onChanged,
+          dropdownColor: Colors.grey[900],
+          iconEnabledColor: Colors.tealAccent,
+          style: const TextStyle(color: Colors.white),
           decoration: _inputDecoration(label),
-          dropdownColor: Colors.black45,
         ),
       ],
     );
@@ -223,9 +230,20 @@ class _OrganizationRegistrationForm extends StatelessWidget {
       hintText: hint,
       hintStyle: TextStyle(color: Colors.grey[500]),
       filled: true,
-      fillColor: Colors.black54,
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      fillColor: Colors.grey[850],
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.tealAccent),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.tealAccent, width: 2),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.grey),
+      ),
     );
   }
 }

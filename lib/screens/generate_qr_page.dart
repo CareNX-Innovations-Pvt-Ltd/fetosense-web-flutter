@@ -98,7 +98,11 @@ class _GenerateQRPageState extends State<GenerateQRPage> {
                   ),
                   child: const Text(
                     "Generate",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -174,11 +178,22 @@ class _GenerateQRPageState extends State<GenerateQRPage> {
   InputDecoration _inputDecoration(String hintText) {
     return InputDecoration(
       hintText: hintText,
-      hintStyle: TextStyle(color: Colors.grey[500]),
+      hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
       filled: true,
-      fillColor: Colors.black54,
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      fillColor: const Color(0xFF121212),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.tealAccent),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.grey),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.tealAccent, width: 2),
+      ),
     );
   }
 

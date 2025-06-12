@@ -3,11 +3,13 @@ import 'package:appwrite/models.dart' as models;
 import 'package:bloc/bloc.dart';
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
-import 'package:fetosense_mis/core/services/excel_services.dart' show ExcelExportService;
+import 'package:fetosense_mis/core/services/excel_services.dart'
+    show ExcelExportService;
 
 import '../../utils/fetch_devices.dart';
 
 part 'device_details_state.dart';
+
 class DeviceDetailsCubit extends Cubit<DeviceDetailsState> {
   DeviceDetailsCubit() : super(DeviceDetailsState.initial());
 
@@ -25,11 +27,15 @@ class DeviceDetailsCubit extends Cubit<DeviceDetailsState> {
         fromDate: state.fromDate,
         tillDate: state.tillDate,
       );
-      emit(state.copyWith(
-        allDevices: devices,
-        filteredDevices: devices,
-        isLoading: false,
-      ));
+      emit(
+        state.copyWith(
+          allDevices: devices,
+          filteredDevices: devices,
+          isLoading: false,
+        ),
+      );
+
+      ///
       applySearch(state.searchQuery); // Apply search after fetch
     } catch (e) {
       emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
@@ -46,22 +52,26 @@ class DeviceDetailsCubit extends Cubit<DeviceDetailsState> {
 
   void applySearch(String query) {
     final keyword = query.trim().toLowerCase();
-    final filtered = keyword.isEmpty
-        ? state.allDevices
-        : state.allDevices.where((device) {
-      final name = (device.data['organizationName'] ?? '').toString().toLowerCase();
-      return name.contains(keyword);
-    }).toList();
+    final filtered =
+        keyword.isEmpty
+            ? state.allDevices
+            : state.allDevices.where((device) {
+              final name =
+                  (device.data['organizationName'] ?? '')
+                      .toString()
+                      .toLowerCase();
+              return name.contains(keyword);
+            }).toList();
 
-    emit(state.copyWith(
-      searchQuery: query,
-      filteredDevices: filtered,
-    ));
+    emit(state.copyWith(searchQuery: query, filteredDevices: filtered));
   }
 
   Future<void> downloadExcel(context) async {
     try {
-      await ExcelExportService.exportDevicesToExcel(context, state.filteredDevices);
+      await ExcelExportService.exportDevicesToExcel(
+        context,
+        state.filteredDevices,
+      );
     } catch (e) {
       emit(state.copyWith(errorMessage: e.toString()));
     }

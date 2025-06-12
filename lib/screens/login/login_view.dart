@@ -1,4 +1,5 @@
 import 'package:fetosense_mis/core/services/auth_service.dart';
+import 'package:fetosense_mis/screens/login/widget/capcha_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'login_cubit.dart';
@@ -15,13 +16,19 @@ class LoginView extends StatelessWidget {
   }
 }
 
-class _LoginViewBody extends StatelessWidget {
+class _LoginViewBody extends StatefulWidget {
   const _LoginViewBody();
 
   @override
+  State<_LoginViewBody> createState() => _LoginViewBodyState();
+}
+
+class _LoginViewBodyState extends State<_LoginViewBody> {
+  bool isChecked = false;
+  @override
   Widget build(BuildContext context) {
     final cubit = context.read<LoginCubit>();
-    cubit.usernameController.text = 'mgm@belapur.com';
+    cubit.usernameController.text = 'pranav@carenx.com';
     cubit.passwordController.text = '12345678';
     return Scaffold(
       backgroundColor: const Color(0xFF1E1E1E),
@@ -57,69 +64,118 @@ class _LoginViewBody extends StatelessWidget {
                         children: [
                           const Text(
                             "Login",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
+                            style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
                           const SizedBox(height: 20),
                           TextField(
                             controller: cubit.usernameController,
                             style: const TextStyle(color: Colors.white),
-                            decoration: _inputDecoration("Username", Icons.person),
+                            decoration: _inputDecoration(
+                              "Username",
+                              Icons.person,
+                            ),
                           ),
                           const SizedBox(height: 15),
                           TextField(
                             controller: cubit.passwordController,
                             obscureText: obscurePassword,
                             style: const TextStyle(color: Colors.white),
-                            decoration: _inputDecoration("Password", Icons.lock).copyWith(
+                            decoration: _inputDecoration(
+                              "Password",
+                              Icons.lock,
+                            ).copyWith(
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                  obscurePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
                                   color: Colors.white,
                                 ),
-                                onPressed: () => cubit.togglePasswordVisibility(),
+                                onPressed:
+                                    () => cubit.togglePasswordVisibility(),
                               ),
                             ),
                           ),
                           const SizedBox(height: 15),
-                          // Row(
-                          //   children: [
-                          //     Checkbox(
-                          //       value: false,
-                          //       onChanged: (value) {},
-                          //       activeColor: Colors.blue,
-                          //     ),
-                          //     const Text(
-                          //       "I'm not a robot",
-                          //       style: TextStyle(color: Colors.white54),
-                          //     ),
-                          //     const Spacer(),
-                          //     const Icon(Icons.security, color: Colors.white54),
-                          //   ],
-                          // ),
-                          // const SizedBox(height: 10),
+                          /////
+                          CaptchaCheckbox(
+                            onVerified: (value) {
+                              setState(() {
+                                isChecked = value;
+                              });
+                              // Do something after CAPTCHA is verified and checkbox is checked
+                              debugPrint("CAPTCHA verified: $isChecked");
+                            },
+                          ),
+                          const SizedBox(height: 10),
                           SizedBox(
                             width: 100,
                             child: ElevatedButton(
-                              onPressed: () => cubit.loginUser(context),
+                              onPressed: () {
+                                if (isChecked) {
+                                  cubit.loginUser(context);
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder:
+                                        (context) => AlertDialog(
+                                          insetPadding: EdgeInsets.all(16),
+                                          contentPadding: EdgeInsets.all(16),
+                                          backgroundColor: Colors.grey.shade900,
+                                          title: const Text(
+                                            "Verification Required",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          content: const Text(
+                                            "Please verify you're not a robot.",
+                                            style: TextStyle(
+                                              color: Colors.white70,
+                                            ),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed:
+                                                  () =>
+                                                      Navigator.of(
+                                                        context,
+                                                      ).pop(),
+                                              child: const Text(
+                                                "OK",
+                                                style: TextStyle(
+                                                  color: Colors.tealAccent,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                  );
+                                }
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.cyan[700],
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                ),
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.zero,
                                 ),
                               ),
-                              child: state is LoginLoading
-                                  ? const CircularProgressIndicator(color: Colors.white)
-                                  : const Text(
-                                "Login",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              child:
+                                  state is LoginLoading
+                                      ? const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                      : const Text(
+                                        "Login",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -167,28 +223,26 @@ class _LoginViewBody extends StatelessWidget {
                         style: TextStyle(color: Colors.white60, fontSize: 14),
                       ),
                       const SizedBox(height: 20),
-                      // SizedBox(
-                      //   width: 100,
-                      //   child: ElevatedButton(
-                      //     onPressed: () {
-                      //
-                      //     },
-                      //     style: ElevatedButton.styleFrom(
-                      //       backgroundColor: Colors.cyan[700],
-                      //       padding: const EdgeInsets.symmetric(vertical: 10),
-                      //       shape: const RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.zero,
-                      //       ),
-                      //     ),
-                      //     child: const Text(
-                      //       "Home Page",
-                      //       style: TextStyle(
-                      //         fontSize: 14,
-                      //         fontWeight: FontWeight.bold,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
+                      SizedBox(
+                        width: 100,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.cyan[700],
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,
+                            ),
+                          ),
+                          child: const Text(
+                            "Home Page",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -206,9 +260,7 @@ class _LoginViewBody extends StatelessWidget {
       fillColor: const Color(0xFF252525),
       prefixIcon: Container(
         decoration: const BoxDecoration(
-          border: Border(
-            right: BorderSide(color: Colors.white, width: 1),
-          ),
+          border: Border(right: BorderSide(color: Colors.white, width: 1)),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Icon(icon, color: Colors.white),

@@ -1,18 +1,14 @@
 /// A Flutter widget that displays weekly and monthly analytics charts for doctors,
 /// using Appwrite as the backend and FL Chart for visualization.
 library;
-
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/core/utils/app_constants.dart';
-import 'package:fetosense_mis/core/utils/preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:intl/intl.dart';
-
-import '../../core/utils/user_role.dart' show UserRoles;
 
 /// The main page that renders doctor registration trends in weekly and monthly charts.
 class DoctorAnalyticsPage extends StatefulWidget {
@@ -50,9 +46,6 @@ class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
   late final Databases database;
 
   final client = locator<AppwriteService>().client;
-
-  final prefs = locator<PreferenceHelper>();
-
   @override
   void initState() {
     super.initState();
@@ -63,24 +56,11 @@ class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
 
   /// Fetches doctor registration data from Appwrite and prepares data for both weekly and monthly charts.
   Future<void> fetchAnalyticsData() async {
-    final userData = prefs.getUser();
-    if (userData == null) return;
-    final isRestricted = userData.role != UserRoles.superAdmin;
-
-    List<String> buildQueries(String type) {
-      final queries = <String>[];
-      if (type.isNotEmpty) queries.add(Query.equal('type', type));
-      if (isRestricted) {
-        queries.add(Query.equal('organizationId', userData.organizationId));
-      }
-      return queries;
-    }
-
     try {
       final response = await database.listDocuments(
         databaseId: AppConstants.appwriteDatabaseId,
         collectionId: AppConstants.userCollectionId,
-        queries: buildQueries('doctor'),
+        queries: [Query.equal('type', 'doctor')],
       );
 
       final docs = response.documents;
@@ -176,9 +156,7 @@ class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
         LineChartData(
           gridData: const FlGridData(show: false),
           titlesData: FlTitlesData(
-            leftTitles: const AxisTitles(
-              sideTitles: SideTitles(showTitles: true),
-            ),
+            leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: true)),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,

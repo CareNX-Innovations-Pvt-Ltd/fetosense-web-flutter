@@ -1,3 +1,4 @@
+import 'package:fetosense_mis/screens/mother_details/widget/mother_details_table.dart';
 import 'package:fetosense_mis/widget/custom_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,7 +54,23 @@ class MotherDetails extends StatelessWidget {
                     );
                   }
 
-                  return _buildDataTable(state);
+                  // Wrap your MotherDetailsTable inside vertical & horizontal scroll views
+                  return SingleChildScrollView(
+                    scrollDirection:
+                        Axis.horizontal, // scroll horizontally for DataTable2
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: SizedBox(
+                        width:
+                            MediaQuery.of(context).size.width *
+                            0.8, // or any suitable ratio
+
+                        child: MotherDetailsTable(
+                          filteredMothers: state.filteredMothers,
+                        ),
+                      ),
+                    ),
+                  );
                 },
               ),
             ),

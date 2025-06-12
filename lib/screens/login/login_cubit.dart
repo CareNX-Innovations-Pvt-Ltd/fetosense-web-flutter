@@ -23,16 +23,15 @@ class LoginCubit extends Cubit<LoginState> {
   Future<void> loginUser(BuildContext context) async {
     emit(LoginLoading());
     try {
-     final bool success = await AuthService().loginUser(
+      await AuthService().loginUser(
         usernameController.text,
         passwordController.text,
+
       );
-      if (context.mounted && success) {
+      if (context.mounted) {
         emit(LoginSuccess());
         locator<PreferenceHelper>().setAutoLogin(true);
         context.go(AppRoutes.dashboard);
-      } else {
-        emit(LoginFailure('Doctors/User cannot access the dashboard.'),);
       }
     } catch (e) {
       emit(LoginFailure(e.toString()));
