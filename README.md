@@ -88,6 +88,17 @@ flutter run -d chrome
 You can find the complete developer documentation [<u>here</u>](https://carenx-innovations-pvt-ltd.github.io/fetosense-web-flutter/).
 
 ---
+## System Architecture Diagram
+
+![img.png](assets/images/System Architechture Diagram.jpeg)
+
+---
+
+##  Project Charter
+
+You can find the Project Charter [<u>here</u>](https://github.com/CareNX-Innovations-Pvt-Ltd/fetosense-web-flutter/blob/main/Fetosense%20Project%20Charter%20-%20UNICEF.pdf).
+
+---
 
 ##  Testing
 
