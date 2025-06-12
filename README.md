@@ -90,7 +90,7 @@ You can find the complete developer documentation [<u>here</u>](https://carenx-i
 ---
 ## System Architecture Diagram
 
-![img.png](assets/images/System Architechture Diagram.jpeg)
+![img.png](assets/images/systemarchitechture.jpeg)
 
 ---
 
