@@ -34,10 +34,10 @@ class AuthService {
     }
   }
 
-  Future<String> loginUser(
+  Future<bool> loginUser(
     String email,
     String password, {
-    String role = UserRoles.user,
+    String role = UserRoles.admin,
   }) async {
     try {
       final session = await account.createEmailPasswordSession(
@@ -45,38 +45,41 @@ class AuthService {
         password: password,
       );
 
-      final user = await account.get();
+      final _ = await account.get();
 
       final result = await databases.listDocuments(
         databaseId: AppConstants.appwriteDatabaseId,
-        collectionId: AppConstants.misUserCollectionId,
+        collectionId: AppConstants.userCollectionId,
         queries: [Query.equal('email', email)],
       );
 
       late UserModel userModel;
 
-      if (result.documents.isEmpty) {
-        await databases.createDocument(
-          databaseId: AppConstants.appwriteDatabaseId,
-          collectionId: AppConstants.misUserCollectionId,
-          documentId: user.$id,
-          data: {
-            'userId': user.$id,
-            'email': email,
-            'role': role,
-            'createdAt': DateTime.now().toIso8601String(),
-          },
-        );
-        userModel = UserModel(userId: user.$id, email: email, role: role);
-      } else {
+      // if (result.documents.isEmpty) {
+      //   await databases.createDocument(
+      //     databaseId: AppConstants.appwriteDatabaseId,
+      //     collectionId: AppConstants.userCollectionId,
+      //     documentId: user.$id,
+      //     data: {
+      //       'documentId': user.$id,
+      //       'email': email,
+      //       'designation': role,
+      //       'createdAt': DateTime.now().toIso8601String(),
+      //     },
+      //   );
+      //   userModel = UserModel(userId: user.$id, email: email, role: role, organizationId: '', );
+      // } else {
         final doc = result.documents.first;
         userModel = UserModel.fromJson(doc.data);
-      }
+        if(userModel.role != UserRoles.admin) {
+          return false;
+        }
+      // }
 
       prefs.saveUser(userModel);
 
       debugPrint('Login successful. Session ID: ${session.$id}');
-      return session.userId;
+      return true;
     } on AppwriteException catch (e) {
       throw Exception('Failed to sign in: ${e.message}');
     }

@@ -1,4 +1,7 @@
+import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/core/utils/app_routes.dart';
+import 'package:fetosense_mis/core/utils/preferences.dart';
+import 'package:fetosense_mis/core/utils/user_role.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,6 +12,8 @@ import 'package:go_router/go_router.dart';
 /// it changes the background color. The sidebar is typically used in the main layout
 /// for navigating between different sections of the app.
 Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
+  final prefs = locator<PreferenceHelper>();
+  final role = prefs.getUserRole();
   return Container(
     width: 210,
     color: const Color(0xFF282B2C),
@@ -23,18 +28,20 @@ Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
             context.pushReplacement(AppRoutes.dashboard);
           },
         ),
-        const _ExpandableMenu(
-          icon: Icons.app_registration,
-          title: "Registration",
-          children: [
-            _SidebarItem(
-              title: "Organization",
-              route: '/organization-registration',
-            ),
-            _SidebarItem(title: "Device", route: '/device-registration'),
-            _SidebarItem(title: "Generate QR", route: '/generate-qr'),
-          ],
-        ),
+        role == UserRoles.superAdmin
+            ? const _ExpandableMenu(
+              icon: Icons.app_registration,
+              title: "Registration",
+              children: [
+                _SidebarItem(
+                  title: "Organization",
+                  route: '/organization-registration',
+                ),
+                _SidebarItem(title: "Device", route: '/device-registration'),
+                _SidebarItem(title: "Generate QR", route: '/generate-qr'),
+              ],
+            )
+            : Container(),
         const _ExpandableMenu(
           icon: Icons.pie_chart,
           title: "MIS",
@@ -79,7 +86,7 @@ Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
         ),
         const _SidebarItem(icon: Icons.article, title: "Reports"),
         const _SidebarItem(icon: Icons.settings, title: "Operations"),
-        const _SidebarItem(icon: Icons.people, title: "Users"),
+        role == UserRoles.superAdmin ? const _SidebarItem(icon: Icons.people, title: "Users") : Container(),
         const Spacer(),
       ],
     ),
@@ -97,12 +104,7 @@ class _SidebarItem extends StatefulWidget {
   final String? route;
   final VoidCallback? onTap;
 
-  const _SidebarItem({
-    this.icon,
-    required this.title,
-    this.route,
-    this.onTap,
-  });
+  const _SidebarItem({this.icon, required this.title, this.route, this.onTap});
 
   @override
   _SidebarItemState createState() => _SidebarItemState();

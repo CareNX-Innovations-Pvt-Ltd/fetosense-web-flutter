@@ -1,86 +1,102 @@
-import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/models.dart' as models;
 import 'package:bloc/bloc.dart';
+import 'package:appwrite/models.dart' as models;
+import 'package:equatable/equatable.dart';
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/core/utils/app_constants.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:appwrite/appwrite.dart';
 
 part 'doctor_details_state.dart';
 
 class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
-  DoctorDetailsCubit() : super(DoctorInitial());
+  DoctorDetailsCubit() : super(DoctorDetailsState.initial()) {
+    fetchDoctorsId();
+  }
 
   final Databases db = Databases(locator<AppwriteService>().client);
 
-  DateTime? fromDate;
-  DateTime? tillDate;
-  List<models.Document> allDoctors = [];
-
   void updateFromDate(DateTime? date) {
-    fromDate = date;
     emit(state.copyWith(fromDate: date));
   }
 
   void updateTillDate(DateTime? date) {
-    tillDate = date;
     emit(state.copyWith(tillDate: date));
   }
 
-  Future<List> fetchDoctorsId() async {
-    emit(state.copyWith(isLoading: true));
+  void applySearchFilter(String searchTerm) {
+    final filtered = state.allDoctors.where((doc) {
+      final data = doc.data;
+      final lower = searchTerm.toLowerCase();
+      return data['name']?.toLowerCase().contains(lower) == true ||
+          data['email']?.toLowerCase().contains(lower) == true ||
+          data['organizationName']?.toLowerCase().contains(lower) == true;
+    }).toList();
+
+    emit(state.copyWith(filteredDoctors: filtered));
+  }
+
+  Future<void> fetchDoctorsId() async {
+    emit(state.copyWith(isLoading: true, error: null));
     try {
       final List<String> queries = [Query.equal('type', 'doctor')];
 
-      final bool applyDateFilter = fromDate != null || tillDate != null;
-
-      if (applyDateFilter) {
-        queries.add(Query.isNotNull('createdOn'));
-
-        if (fromDate != null) {
-          queries.add(
-            Query.greaterThanEqual('createdOn', fromDate!.toIso8601String()),
-          );
-        }
-
-        if (tillDate != null) {
-          final tillDateEnd = DateTime(
-            tillDate!.year,
-            tillDate!.month,
-            tillDate!.day,
-            23,
-            59,
-            59,
-          );
-          queries.add(
-            Query.lessThanEqual('createdOn', tillDateEnd.toIso8601String()),
-          );
-        }
+      if (state.fromDate != null) {
+        queries.add(Query.greaterThanEqual('createdOn', state.fromDate!.toIso8601String()));
       }
 
-      // Query the database for doctor documents
-      final result = await db.listDocuments(
+      if (state.tillDate != null) {
+        final tillEnd = DateTime(
+          state.tillDate!.year,
+          state.tillDate!.month,
+          state.tillDate!.day,
+          23, 59, 59,
+        );
+        queries.add(Query.lessThanEqual('createdOn', tillEnd.toIso8601String()));
+      }
+
+      final response = await db.listDocuments(
         databaseId: AppConstants.appwriteDatabaseId,
         collectionId: AppConstants.userCollectionId,
         queries: queries,
       );
-      emit(state.copyWith(isLoading: false));
-      emit(state.copyWith(filteredDoctors: result.documents));
-      debugPrint(result.documents.toString());
-      return result.documents;
+
+      final List<models.Document> enrichedDocs = [];
+
+      for (final doc in response.documents) {
+        final doctorName = doc.data['name'] ?? 'Unknown';
+        final mothers = await db.listDocuments(
+          databaseId: AppConstants.appwriteDatabaseId,
+          collectionId: AppConstants.userCollectionId,
+          queries: [Query.equal('doctorName', doctorName), Query.equal('type', 'mother')],
+        );
+
+        final tests = await db.listDocuments(
+          databaseId: AppConstants.appwriteDatabaseId,
+          collectionId: AppConstants.testsCollectionId,
+          queries: [Query.equal('doctorName', doctorName)],
+        );
+
+        final updatedData = Map<String, dynamic>.from(doc.data)
+          ..['noOfMother'] = mothers.total
+          ..['noOfTests'] = tests.total;
+
+        enrichedDocs.add(models.Document(
+          $id: doc.$id,
+          $collectionId: doc.$collectionId,
+          $databaseId: doc.$databaseId,
+          $createdAt: doc.$createdAt,
+          $updatedAt: doc.$updatedAt,
+          data: updatedData, $permissions: [],
+        ));
+      }
+
+      emit(state.copyWith(
+        allDoctors: enrichedDocs,
+        filteredDoctors: enrichedDocs,
+        isLoading: false,
+      ));
     } catch (e) {
-      print(' Error fetching doctors: $e');
-      return [];
+      emit(state.copyWith(isLoading: false, error: e.toString()));
     }
-  }
-
-  void applySearchFilter(String keyword) {
-    final lower = keyword.toLowerCase();
-    final filtered = allDoctors.where((doc) {
-      final name = doc.data['organizationName']?.toString().toLowerCase() ?? '';
-      return name.contains(lower);
-    }).toList();
-
-    emit(state.copyWith(filteredDoctors: filtered));
   }
 }
