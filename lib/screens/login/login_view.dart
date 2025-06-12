@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'login_cubit.dart';
 
+/// The main login view widget.
+///
+/// Provides a [LoginCubit] to manage login state and renders the [_LoginViewBody].
 class LoginView extends StatelessWidget {
+  /// Creates a [LoginView] widget.
   const LoginView({super.key});
 
   @override
@@ -15,7 +19,11 @@ class LoginView extends StatelessWidget {
   }
 }
 
+/// Internal widget that builds the login screen UI.
+///
+/// Uses [BlocProvider] to access the [LoginCubit] and renders the login form and layout.
 class _LoginViewBody extends StatelessWidget {
+  /// Creates a [_LoginViewBody] widget.
   const _LoginViewBody();
 
   @override
@@ -57,29 +65,35 @@ class _LoginViewBody extends StatelessWidget {
                         children: [
                           const Text(
                             "Login",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
+                            style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
                           const SizedBox(height: 20),
                           TextField(
                             controller: cubit.usernameController,
                             style: const TextStyle(color: Colors.white),
-                            decoration: _inputDecoration("Username", Icons.person),
+                            decoration: _inputDecoration(
+                              "Username",
+                              Icons.person,
+                            ),
                           ),
                           const SizedBox(height: 15),
                           TextField(
                             controller: cubit.passwordController,
                             obscureText: obscurePassword,
                             style: const TextStyle(color: Colors.white),
-                            decoration: _inputDecoration("Password", Icons.lock).copyWith(
+                            decoration: _inputDecoration(
+                              "Password",
+                              Icons.lock,
+                            ).copyWith(
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                  obscurePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
                                   color: Colors.white,
                                 ),
-                                onPressed: () => cubit.togglePasswordVisibility(),
+                                onPressed:
+                                    () => cubit.togglePasswordVisibility(),
                               ),
                             ),
                           ),
@@ -106,20 +120,25 @@ class _LoginViewBody extends StatelessWidget {
                               onPressed: () => cubit.loginUser(context),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.cyan[700],
-                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              child: state is LoginLoading
-                                  ? const CircularProgressIndicator(color: Colors.white)
-                                  : const Text(
-                                "Login",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              child:
+                                  state is LoginLoading
+                                      ? const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                      : const Text(
+                                        "Login",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -206,9 +225,7 @@ class _LoginViewBody extends StatelessWidget {
       fillColor: const Color(0xFF252525),
       prefixIcon: Container(
         decoration: const BoxDecoration(
-          border: Border(
-            right: BorderSide(color: Colors.white, width: 1),
-          ),
+          border: Border(right: BorderSide(color: Colors.white, width: 1)),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Icon(icon, color: Colors.white),

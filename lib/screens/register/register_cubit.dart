@@ -5,22 +5,29 @@ import 'package:meta/meta.dart';
 
 part 'register_state.dart';
 
+/// Cubit for managing the state and logic of the registration screen.
+///
+/// Handles user input for email and password, and manages the registration process using [AuthService].
 class RegisterCubit extends Cubit<RegisterState> {
+  /// The authentication service used for registering users.
   final AuthService authService;
 
+  /// Creates a [RegisterCubit] with the given [authService].
   RegisterCubit({required this.authService}) : super(const RegisterState());
 
-  // Update email in state
+  /// Updates the email in the state.
   void emailChanged(String email) {
     emit(state.copyWith(email: email));
   }
 
-  // Update password in state
+  /// Updates the password in the state.
   void passwordChanged(String password) {
     emit(state.copyWith(password: password));
   }
 
-  // Register user method
+  /// Registers a new user using the current email and password in the state.
+  ///
+  /// Emits loading, success, or error states based on the registration result.
   Future<void> registerUser() async {
     // Show loading state
     emit(state.copyWith(isLoading: true, message: ''));

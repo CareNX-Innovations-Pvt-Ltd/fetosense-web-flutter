@@ -23,6 +23,7 @@ class DoctorAnalyticsPage extends StatefulWidget {
   State<DoctorAnalyticsPage> createState() => _DoctorAnalyticsPageState();
 }
 
+/// The state for [DoctorAnalyticsPage], handling tab switching, data loading, and chart rendering.
 class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
     with TickerProviderStateMixin {
   /// Controller for switching between weekly and monthly tabs.

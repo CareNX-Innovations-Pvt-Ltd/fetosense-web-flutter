@@ -25,6 +25,7 @@ Future<List<models.Document>> fetchDevices(
 
     final bool applyDateFilter = fromDate != null || tillDate != null;
 
+    // If date filters are applied, add queries for createdOn field
     if (applyDateFilter) {
       queries.add(Query.isNotNull('createdOn'));
 
@@ -49,14 +50,17 @@ Future<List<models.Document>> fetchDevices(
       }
     }
 
+    // Fetch device documents from Appwrite database
     final result = await db.listDocuments(
       databaseId: '67ece4a7002a0a732dfd',
       collectionId: '67f36a7e002c46ea05f0',
       queries: queries,
     );
 
+    // Return the list of device documents
     return result.documents;
   } catch (e) {
+    // Print error and return empty list on failure
     print('Error fetching devices: $e');
     return [];
   }

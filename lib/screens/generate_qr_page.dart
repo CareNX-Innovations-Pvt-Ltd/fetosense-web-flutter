@@ -58,6 +58,9 @@ class _GenerateQRPageState extends State<GenerateQRPage> {
               const SizedBox(height: 20),
 
               // Kit ID Field
+              /// Text field for entering the Kit ID.
+              ///
+              /// Validates that the Kit ID is not empty and trims leading spaces on input.
               _buildLabel("Kit ID", true),
               const SizedBox(height: 8),
               SizedBox(

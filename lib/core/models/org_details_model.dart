@@ -1,12 +1,26 @@
 import 'package:appwrite/models.dart' as models;
 
+///
+/// Model representing the details of an organization and related statistics.
+///
+/// Contains a list of organization documents and counts for devices, mothers, tests, and doctors.
 class OrganizationDetailsModel {
+  /// The list of organization documents.
   final List<models.Document> organizations;
+
+  /// The total number of devices associated with the organization(s).
   final int deviceCount;
+
+  /// The total number of mothers associated with the organization(s).
   final int motherCount;
+
+  /// The total number of tests conducted by the organization(s).
   final int testCount;
+
+  /// The total number of doctors associated with the organization(s).
   final int doctorCount;
 
+  /// Creates an [OrganizationDetailsModel] with the given details and statistics.
   OrganizationDetailsModel({
     required this.organizations,
     required this.deviceCount,
@@ -15,7 +29,9 @@ class OrganizationDetailsModel {
     required this.doctorCount,
   });
 
-  // Create a copy of this model with some fields updated
+  /// Returns a copy of this model with updated fields if provided.
+  ///
+  /// If a parameter is not provided, the current value is used.
   OrganizationDetailsModel copyWith({
     List<models.Document>? organizations,
     int? deviceCount,

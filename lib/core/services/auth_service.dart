@@ -20,6 +20,9 @@ class AuthService {
   final Databases databases = Databases(locator<AppwriteService>().client);
   final prefs = locator<PreferenceHelper>();
 
+  /// Registers a new user with the provided [email] and [password].
+  ///
+  /// Returns `true` if registration is successful, otherwise `false`.
   Future<bool> registerUser(String email, String password) async {
     try {
       await account.create(
@@ -34,6 +37,10 @@ class AuthService {
     }
   }
 
+  /// Logs in a user with the provided [email] and [password].
+  ///
+  /// Optionally accepts a [role] parameter (default is [UserRoles.admin]).
+  /// Returns `true` if login is successful, otherwise `false`.
   Future<bool> loginUser(
     String email,
     String password, {
@@ -69,11 +76,11 @@ class AuthService {
       //   );
       //   userModel = UserModel(userId: user.$id, email: email, role: role, organizationId: '', );
       // } else {
-        final doc = result.documents.first;
-        userModel = UserModel.fromJson(doc.data);
-        if(userModel.role != UserRoles.admin) {
-          return false;
-        }
+      final doc = result.documents.first;
+      userModel = UserModel.fromJson(doc.data);
+      if (userModel.role != UserRoles.admin) {
+        return false;
+      }
       // }
 
       prefs.saveUser(userModel);

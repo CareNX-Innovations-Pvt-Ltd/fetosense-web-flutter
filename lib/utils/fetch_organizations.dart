@@ -26,6 +26,7 @@ Future<List<models.Document>> fetchOrganizations(
 
     final bool applyDateFilter = fromDate != null || tillDate != null;
 
+    // If date filters are applied, add queries for createdOn field
     if (applyDateFilter) {
       queries.add(Query.isNotNull('createdOn'));
 
@@ -36,6 +37,7 @@ Future<List<models.Document>> fetchOrganizations(
       }
 
       if (tillDate != null) {
+        // Add a query to filter documents created on or before the end of tillDate
         final tillDateEnd = DateTime(
           tillDate.year,
           tillDate.month,
@@ -50,15 +52,17 @@ Future<List<models.Document>> fetchOrganizations(
       }
     }
 
-    // Query the database for organization documents
+    // Fetch organization documents from Appwrite database
     final result = await db.listDocuments(
       databaseId: AppConstants.appwriteDatabaseId,
       collectionId: AppConstants.userCollectionId,
       queries: queries,
     );
 
+    // Return the list of organization documents
     return result.documents;
   } catch (e) {
+    // Print error and return empty list on failure
     print('Error fetching organizations: $e');
     return [];
   }

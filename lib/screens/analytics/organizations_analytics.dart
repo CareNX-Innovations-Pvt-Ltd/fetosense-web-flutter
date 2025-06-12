@@ -1,6 +1,7 @@
 /// Flutter page that shows weekly or monthly test analytics for organizations
 /// using Appwrite as the backend and fl_chart for graph visualization.
 library;
+
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,8 @@ import '../../utils/fetch_tests.dart';
 
 /// A page that displays test trends for selected organizations in weekly/monthly charts.
 class OrganizationAnalyticsPage extends StatefulWidget {
-
   /// Creates an [OrganizationAnalyticsPage] instance.
-  const OrganizationAnalyticsPage({super.key,});
+  const OrganizationAnalyticsPage({super.key});
 
   @override
   State<OrganizationAnalyticsPage> createState() =>
@@ -244,6 +244,7 @@ class _OrganizationAnalyticsPageState extends State<OrganizationAnalyticsPage> {
                 ),
                 const SizedBox(width: 12),
                 ElevatedButton(
+                  // Triggers fetching and displaying the analytics data for the selected date range.
                   onPressed: fetchGraphData,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
@@ -414,8 +415,12 @@ class TestLineChart extends StatelessWidget {
               },
             ),
           ),
-          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          topTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
         ),
         borderData: FlBorderData(
           show: true,

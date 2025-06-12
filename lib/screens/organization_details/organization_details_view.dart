@@ -442,7 +442,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+/// The main page view for displaying organization details.
+///
+/// Provides a [OrganizationCubit] to manage state and renders the [OrganizationDetailsView].
 class OrganizationDetailsPageView extends StatelessWidget {
+  /// Creates an [OrganizationDetailsPageView] widget.
   const OrganizationDetailsPageView({super.key});
 
   @override
@@ -454,7 +458,11 @@ class OrganizationDetailsPageView extends StatelessWidget {
   }
 }
 
+/// The main view for displaying organization details.
+///
+/// Uses [BlocBuilder] to listen to [OrganizationCubit] state and renders the organization details UI.
 class OrganizationDetailsView extends StatelessWidget {
+  /// Creates an [OrganizationDetailsView] widget.
   const OrganizationDetailsView({super.key});
 
   @override

@@ -1,13 +1,19 @@
 import 'package:appwrite/models.dart' as models;
 import 'package:fetosense_mis/screens/doctor_details/doctor_details_cubit.dart';
-import 'package:fetosense_mis/widget/doctor_edit_popup.dart' show DoctorEditPopup;
+import 'package:fetosense_mis/widget/doctor_edit_popup.dart'
+    show DoctorEditPopup;
 import 'package:fetosense_mis/core/services/excel_services.dart';
 import 'package:fetosense_mis/utils/format_date.dart';
 import 'package:fetosense_mis/widget/custom_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+/// The main view for displaying doctor details.
+///
+/// Provides a [DoctorDetailsCubit] to manage state and renders the doctor details UI,
+/// including filters, search, and a table of doctor data.
 class DoctorDetailsView extends StatelessWidget {
+  /// Creates a [DoctorDetailsView] widget.
   const DoctorDetailsView({super.key});
 
   @override
@@ -38,7 +44,10 @@ class DoctorDetailsView extends StatelessWidget {
               children: [
                 _buildHeader(context),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 15.0,
+                  ),
                   child: Column(
                     children: [
                       Row(
@@ -50,7 +59,8 @@ class DoctorDetailsView extends StatelessWidget {
                               selectedDate: state.fromDate,
                               controller: fromDateController,
                               onDateCleared: () => cubit.updateFromDate(null),
-                              onDateSelected: (picked) => cubit.updateFromDate(picked),
+                              onDateSelected:
+                                  (picked) => cubit.updateFromDate(picked),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -61,7 +71,8 @@ class DoctorDetailsView extends StatelessWidget {
                               selectedDate: state.tillDate,
                               controller: tillDateController,
                               onDateCleared: () => cubit.updateTillDate(null),
-                              onDateSelected: (picked) => cubit.updateTillDate(picked),
+                              onDateSelected:
+                                  (picked) => cubit.updateTillDate(picked),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -71,7 +82,9 @@ class DoctorDetailsView extends StatelessWidget {
                               onPressed: cubit.fetchDoctorsId,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
-                                side: const BorderSide(color: Color(0xFF1A86AD)),
+                                side: const BorderSide(
+                                  color: Color(0xFF1A86AD),
+                                ),
                               ),
                               child: const Text(
                                 "Get Data",
@@ -102,9 +115,10 @@ class DoctorDetailsView extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Expanded(
-                  child: state.isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : _buildDataTable(context, state.filteredDoctors),
+                  child:
+                      state.isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : _buildDataTable(context, state.filteredDoctors),
                 ),
               ],
             ),
@@ -142,11 +156,14 @@ class DoctorDetailsView extends StatelessWidget {
             onPressed: () async {
               try {
                 final state = context.read<DoctorDetailsCubit>().state;
-                await ExcelExportService.exportDoctorsToExcel(context, state.filteredDoctors);
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Failed to export: $e")),
+                await ExcelExportService.exportDoctorsToExcel(
+                  context,
+                  state.filteredDoctors,
                 );
+              } catch (e) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text("Failed to export: $e")));
               }
             },
             tooltip: 'Download Excel',
@@ -159,10 +176,7 @@ class DoctorDetailsView extends StatelessWidget {
   Widget _buildDataTable(BuildContext context, List<models.Document> doctors) {
     if (doctors.isEmpty) {
       return const Center(
-        child: Text(
-          "No data available",
-          style: TextStyle(color: Colors.white),
-        ),
+        child: Text("No data available", style: TextStyle(color: Colors.white)),
       );
     }
     return SingleChildScrollView(
@@ -180,43 +194,51 @@ class DoctorDetailsView extends StatelessWidget {
           DataColumn(label: _columnText("Version")),
           DataColumn(label: _columnText("Action")),
         ],
-        rows: doctors.map((doc) {
-          final data = doc.data;
-          return DataRow(cells: [
-            _dataCell(data['name']),
-            _dataCell(data['email']),
-            _dataCell(data['organizationName']),
-            _dataCell(data['noOfMother']),
-            _dataCell(data['noOfTests']),
-            _dataCell(formatDate(data['createdOn'])),
-            _dataCell(formatDate(data['lastLoginTime'])),
-            _dataCell(data['appVersion']),
-            DataCell(
-              TextButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) => Dialog(
-                      insetPadding: const EdgeInsets.all(20),
-                      backgroundColor: Colors.transparent,
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        height: 600,
-                        child: DoctorEditPopup(
-                          data: data,
-                          documentId: doc.$id,
-                          onClose: () => Navigator.pop(context),
-                        ),
+        rows:
+            doctors.map((doc) {
+              final data = doc.data;
+              return DataRow(
+                cells: [
+                  _dataCell(data['name']),
+                  _dataCell(data['email']),
+                  _dataCell(data['organizationName']),
+                  _dataCell(data['noOfMother']),
+                  _dataCell(data['noOfTests']),
+                  _dataCell(formatDate(data['createdOn'])),
+                  _dataCell(formatDate(data['lastLoginTime'])),
+                  _dataCell(data['appVersion']),
+                  DataCell(
+                    TextButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder:
+                              (context) => Dialog(
+                                insetPadding: const EdgeInsets.all(20),
+                                backgroundColor: Colors.transparent,
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.6,
+                                  height: 600,
+                                  child: DoctorEditPopup(
+                                    data: data,
+                                    documentId: doc.$id,
+                                    onClose: () => Navigator.pop(context),
+                                  ),
+                                ),
+                              ),
+                        );
+                      },
+                      child: const Text(
+                        "Edit",
+                        style: TextStyle(color: Colors.blue),
                       ),
                     ),
-                  );
-                },
-                child: const Text("Edit", style: TextStyle(color: Colors.blue)),
-              ),
-            ),
-          ]);
-        }).toList(),
+                  ),
+                ],
+              );
+            }).toList(),
       ),
     );
   }

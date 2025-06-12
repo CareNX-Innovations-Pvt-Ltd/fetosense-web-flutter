@@ -1,4 +1,4 @@
-name: Deploy Flutter Web to GitHub Pages
+name: Deploy Dart Documentation to GitHub Pages
 
 on:
   push:
@@ -6,31 +6,24 @@ on:
       - main
 
 jobs:
-  build_and_deploy:
+  deploy_docs:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.x'
-          channel: 'stable'
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
 
       - name: Install dependencies
-        run: flutter pub get
+        run: dart pub get
 
-      - name: Build Flutter Web
-        run: flutter build web --release
+      - name: Generate documentation
+        run: dart doc
 
-      - name: Remove <base href="/"> from index.html
-        run: |
-          sed -i '/<base href="\/">/d' build/web/index.html
-
-      - name: Deploy to GitHub Pages
+      - name: Deploy documentation to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/web
+          publish_dir: doc/api

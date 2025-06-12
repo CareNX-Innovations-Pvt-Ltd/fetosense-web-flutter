@@ -10,18 +10,14 @@ import 'package:appwrite/models.dart' as models;
 /// (represented as a list of Appwrite documents) into an Excel file. The
 /// Excel file is then made available for download by the user in `.xlsx` format.
 class ExcelExportService {
-  /// Exports the given list of [documents] to an Excel file and triggers
-  /// the download.
+  /// Exports the given list of device [documents] to an Excel file and triggers a download in the browser.
   ///
-  /// The method creates a new Excel file, adds headers and rows based on the
-  /// given device data, and then triggers a download of the generated Excel file.
+  /// This method creates a new Excel file, adds headers and device data rows, and then
+  /// initiates a download of the generated `.xlsx` file for the user. If an error occurs,
+  /// a snackbar with an error message is shown using the provided [context].
   ///
-  /// [context] is required to show any error messages if the export fails.
-  /// [documents] is a list of Appwrite [Document] objects containing the
-  /// device data to be exported.
-  ///
-  /// This method handles the creation of the Excel file and ensures the file
-  /// is downloaded in the user's browser.
+  /// [context]: The [BuildContext] used to show error messages.
+  /// [documents]: The list of Appwrite [Document] objects containing device data to export.
   static Future<void> exportDevicesToExcel(
     BuildContext context,
     List<models.Document> documents,
@@ -75,9 +71,9 @@ class ExcelExportService {
   }
 
   static Future<void> exportDoctorsToExcel(
-      BuildContext context,
-      List<models.Document> documents,
-      ) async {
+    BuildContext context,
+    List<models.Document> documents,
+  ) async {
     try {
       // Create a new Excel file and select the first sheet
       final excel = Excel.createExcel();
@@ -116,9 +112,9 @@ class ExcelExportService {
       final blob = html.Blob([fileBytes]);
       final url = html.Url.createObjectUrlFromBlob(blob);
       final anchor =
-      html.AnchorElement(href: url)
-        ..setAttribute("download", "Doctors.xlsx")
-        ..click(); // Trigger the download
+          html.AnchorElement(href: url)
+            ..setAttribute("download", "Doctors.xlsx")
+            ..click(); // Trigger the download
       html.Url.revokeObjectUrl(url); // Clean up the object URL after download
     } catch (e) {
       // Show an error message if the export fails
@@ -129,9 +125,9 @@ class ExcelExportService {
   }
 
   static Future<void> exportMothersToExcel(
-      BuildContext context,
-      List<models.Document> documents,
-      ) async {
+    BuildContext context,
+    List<models.Document> documents,
+  ) async {
     try {
       // Create a new Excel file and select the first sheet
       final excel = Excel.createExcel();
@@ -158,9 +154,9 @@ class ExcelExportService {
       final blob = html.Blob([fileBytes]);
       final url = html.Url.createObjectUrlFromBlob(blob);
       final anchor =
-      html.AnchorElement(href: url)
-        ..setAttribute("download", "Mothers.xlsx")
-        ..click(); // Trigger the download
+          html.AnchorElement(href: url)
+            ..setAttribute("download", "Mothers.xlsx")
+            ..click(); // Trigger the download
       html.Url.revokeObjectUrl(url); // Clean up the object URL after download
     } catch (e) {
       // Show an error message if the export fails
@@ -171,9 +167,9 @@ class ExcelExportService {
   }
 
   static Future<void> exportOrganizationsToExcel(
-      BuildContext context,
-      List<OrganizationDetailsModel> documents,
-      ) async {
+    BuildContext context,
+    List<OrganizationDetailsModel> documents,
+  ) async {
     try {
       // Create a new Excel file and select the first sheet
       final excel = Excel.createExcel();
@@ -203,7 +199,7 @@ class ExcelExportService {
           data['name'] ?? '',
           doc.deviceCount ?? '',
           doc.doctorCount ?? '',
-          doc.motherCount?? '',
+          doc.motherCount ?? '',
           doc.testCount ?? '',
           data['mobile'] ?? '',
           data['status'] ?? '',
@@ -218,9 +214,9 @@ class ExcelExportService {
       final blob = html.Blob([fileBytes]);
       final url = html.Url.createObjectUrlFromBlob(blob);
       final anchor =
-      html.AnchorElement(href: url)
-        ..setAttribute("download", "organizations.xlsx")
-        ..click(); // Trigger the download
+          html.AnchorElement(href: url)
+            ..setAttribute("download", "organizations.xlsx")
+            ..click(); // Trigger the download
       html.Url.revokeObjectUrl(url); // Clean up the object URL after download
     } catch (e) {
       // Show an error message if the export fails

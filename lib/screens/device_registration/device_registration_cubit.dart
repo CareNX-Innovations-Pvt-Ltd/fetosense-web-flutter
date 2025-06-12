@@ -10,28 +10,35 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:appwrite/appwrite.dart';
 part 'device_registration_state.dart';
 
-
-/// Handles the business logic for device registration.
+/// Cubit for handling the business logic and state management of device registration.
+///
+/// Responsible for fetching organizations, registering devices, and managing device registration state.
 class DeviceRegistrationCubit extends Cubit<DeviceRegistrationState> {
+  /// The Appwrite [Databases] instance for database operations.
   final Databases db;
 
+  /// Creates a [DeviceRegistrationCubit] with the given [db] instance.
   DeviceRegistrationCubit({required this.db})
-      : super(const DeviceRegistrationState());
+    : super(const DeviceRegistrationState());
 
+  /// Helper for accessing user preferences.
   final prefs = locator<PreferenceHelper>();
 
-  /// Fetches organizations from the database.
+  /// Fetches organizations from the database and updates the state.
   Future<void> fetchOrganizations() async {
     try {
       final result = await fetchOrganizationsFromDb(db);
-      emit(state.copyWith(
-        organizationList: result.map((doc) {
-          return {
-            'id': doc.$id,
-            'name': doc.data['name']?.toString() ?? '',
-          };
-        }).toList(),
-      ));
+      emit(
+        state.copyWith(
+          organizationList:
+              result.map((doc) {
+                return {
+                  'id': doc.$id,
+                  'name': doc.data['name']?.toString() ?? '',
+                };
+              }).toList(),
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(errorMessage: 'Failed to load organizations: $e'));
     }
@@ -39,10 +46,12 @@ class DeviceRegistrationCubit extends Cubit<DeviceRegistrationState> {
 
   /// Updates the selected organization.
   void updateSelectedOrganization(String name, String id) {
-    emit(state.copyWith(
-      selectedOrganizationName: name,
-      selectedOrganizationId: id,
-    ));
+    emit(
+      state.copyWith(
+        selectedOrganizationName: name,
+        selectedOrganizationId: id,
+      ),
+    );
   }
 
   /// Updates the selected product type.
@@ -95,15 +104,13 @@ class DeviceRegistrationCubit extends Cubit<DeviceRegistrationState> {
   /// Submits the device registration data to the database.
   Future<void> registerDevice() async {
     if (!validateForm()) {
-      emit(state.copyWith(
-        errorMessage: 'Please fill in all required fields.',
-      ));
+      emit(state.copyWith(errorMessage: 'Please fill in all required fields.'));
       return;
     }
 
     emit(state.copyWith(isSubmitting: true, clearErrorMessage: () => null));
     UserModel? userModel = prefs.getUser();
-    if(userModel?.role == UserRoles.admin){
+    if (userModel?.role == UserRoles.admin) {
       try {
         await db.createDocument(
           databaseId: AppConstants.appwriteDatabaseId,
@@ -124,21 +131,17 @@ class DeviceRegistrationCubit extends Cubit<DeviceRegistrationState> {
           },
         );
 
-        emit(state.copyWith(
-          isSubmitting: false,
-          isSuccess: true,
-        ));
+        emit(state.copyWith(isSubmitting: false, isSuccess: true));
       } catch (e) {
-        emit(state.copyWith(
-          isSubmitting: false,
-          errorMessage: 'Error: $e',
-        ));
+        emit(state.copyWith(isSubmitting: false, errorMessage: 'Error: $e'));
       }
     } else {
-      emit(state.copyWith(
-        isSubmitting: false,
-        errorMessage: '${userModel?.role} role cannot register device',
-      ));
+      emit(
+        state.copyWith(
+          isSubmitting: false,
+          errorMessage: '${userModel?.role} role cannot register device',
+        ),
+      );
     }
   }
 }

@@ -11,16 +11,26 @@ import 'package:flutter/material.dart';
 
 part 'organization_details_state.dart';
 
+/// Cubit for managing the state and logic of the organization details screen.
+///
+/// Handles fetching organization details, including device, mother, and test counts for each organization.
+/// Also manages Excel export and date filtering.
 class OrganizationCubit extends Cubit<OrganizationState> {
+  /// Appwrite [Databases] instance for organization data operations.
   final Databases db = Databases(locator<AppwriteService>().client);
+
+  /// The [BuildContext] used for showing snackbars and dialogs.
   final BuildContext context;
 
+  /// Creates an [OrganizationCubit] and initializes the state and data.
   OrganizationCubit({required this.context})
     : super(const OrganizationState()) {
     fetchOrganizationDetails();
   }
 
   /// Fetches organizations from the database based on the date range.
+  ///
+  /// Updates the state with a list of [OrganizationDetailsModel] containing counts for devices, mothers, and tests.
   Future<void> fetchOrganizationDetails() async {
     emit(state.copyWith(status: OrganizationStatus.loading));
 
@@ -81,9 +91,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       final result = await db.listDocuments(
         databaseId: AppConstants.appwriteDatabaseId,
         collectionId: AppConstants.deviceCollectionId,
-        queries: [
-          Query.equal('organizationId', organizationId),
-        ],
+        queries: [Query.equal('organizationId', organizationId)],
       );
       return result.total;
     } catch (e) {
@@ -134,9 +142,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       final result = await db.listDocuments(
         databaseId: AppConstants.appwriteDatabaseId,
         collectionId: AppConstants.testsCollectionId,
-        queries: [
-          Query.equal('organizationId', organizationId),
-        ],
+        queries: [Query.equal('organizationId', organizationId)],
       );
       return result.total;
     } catch (e) {
@@ -203,16 +209,19 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     final keyword = state.searchQuery.trim().toLowerCase();
 
     if (keyword.isEmpty) {
-      emit(state.copyWith(filteredOrganizationDetails: state.organizationDetails));
+      emit(
+        state.copyWith(filteredOrganizationDetails: state.organizationDetails),
+      );
     } else {
-      final filtered = state.organizationDetails.where((orgDetail) {
-        // Since we're storing a list of documents, we need to access the first one
-        if (orgDetail.organizations.isEmpty) return false;
+      final filtered =
+          state.organizationDetails.where((orgDetail) {
+            // Since we're storing a list of documents, we need to access the first one
+            if (orgDetail.organizations.isEmpty) return false;
 
-        final org = orgDetail.organizations.first;
-        final name = org.data['name']?.toString().toLowerCase() ?? '';
-        return name.contains(keyword);
-      }).toList();
+            final org = orgDetail.organizations.first;
+            final name = org.data['name']?.toString().toLowerCase() ?? '';
+            return name.contains(keyword);
+          }).toList();
 
       emit(state.copyWith(filteredOrganizationDetails: filtered));
     }
@@ -252,12 +261,12 @@ class OrganizationCubit extends Cubit<OrganizationState> {
 
       await ExcelExportService.exportOrganizationsToExcel(
         context,
-        state.organizationDetails
+        state.organizationDetails,
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to export: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Failed to export: $e")));
     }
   }
 }
