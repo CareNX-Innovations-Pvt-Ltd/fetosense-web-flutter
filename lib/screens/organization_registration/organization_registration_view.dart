@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'organization_registration_cubit.dart';
 
+/// The main view for organization registration.
+///
+/// Provides a [OrganizationRegistrationCubit] to manage state and renders the [_OrganizationRegistrationForm].
 class OrganizationRegistrationView extends StatelessWidget {
+  /// Creates an [OrganizationRegistrationView] widget.
   const OrganizationRegistrationView({super.key});
 
   @override
@@ -14,12 +18,23 @@ class OrganizationRegistrationView extends StatelessWidget {
   }
 }
 
+/// Internal widget that builds the organization registration form UI.
+///
+/// Uses [BlocBuilder] to listen to [OrganizationRegistrationCubit] state and renders the registration form and input fields.
 class _OrganizationRegistrationForm extends StatelessWidget {
+  /// Creates a [_OrganizationRegistrationForm] widget.
   const _OrganizationRegistrationForm();
 
+  /// List of available statuses for the organization.
   static const List<String> statusList = ["Trial", "Demo", "Sold"];
+
+  /// List of available designations for the contact person.
   static const List<String> designationList = ["Manager", "Executive", "Admin"];
+
+  /// List of available states for the organization address.
   static const List<String> stateList = ["Maharashtra", "Karnataka", "Gujarat"];
+
+  /// Map of cities for each state.
   static const Map<String, List<String>> cityMap = {
     "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
     "Karnataka": ["Bangalore", "Mysore"],

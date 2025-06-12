@@ -11,6 +11,7 @@ Future<List<models.Document>> fetchTests(
 
     final bool applyDateFilter = fromDate != null || tillDate != null;
 
+    // If date filters are applied, add queries for createdOn field
     if (applyDateFilter) {
       queries.add(Query.isNotNull('createdOn'));
 

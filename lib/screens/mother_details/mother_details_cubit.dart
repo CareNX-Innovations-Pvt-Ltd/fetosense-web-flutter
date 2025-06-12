@@ -8,16 +8,19 @@ import 'package:fetosense_mis/core/services/excel_services.dart';
 import 'package:fetosense_mis/core/utils/app_constants.dart';
 import 'package:flutter/material.dart';
 
-
 part 'mother_details_state.dart';
 
-
-/// Fetches mothers from the database with optional date filtering
+/// Fetches mothers from the database with optional date filtering.
+///
+/// Queries the Appwrite database for documents of type 'mother'.
+/// Optionally filters by [fromDate] and [tillDate] if provided.
+///
+/// Returns a [List] of Appwrite [Document]s representing mothers.
 Future<List<models.Document>> fetchMothers(
-    Databases db, {
-      DateTime? fromDate,
-      DateTime? tillDate,
-    }) async {
+  Databases db, {
+  DateTime? fromDate,
+  DateTime? tillDate,
+}) async {
   // Implementation would depend on your actual query logic
   // This is a placeholder based on the original code
   List<String> queries = [];
@@ -25,7 +28,9 @@ Future<List<models.Document>> fetchMothers(
   queries.add(Query.equal('type', 'mother'));
 
   if (fromDate != null) {
-    queries.add(Query.greaterThanEqual('createdAt', fromDate.toIso8601String()));
+    queries.add(
+      Query.greaterThanEqual('createdAt', fromDate.toIso8601String()),
+    );
   }
 
   if (tillDate != null) {
@@ -34,7 +39,8 @@ Future<List<models.Document>> fetchMothers(
 
   final result = await db.listDocuments(
     databaseId: AppConstants.appwriteDatabaseId, // Replace with actual DB ID
-    collectionId: AppConstants.userCollectionId, // Replace with actual collection ID
+    collectionId:
+        AppConstants.userCollectionId, // Replace with actual collection ID
     queries: queries,
   );
 
@@ -112,18 +118,22 @@ class MotherDetailsCubit extends Cubit<MotherDetailsState> {
         tillDate: state.tillDate,
       );
 
-      emit(state.copyWith(
-        allMothers: result,
-        filteredMothers: result,
-        isLoading: false,
-      ));
+      emit(
+        state.copyWith(
+          allMothers: result,
+          filteredMothers: result,
+          isLoading: false,
+        ),
+      );
 
       _applySearchFilter();
     } catch (e) {
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: "Error fetching mothers: $e",
-      ));
+      emit(
+        state.copyWith(
+          isLoading: false,
+          errorMessage: "Error fetching mothers: $e",
+        ),
+      );
       print("Error fetching mothers: $e");
     }
   }
@@ -136,10 +146,12 @@ class MotherDetailsCubit extends Cubit<MotherDetailsState> {
     if (keyword.isEmpty) {
       emit(state.copyWith(filteredMothers: state.allMothers));
     } else {
-      final filtered = state.allMothers.where((org) {
-        final name = org.data['organizationName']?.toString().toLowerCase() ?? '';
-        return name.contains(keyword);
-      }).toList();
+      final filtered =
+          state.allMothers.where((org) {
+            final name =
+                org.data['organizationName']?.toString().toLowerCase() ?? '';
+            return name.contains(keyword);
+          }).toList();
 
       emit(state.copyWith(filteredMothers: filtered));
     }
@@ -148,11 +160,14 @@ class MotherDetailsCubit extends Cubit<MotherDetailsState> {
   /// Downloads the filtered mothers data in Excel format
   Future<void> downloadExcel(BuildContext context) async {
     try {
-      await ExcelExportService.exportMothersToExcel(context, state.filteredMothers);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to export: $e")),
+      await ExcelExportService.exportMothersToExcel(
+        context,
+        state.filteredMothers,
       );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Failed to export: $e")));
     }
   }
 }

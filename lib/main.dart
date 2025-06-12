@@ -9,42 +9,51 @@ import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// The entry point of the application.
+/// The entry point of the Fetosense MIS application.
+///
+/// Initializes preferences, sets up dependency injection, and runs the app.
 void main() {
   PreferenceHelper.init();
   setupLocator();
   runApp(const MyApp());
 }
 
-/// Main application widget that provides routing to different screens.
+/// The root widget of the Fetosense MIS application.
 ///
-/// The `MyApp` widget is the root of the application and defines the routes for navigation.
-/// It takes an instance of the [Client] as a parameter to be used across the app.
+/// Sets up multiple Bloc providers for state management and configures the router.
 class MyApp extends StatelessWidget {
+  /// Creates a [MyApp] widget.
+  ///
+  /// The [key] parameter is optional and can be used to specify a widget key.
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => LoginCubit(),
-        ),
-        BlocProvider(
-          create: (context) => OrganizationRegistrationCubit(),
-        ),
-        BlocProvider(
-          create: (context) => DeviceDetailsCubit(),
-        ),
-        BlocProvider(
-          create: (context) => DoctorDetailsCubit(),
-        ),
+        /// Provides [LoginCubit] for authentication state management.
+        BlocProvider(create: (context) => LoginCubit()),
+
+        /// Provides [OrganizationRegistrationCubit] for organization registration state.
+        BlocProvider(create: (context) => OrganizationRegistrationCubit()),
+
+        /// Provides [DeviceDetailsCubit] for device details state management.
+        BlocProvider(create: (context) => DeviceDetailsCubit()),
+
+        /// Provides [DoctorDetailsCubit] for doctor details state management.
+        BlocProvider(create: (context) => DoctorDetailsCubit()),
       ],
       child: MaterialApp.router(
+        /// The title of the application displayed in the browser tab.
         title: 'Flutter Web + Appwrite',
-        debugShowCheckedModeBanner:
-            false,
+
+        /// Hides the debug banner in non-debug builds.
+        debugShowCheckedModeBanner: false,
+
+        /// Sets the light theme for the application.
         theme: ThemeData.light(),
+
+        /// Configures the router for navigation using [AppRouter].
         routerConfig: AppRouter().router,
       ),
     );

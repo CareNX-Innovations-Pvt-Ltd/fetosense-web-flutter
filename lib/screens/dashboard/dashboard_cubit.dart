@@ -12,11 +12,21 @@ import 'package:go_router/go_router.dart';
 
 part 'dashboard_state.dart';
 
+/// Cubit for managing the state of the dashboard screen.
+///
+/// Handles user data retrieval, sidebar state, and dashboard statistics such as organization,
+/// device, mother, and test counts. Uses Appwrite for backend data and supports role-based access.
 class DashboardCubit extends Cubit<DashboardState> {
+  /// Service for authentication and user management.
   final AuthService _authService = AuthService();
+
+  /// Appwrite client instance for API calls.
   final client = locator<AppwriteService>().client;
+
+  /// Helper for accessing user preferences.
   final prefs = locator<PreferenceHelper>();
 
+  /// Creates a [DashboardCubit] and initializes user data.
   DashboardCubit()
     : super(
         const DashboardState(
@@ -32,6 +42,9 @@ class DashboardCubit extends Cubit<DashboardState> {
     getUserData();
   }
 
+  /// Fetches user data and dashboard statistics from Appwrite.
+  ///
+  /// Updates the state with user email and counts for organizations, devices, mothers, and tests.
   Future<void> getUserData() async {
     final userData = prefs.getUser();
 
@@ -44,7 +57,8 @@ class DashboardCubit extends Cubit<DashboardState> {
     List<String> buildQueries(String type) {
       final queries = <String>[];
       if (type.isNotEmpty) queries.add(Query.equal('type', type));
-      if (isRestricted) queries.add(Query.equal('organizationId', userData.organizationId));
+      if (isRestricted)
+        queries.add(Query.equal('organizationId', userData.organizationId));
       return queries;
     }
 
@@ -57,9 +71,10 @@ class DashboardCubit extends Cubit<DashboardState> {
     final deviceCount = await databases.listDocuments(
       databaseId: AppConstants.appwriteDatabaseId,
       collectionId: AppConstants.deviceCollectionId,
-      queries: isRestricted
-          ? [Query.equal('organizationId', userData.organizationId)]
-          : [],
+      queries:
+          isRestricted
+              ? [Query.equal('organizationId', userData.organizationId)]
+              : [],
     );
 
     final motherCount = await databases.listDocuments(
@@ -71,9 +86,10 @@ class DashboardCubit extends Cubit<DashboardState> {
     final testCount = await databases.listDocuments(
       databaseId: AppConstants.appwriteDatabaseId,
       collectionId: AppConstants.testsCollectionId,
-      queries: isRestricted
-          ? [Query.equal('organizationId', userData.organizationId)]
-          : [],
+      queries:
+          isRestricted
+              ? [Query.equal('organizationId', userData.organizationId)]
+              : [],
     );
 
     emit(

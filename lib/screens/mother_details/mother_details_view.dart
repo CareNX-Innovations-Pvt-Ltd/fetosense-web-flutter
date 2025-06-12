@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'mother_details_cubit.dart';
 
+/// The main view for displaying mother details.
+///
+/// Provides a [MotherDetailsCubit] to manage state and renders the [MotherDetails] UI.
 class MotherDetailsView extends StatelessWidget {
+  /// Creates a [MotherDetailsView] widget.
   const MotherDetailsView({super.key});
 
   @override
@@ -15,7 +19,11 @@ class MotherDetailsView extends StatelessWidget {
   }
 }
 
+/// Internal widget that builds the mother details UI.
+///
+/// Uses [BlocBuilder] to listen to [MotherDetailsCubit] state and renders the mother details table and filters.
 class MotherDetails extends StatelessWidget {
+  /// Creates a [MotherDetails] widget.
   const MotherDetails({super.key});
 
   @override

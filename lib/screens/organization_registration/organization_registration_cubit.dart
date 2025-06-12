@@ -10,42 +10,67 @@ import 'package:appwrite/appwrite.dart';
 
 part 'organization_registration_state.dart';
 
-class OrganizationRegistrationCubit extends Cubit<OrganizationRegistrationState> {
+/// Cubit for managing the state and logic of the organization registration screen.
+///
+/// Handles form input, state and city selection, and organization registration logic.
+class OrganizationRegistrationCubit
+    extends Cubit<OrganizationRegistrationState> {
+  /// Appwrite [Databases] instance for organization registration operations.
   final Databases db;
 
+  /// Global key for the registration form.
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  /// Controller for the organization name input field.
   final TextEditingController organizationController = TextEditingController();
+
+  /// Controller for the mobile number input field.
   final TextEditingController mobileController = TextEditingController();
+
+  /// Controller for the contact person input field.
   final TextEditingController contactPersonController = TextEditingController();
+
+  /// Controller for the email input field.
   final TextEditingController emailController = TextEditingController();
+
+  /// Controller for the street address input field.
   final TextEditingController streetController = TextEditingController();
+
+  /// Helper for accessing user preferences.
   final prefs = locator<PreferenceHelper>();
 
+  /// Creates an [OrganizationRegistrationCubit] and initializes the state.
   OrganizationRegistrationCubit()
-      : db = Databases(locator<AppwriteService>().client),
-        super(OrganizationRegistrationState.initial());
+    : db = Databases(locator<AppwriteService>().client),
+      super(OrganizationRegistrationState.initial());
 
+  /// Sets the selected status for the organization.
   void setStatus(String? status) {
     emit(state.copyWith(selectedStatus: status));
   }
 
+  /// Sets the selected designation for the contact person.
   void setDesignation(String? designation) {
     emit(state.copyWith(selectedDesignation: designation));
   }
 
+  /// Sets the selected state and resets the city selection.
   void setStateName(String? stateName) {
     emit(state.copyWith(selectedState: stateName, selectedCity: null));
   }
 
+  /// Sets the selected city.
   void setCity(String? city) {
     emit(state.copyWith(selectedCity: city));
   }
 
+  /// Saves the organization registration form.
+  ///
+  /// Validates the form, checks user role, and sends the registration data to the server.
   Future<void> saveForm(BuildContext context) async {
     if (formKey.currentState?.validate() ?? false) {
       UserModel? user = prefs.getUser();
-      if(user?.role == UserRoles.admin) {
+      if (user?.role == UserRoles.admin) {
         try {
           await db.createDocument(
             databaseId: AppConstants.appwriteDatabaseId,
@@ -70,13 +95,15 @@ class OrganizationRegistrationCubit extends Cubit<OrganizationRegistrationState>
             const SnackBar(content: Text('Organization saved successfully!')),
           );
         } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: $e')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Error: $e')));
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${user?.role} role cannot register organization')),
+          SnackBar(
+            content: Text('${user?.role} role cannot register organization'),
+          ),
         );
       }
     }

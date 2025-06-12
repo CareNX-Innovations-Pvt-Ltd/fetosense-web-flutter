@@ -25,6 +25,7 @@ Future<List<models.Document>> fetchMothers(
 
     final bool applyDateFilter = fromDate != null || tillDate != null;
 
+    // If date filters are applied, add queries for createdOn field
     if (applyDateFilter) {
       queries.add(Query.isNotNull('createdOn'));
 
@@ -35,6 +36,7 @@ Future<List<models.Document>> fetchMothers(
       }
 
       if (tillDate != null) {
+        // Add a query to filter documents created on or before the end of tillDate
         final tillDateEnd = DateTime(
           tillDate.year,
           tillDate.month,
@@ -49,16 +51,18 @@ Future<List<models.Document>> fetchMothers(
       }
     }
 
-    // Query the database for mother documents
+    // Fetch mother documents from Appwrite database
     final result = await db.listDocuments(
       databaseId: '67ece4a7002a0a732dfd',
       collectionId: '67f36a7e002c46ea05f0',
       queries: queries,
     );
 
+    // Return the list of mother documents
     return result.documents;
   } catch (e) {
-    print(' Error fetching mothers: $e');
+    // Print error and return empty list on failure
+    print('Error fetching mothers: $e');
     return [];
   }
 }

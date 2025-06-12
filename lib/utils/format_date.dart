@@ -2,15 +2,15 @@ import 'package:intl/intl.dart';
 
 /// Formats an ISO 8601 date string into a human-readable date format.
 ///
-/// This function takes an ISO 8601 formatted date string (e.g., `yyyy-MM-ddTHH:mm:ssZ`)
-/// and converts it into a user-friendly format (e.g., `dd/MM/yyyy`). If the input date
-/// string is null, empty, or invalid, it returns an empty string.
+/// Takes an ISO 8601 formatted date string (e.g., `yyyy-MM-ddTHH:mm:ssZ`) and converts it
+/// into a user-friendly format (e.g., `dd/MM/yyyy`). If the input date string is null, empty,
+/// or invalid, it returns an empty string.
 ///
-/// [isoDate] is the ISO 8601 date string that needs to be formatted.
+/// [isoDate]: The ISO 8601 date string to format.
 ///
-/// Returns a formatted date string in the format `dd/MM/yyyy`. If the input is invalid,
-/// an empty string is returned.
+/// Returns a formatted date string in the format `dd/MM/yyyy`, or an empty string if invalid.
 String formatDate(String? isoDate) {
+  // Return empty string if input is null or empty
   if (isoDate == null || isoDate.isEmpty) return '';
   try {
     // Parse the ISO 8601 date string

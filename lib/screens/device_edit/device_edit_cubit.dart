@@ -27,6 +27,11 @@ class DeviceEditCubit extends Cubit<DeviceEditState> {
     fetchTabletSerialNumber();
   }
 
+  /// Fetches the tablet serial number for the current device from Appwrite.
+  ///
+  /// Queries the device collection using the [documentId] and updates the
+  /// [tabletSerialNumberController] with the fetched value if available.
+  /// Emits [DeviceEditLoaded] on success or [DeviceEditError] on failure.
   Future<void> fetchTabletSerialNumber() async {
     emit(DeviceEditLoading());
     try {
@@ -47,10 +52,14 @@ class DeviceEditCubit extends Cubit<DeviceEditState> {
     }
   }
 
+  /// Updates the device details in Appwrite with the current values from the controllers.
+  ///
+  /// Only allows update if the current user has the [UserRoles.admin] role.
+  /// Emits [DeviceEditSaving] while saving, and [DeviceEditLoaded] or [DeviceEditError] on completion.
   Future<void> updateChanges() async {
     emit(DeviceEditSaving());
     UserModel? user = prefs.getUser();
-    if(user?.role == UserRoles.admin) {
+    if (user?.role == UserRoles.admin) {
       try {
         await db.updateDocument(
           databaseId: AppConstants.appwriteDatabaseId,

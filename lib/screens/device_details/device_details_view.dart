@@ -6,7 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'device_details_cubit.dart';
 
+/// The main view for displaying device details.
+///
+/// Provides a [DeviceDetailsCubit] to manage state and renders the [_DeviceDetailsView].
 class DeviceDetailsView extends StatelessWidget {
+  /// Creates a [DeviceDetailsView] widget.
   const DeviceDetailsView({super.key});
 
   @override
@@ -18,7 +22,11 @@ class DeviceDetailsView extends StatelessWidget {
   }
 }
 
+/// Internal widget that builds the device details UI.
+///
+/// Uses [BlocBuilder] to listen to [DeviceDetailsCubit] state and renders the device details table and filters.
 class _DeviceDetailsView extends StatelessWidget {
+  /// Creates a [_DeviceDetailsView] widget.
   const _DeviceDetailsView();
 
   @override

@@ -21,14 +21,15 @@ import 'package:fl_chart/fl_chart.dart';
 
 import 'dashboard_cubit.dart';
 
-
+/// The main dashboard screen widget.
+///
+/// Wraps the [DashboardView] with a [BlocProvider] and sets the initial child index.
 class DashboardScreen extends StatelessWidget {
+  /// The index of the child widget to display initially.
   final int childIndex;
 
-  const DashboardScreen({
-    super.key,
-    required this.childIndex,
-  });
+  /// Creates a [DashboardScreen] with the given [childIndex].
+  const DashboardScreen({super.key, required this.childIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -39,17 +40,29 @@ class DashboardScreen extends StatelessWidget {
   }
 }
 
+/// The main dashboard view widget.
+///
+/// Displays the dashboard UI and manages its state.
 class DashboardView extends StatefulWidget {
+  /// Creates a [DashboardView] widget.
   const DashboardView({super.key});
 
   @override
   State<DashboardView> createState() => _DashboardViewState();
 }
 
+/// State class for [DashboardView].
+///
+/// Handles sidebar animation, user preferences, and user model loading.
 class _DashboardViewState extends State<DashboardView>
     with SingleTickerProviderStateMixin {
+  /// Animation controller for the sidebar.
   late final AnimationController _sidebarAnimationController;
+
+  /// Reference to the preferences helper.
   final prefs = locator<PreferenceHelper>();
+
+  /// The current user model, if available.
   UserModel? userModel;
 
   @override
@@ -81,7 +94,7 @@ class _DashboardViewState extends State<DashboardView>
         return Scaffold(
           backgroundColor: Colors.black87,
           appBar: buildAppBar(
-                () => context.read<DashboardCubit>().toggleSidebar(),
+            () => context.read<DashboardCubit>().toggleSidebar(),
             state.userEmail,
             () => context.read<DashboardCubit>().logout(context),
           ),
@@ -95,7 +108,7 @@ class _DashboardViewState extends State<DashboardView>
                       axis: Axis.horizontal,
                       child: buildSidebar(
                         context,
-                            () => context.read<DashboardCubit>().logout(context),
+                        () => context.read<DashboardCubit>().logout(context),
                       ),
                     ),
                     Expanded(child: _getChild(state.childIndex, state)),
@@ -114,7 +127,10 @@ class _DashboardViewState extends State<DashboardView>
     switch (childIndex) {
       case 0:
         return Column(
-          children: [_buildTopStats(state), Expanded(child: _buildGraphSection())],
+          children: [
+            _buildTopStats(state),
+            Expanded(child: _buildGraphSection()),
+          ],
         );
       case 1:
         return const OrganizationRegistrationView();
@@ -183,9 +199,7 @@ class _DashboardViewState extends State<DashboardView>
   //   );
   // }
 
-  Widget _buildCountItem(
-      DashboardStat state
-      ) {
+  Widget _buildCountItem(DashboardStat state) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -221,12 +235,12 @@ class _DashboardViewState extends State<DashboardView>
   List<DashboardStat> _getDashboardStats(DashboardState state) {
     final role = prefs.getUserRole();
     return [
-    if(role == UserRoles.superAdmin)
-      DashboardStat(
-        icon: Icons.business,
-        title: "Organizations",
-        count: state.organizationCount.toString(),
-      ),
+      if (role == UserRoles.superAdmin)
+        DashboardStat(
+          icon: Icons.business,
+          title: "Organizations",
+          count: state.organizationCount.toString(),
+        ),
       DashboardStat(
         icon: Icons.devices,
         title: "Devices",
@@ -244,7 +258,6 @@ class _DashboardViewState extends State<DashboardView>
       ),
     ];
   }
-
 
   Widget _buildGraphSection() {
     return Container(
