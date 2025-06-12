@@ -85,9 +85,7 @@ flutter run -d chrome
 
 ##  Developers Documentation
 
-You can find the complete developer documentation here:  
-➡️ **[https://carenx-innovations-pvt-ltd.github.io/fetosense-web-flutter/](https://carenx-innovations-pvt-ltd.github.io/fetosense-web-flutter/)**
-
+You can find the complete developer documentation [<u>here</u>](https://carenx-innovations-pvt-ltd.github.io/fetosense-web-flutter/).
 
 ---
 
@@ -111,11 +109,12 @@ This project can be deployed using:
 
 ##  Contributing
 
-Fork the repository  
-Create your feature branch (`git checkout -b feature/amazing-feature`)  
-Commit your changes (`git commit -m 'Add some amazing feature'`)  
-Push to the branch (`git push origin feature/amazing-feature`)  
-Open a Pull Request
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
 ---
 
 ##  About Fetosense
