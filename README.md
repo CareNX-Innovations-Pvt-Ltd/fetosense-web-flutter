@@ -83,17 +83,11 @@ flutter run -d chrome
 
 ---
 
-##  Documentation
+##  Developers Documentation
 
-Documentation is auto-generated using [`dartdoc`](https://dart.dev/tools/dartdoc).  
-To generate the latest documentation, run:
+You can find the complete developer documentation here:  
+➡️ **[https://carenx-innovations-pvt-ltd.github.io/fetosense-web-flutter/](https://carenx-innovations-pvt-ltd.github.io/fetosense-web-flutter/)**
 
-```bash
-dart pub global activate dartdoc
-dart doc
-```
-
-Output will be available in the `/doc/api` directory.
 
 ---
 
@@ -117,8 +111,11 @@ This project can be deployed using:
 
 ##  Contributing
 
-This project is intended for internal use at Fetosense. If you'd like to suggest improvements or collaborate, feel free to fork the repo and create a pull request.
-
+Fork the repository  
+Create your feature branch (`git checkout -b feature/amazing-feature`)  
+Commit your changes (`git commit -m 'Add some amazing feature'`)  
+Push to the branch (`git push origin feature/amazing-feature`)  
+Open a Pull Request
 ---
 
 ##  About Fetosense
