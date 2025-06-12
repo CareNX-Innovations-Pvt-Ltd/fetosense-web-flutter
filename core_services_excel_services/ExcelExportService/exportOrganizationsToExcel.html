@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the exportOrganizationsToExcel method from the ExcelExportService class, for the Dart programming language.">
+  <title>exportOrganizationsToExcel method - ExcelExportService class - excel_services library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">fetosense_mis</a></li>
+    <li><a href="../../core_services_excel_services/">core&#47;services&#47;excel_services.dart</a></li>
+    <li><a href="../../core_services_excel_services/ExcelExportService-class.html">ExcelExportService</a></li>
+    <li class="self-crumb">exportOrganizationsToExcel static method</li>
+  </ol>
+  <div class="self-name">exportOrganizationsToExcel</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="core_services_excel_services&#47;ExcelExportService-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">exportOrganizationsToExcel</span> static method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">exportOrganizationsToExcel</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="exportOrganizationsToExcel-param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span>, </span></li>
+<li><span class="parameter" id="exportOrganizationsToExcel-param-documents"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_org_details_model/OrganizationDetailsModel-class.html">OrganizationDetailsModel</a></span>&gt;</span></span> <span class="parameter-name">documents</span></span></li>
+</ol>)
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">static Future&lt;void&gt; exportOrganizationsToExcel(
+  BuildContext context,
+  List&lt;OrganizationDetailsModel&gt; documents,
+) async {
+  try {
+    &#47;&#47; Create a new Excel file and select the first sheet
+    final excel = Excel.createExcel();
+    final Sheet sheet = excel[&#39;Sheet1&#39;];
+
+    &#47;&#47; Add headers to the sheet
+    sheet.appendRow([
+      &#39;Name&#39;,
+      &#39;Device&#39;,
+      &#39;Doctors&#39;,
+      &#39;Mother&#39;,
+      &#39;Test&#39;,
+      &#39;Mobile&#39;,
+      &#39;Status&#39;,
+      &#39;Created On&#39;,
+      &#39;Address&#39;,
+      &#39;Email&#39;,
+    ]);
+
+    &#47;&#47; Add data rows based on the documents provided
+    for (var doc in documents) {
+      final data = doc.organizations.first.data;
+      final address =
+          &#39;${data[&#39;addressLine&#39;] ?? &#39;&#39;}, ${data[&#39;city&#39;] ?? &#39;&#39;}, ${data[&#39;state&#39;] ?? &#39;&#39;}, ${data[&#39;country&#39;] ?? &#39;&#39;}&#39;;
+
+      sheet.appendRow([
+        data[&#39;name&#39;] ?? &#39;&#39;,
+        doc.deviceCount ?? &#39;&#39;,
+        doc.doctorCount ?? &#39;&#39;,
+        doc.motherCount ?? &#39;&#39;,
+        doc.testCount ?? &#39;&#39;,
+        data[&#39;mobile&#39;] ?? &#39;&#39;,
+        data[&#39;status&#39;] ?? &#39;&#39;,
+        data[&#39;created_on&#39;] ?? &#39;&#39;,
+        address,
+        data[&#39;email&#39;] ?? &#39;&#39;,
+      ]);
+    }
+
+    &#47;&#47; Encode the Excel file and prepare it for download
+    final fileBytes = excel.encode();
+    final blob = html.Blob([fileBytes]);
+    final url = html.Url.createObjectUrlFromBlob(blob);
+    final anchor =
+        html.AnchorElement(href: url)
+          ..setAttribute(&quot;download&quot;, &quot;organizations.xlsx&quot;)
+          ..click(); &#47;&#47; Trigger the download
+    html.Url.revokeObjectUrl(url); &#47;&#47; Clean up the object URL after download
+  } catch (e) {
+    &#47;&#47; Show an error message if the export fails
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(&quot;Failed to export: $e&quot;)));
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">fetosense_mis</a></li>
+    <li><a href="../../core_services_excel_services/">excel_services</a></li>
+    <li><a href="../../core_services_excel_services/ExcelExportService-class.html">ExcelExportService</a></li>
+    <li class="self-crumb">exportOrganizationsToExcel static method</li>
+</ol>
+
+    <h5>ExcelExportService class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    fetosense_mis
+      1.0.0+1
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

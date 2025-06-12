@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the fetchMothers function from the mother_details_cubit library, for the Dart programming language.">
+  <title>fetchMothers function - mother_details_cubit library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">fetosense_mis</a></li>
+    <li><a href="../screens_mother_details_mother_details_cubit/">screens&#47;mother_details&#47;mother_details_cubit.dart</a></li>
+    <li class="self-crumb">fetchMothers function</li>
+  </ol>
+  <div class="self-name">fetchMothers</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="screens_mother_details_mother_details_cubit&#47;screens_mother_details_mother_details_cubit-library-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-function">fetchMothers</span> function 
+ 
+</h1></div>
+
+    <section class="multi-line-signature">
+        
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/appwrite/13.0.0/appwrite.models/Document-class.html">Document</a></span>&gt;</span></span>&gt;</span></span>
+<span class="name ">fetchMothers</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="fetchMothers-param-db"><span class="type-annotation"><a href="https://pub.dev/documentation/appwrite/13.0.0/appwrite/Databases-class.html">Databases</a></span> <span class="parameter-name">db</span>, {</span></li>
+<li><span class="parameter" id="fetchMothers-param-fromDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">fromDate</span>, </span></li>
+<li><span class="parameter" id="fetchMothers-param-tillDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">tillDate</span>, </span></li>
+</ol>})
+
+        
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Fetches mothers from the database with optional date filtering.</p>
+<p>Queries the Appwrite database for documents of type 'mother'.
+Optionally filters by <code>fromDate</code> and <code>tillDate</code> if provided.</p>
+<p>Returns a <a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a> of Appwrite <a href="https://pub.dev/documentation/web/1.1.1/web/Document-extension-type.html">Document</a>s representing mothers.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;models.Document&gt;&gt; fetchMothers(
+  Databases db, {
+  DateTime? fromDate,
+  DateTime? tillDate,
+}) async {
+  &#47;&#47; Implementation would depend on your actual query logic
+  &#47;&#47; This is a placeholder based on the original code
+  List&lt;String&gt; queries = [];
+
+  queries.add(Query.equal(&#39;type&#39;, &#39;mother&#39;));
+
+  if (fromDate != null) {
+    queries.add(
+      Query.greaterThanEqual(&#39;createdAt&#39;, fromDate.toIso8601String()),
+    );
+  }
+
+  if (tillDate != null) {
+    queries.add(Query.lessThanEqual(&#39;createdAt&#39;, tillDate.toIso8601String()));
+  }
+
+  final result = await db.listDocuments(
+    databaseId: AppConstants.appwriteDatabaseId, &#47;&#47; Replace with actual DB ID
+    collectionId:
+        AppConstants.userCollectionId, &#47;&#47; Replace with actual collection ID
+    queries: queries,
+  );
+
+  return result.documents;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">fetosense_mis</a></li>
+    <li><a href="../screens_mother_details_mother_details_cubit/">mother_details_cubit</a></li>
+    <li class="self-crumb">fetchMothers function</li>
+</ol>
+
+    <h5>mother_details_cubit library</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-left-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    fetosense_mis
+      1.0.0+1
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

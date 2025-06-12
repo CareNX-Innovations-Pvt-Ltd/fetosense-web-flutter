@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the fetchDoctors function from the fetch_doctors library, for the Dart programming language.">
+  <title>fetchDoctors function - fetch_doctors library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">fetosense_mis</a></li>
+    <li><a href="../utils_fetch_doctors/">utils&#47;fetch_doctors.dart</a></li>
+    <li class="self-crumb">fetchDoctors function</li>
+  </ol>
+  <div class="self-name">fetchDoctors</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="utils_fetch_doctors&#47;utils_fetch_doctors-library-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-function">fetchDoctors</span> function 
+ 
+</h1></div>
+
+    <section class="multi-line-signature">
+        
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/appwrite/13.0.0/appwrite.models/Document-class.html">Document</a></span>&gt;</span></span>&gt;</span></span>
+<span class="name ">fetchDoctors</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="fetchDoctors-param-db"><span class="type-annotation"><a href="https://pub.dev/documentation/appwrite/13.0.0/appwrite/Databases-class.html">Databases</a></span> <span class="parameter-name">db</span>, {</span></li>
+<li><span class="parameter" id="fetchDoctors-param-fromDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">fromDate</span>, </span></li>
+<li><span class="parameter" id="fetchDoctors-param-tillDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">tillDate</span>, </span></li>
+</ol>})
+
+        
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Fetches a list of doctors from the Appwrite database.</p>
+<p>This function queries the Appwrite database for documents in the specified
+collection that match the criteria defined by the filters. It supports optional
+date filters (<code>fromDate</code> and <code>tillDate</code>) to narrow the query results based on
+the document creation date. It retrieves documents where the <code>type</code> field is
+equal to 'doctor'.</p>
+<p><code>db</code> is the instance of the <a href="https://pub.dev/documentation/appwrite/13.0.0/appwrite/Databases-class.html">Databases</a> used for querying the Appwrite database.
+<code>fromDate</code> is the optional start date filter for the document creation date.
+<code>tillDate</code> is the optional end date filter for the document creation date.</p>
+<p>Returns a list of <a href="https://pub.dev/documentation/appwrite/13.0.0/appwrite.models/Document-class.html">models.Document</a> objects that match the query criteria.
+In case of an error, an empty list is returned.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;models.Document&gt;&gt; fetchDoctors(
+  Databases db, {
+  DateTime? fromDate,
+  DateTime? tillDate,
+}) async {
+  try {
+    final List&lt;String&gt; queries = [Query.equal(&#39;type&#39;, &#39;doctor&#39;)];
+
+    final bool applyDateFilter = fromDate != null || tillDate != null;
+
+    &#47;&#47; If date filters are applied, add queries for createdOn field
+    if (applyDateFilter) {
+      queries.add(Query.isNotNull(&#39;createdOn&#39;));
+
+      if (fromDate != null) {
+        queries.add(
+          Query.greaterThanEqual(&#39;createdOn&#39;, fromDate.toIso8601String()),
+        );
+      }
+
+      if (tillDate != null) {
+        &#47;&#47; Add a query to filter documents created on or before the end of tillDate
+        final tillDateEnd = DateTime(
+          tillDate.year,
+          tillDate.month,
+          tillDate.day,
+          23,
+          59,
+          59,
+        );
+        queries.add(
+          Query.lessThanEqual(&#39;createdOn&#39;, tillDateEnd.toIso8601String()),
+        );
+      }
+    }
+
+    &#47;&#47; Fetch doctor documents from Appwrite database
+    final result = await db.listDocuments(
+      databaseId: &#39;67ece4a7002a0a732dfd&#39;,
+      collectionId: &#39;67f36a7e002c46ea05f0&#39;,
+      queries: queries,
+    );
+
+    &#47;&#47; Return the list of doctor documents
+    return result.documents;
+  } catch (e) {
+    &#47;&#47; Print error and return empty list on failure
+    print(&#39;Error fetching doctors: $e&#39;);
+    return [];
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">fetosense_mis</a></li>
+    <li><a href="../utils_fetch_doctors/">fetch_doctors</a></li>
+    <li class="self-crumb">fetchDoctors function</li>
+</ol>
+
+    <h5>fetch_doctors library</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-left-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    fetosense_mis
+      1.0.0+1
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
