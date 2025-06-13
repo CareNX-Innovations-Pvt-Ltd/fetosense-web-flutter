@@ -1,5 +1,6 @@
 import 'package:fetosense_mis/screens/dashboard/dashboard_view.dart';
 import 'package:fetosense_mis/screens/login/login_view.dart';
+import 'package:fetosense_mis/screens/login/new_login_view.dart';
 import 'package:fetosense_mis/screens/register/register_view.dart';
 import 'package:fetosense_mis/screens/splash/splash_view.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +34,7 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.login,
         name: '/login',
-        builder: (context, state) => const LoginView(),
+        builder: (context, state) => const NewLoginView(),
       ),
       GoRoute(
         path: AppRoutes.register,

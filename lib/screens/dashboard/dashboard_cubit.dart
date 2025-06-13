@@ -30,35 +30,42 @@ class DashboardCubit extends Cubit<DashboardState> {
   }
 
   Future<void> getUserData() async {
-    Databases databases = Databases(client);
-    final user = await _authService.getCurrentUser();
-    final orgCount = await databases.listDocuments(
-      databaseId: AppConstants.appwriteDatabaseId,
-      collectionId: AppConstants.userCollectionId,
-      queries: [Query.equal('type', 'organization')],
-    );
-    final deviceCount = await databases.listDocuments(
-      databaseId: AppConstants.appwriteDatabaseId,
-      collectionId: AppConstants.deviceCollectionId,
-    );
-    final motherCount = await databases.listDocuments(
-      databaseId: AppConstants.appwriteDatabaseId,
-      collectionId: AppConstants.userCollectionId,
-      queries: [Query.equal('type', 'mother')],
-    );
-    final testCount = await databases.listDocuments(
-      databaseId: AppConstants.appwriteDatabaseId,
-      collectionId: AppConstants.testsCollectionId,
-    );
-    emit(
-      state.copyWith(
-        userEmail: user.email,
-        organizationCount: orgCount.total,
-        deviceCount: deviceCount.total,
-        motherCount: motherCount.total,
-        testCount: testCount.total,
-      ),
-    );
+    try {
+      Databases databases = Databases(client);
+      final user = await _authService.getCurrentUser();
+      final orgCount = await databases.listDocuments(
+        databaseId: AppConstants.appwriteDatabaseId,
+        collectionId: AppConstants.userCollectionId,
+        queries: [Query.equal('type', 'organization')],
+      );
+      final deviceCount = await databases.listDocuments(
+        databaseId: AppConstants.appwriteDatabaseId,
+        collectionId: AppConstants.deviceCollectionId,
+      );
+      final motherCount = await databases.listDocuments(
+        databaseId: AppConstants.appwriteDatabaseId,
+        collectionId: AppConstants.userCollectionId,
+        queries: [Query.equal('type', 'mother')],
+      );
+      final testCount = await databases.listDocuments(
+        databaseId: AppConstants.appwriteDatabaseId,
+        collectionId: AppConstants.testsCollectionId,
+      );
+
+      if (!isClosed) {
+        emit(
+          state.copyWith(
+            userEmail: user.email,
+            organizationCount: orgCount.total,
+            deviceCount: deviceCount.total,
+            motherCount: motherCount.total,
+            testCount: testCount.total,
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint("DashboardCubit Error: $e");
+    }
   }
 
   void toggleSidebar() {

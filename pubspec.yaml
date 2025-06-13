@@ -36,6 +36,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/images/
     - assets/images/login/fetosense.png
     - assets/images/device/doppler.png
     - assets/images/device/fetosense kit.png

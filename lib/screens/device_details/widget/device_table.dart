@@ -17,9 +17,9 @@ class DeviceTable extends StatelessWidget {
       horizontalMargin: 12,
       minWidth: 800,
       border: TableBorder.all(color: Colors.grey.shade700, width: 1),
-      headingRowColor: MaterialStateProperty.all(const Color(0xFF181A1B)),
-      dataRowColor: MaterialStateProperty.resolveWith<Color?>((
-        Set<MaterialState> states,
+      headingRowColor: WidgetStateProperty.all(const Color(0xFF181A1B)),
+      dataRowColor: WidgetStateProperty.resolveWith<Color?>((
+        Set<WidgetState> states,
       ) {
         if (states.contains(MaterialState.selected)) {
           return Colors.grey.shade800;
