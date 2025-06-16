@@ -52,7 +52,7 @@ class DashboardCubit extends Cubit<DashboardState> {
 
     final databases = Databases(client);
     final user = await _authService.getCurrentUser();
-    final isRestricted = userData.role != UserRoles.superAdmin;
+    final isRestricted = userData.role != UserRoles.admin;
 
     List<String> buildQueries(String type) {
       final queries = <String>[];
@@ -72,10 +72,6 @@ class DashboardCubit extends Cubit<DashboardState> {
     final deviceCount = await databases.listDocuments(
       databaseId: AppConstants.appwriteDatabaseId,
       collectionId: AppConstants.deviceCollectionId,
-      queries:
-          isRestricted
-              ? [Query.equal('organizationId', userData.organizationId)]
-              : [],
     );
 
     final motherCount = await databases.listDocuments(

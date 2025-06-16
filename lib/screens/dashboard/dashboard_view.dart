@@ -235,7 +235,7 @@ class _DashboardViewState extends State<DashboardView>
   List<DashboardStat> _getDashboardStats(DashboardState state) {
     final role = prefs.getUserRole();
     return [
-      if (role == UserRoles.superAdmin)
+      if (role == UserRoles.admin)
         DashboardStat(
           icon: Icons.business,
           title: "Organizations",

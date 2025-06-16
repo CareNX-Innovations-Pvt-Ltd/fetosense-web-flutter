@@ -78,7 +78,7 @@ class OrganizationRegistrationCubit
             documentId: ID.unique(),
             data: {
               'organizationName': organizationController.text,
-              'mobileNo': mobileController.text,
+              'mobileNo': int.parse(mobileController.text),
               'status': state.selectedStatus,
               'designation': state.selectedDesignation,
               'contactPerson': contactPersonController.text,
