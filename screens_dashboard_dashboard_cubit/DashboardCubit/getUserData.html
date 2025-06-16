@@ -82,8 +82,9 @@
   List&lt;String&gt; buildQueries(String type) {
     final queries = &lt;String&gt;[];
     if (type.isNotEmpty) queries.add(Query.equal(&#39;type&#39;, type));
-    if (isRestricted)
+    if (isRestricted) {
       queries.add(Query.equal(&#39;organizationId&#39;, userData.organizationId));
+    }
     return queries;
   }
 

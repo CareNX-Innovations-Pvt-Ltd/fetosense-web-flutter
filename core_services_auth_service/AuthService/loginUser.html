@@ -94,27 +94,11 @@ Returns <code>true</code> if login is successful, otherwise <code>false</code>.<
     );
 
     late UserModel userModel;
-
-    &#47;&#47; if (result.documents.isEmpty) {
-    &#47;&#47;   await databases.createDocument(
-    &#47;&#47;     databaseId: AppConstants.appwriteDatabaseId,
-    &#47;&#47;     collectionId: AppConstants.userCollectionId,
-    &#47;&#47;     documentId: user.$id,
-    &#47;&#47;     data: {
-    &#47;&#47;       &#39;documentId&#39;: user.$id,
-    &#47;&#47;       &#39;email&#39;: email,
-    &#47;&#47;       &#39;designation&#39;: role,
-    &#47;&#47;       &#39;createdAt&#39;: DateTime.now().toIso8601String(),
-    &#47;&#47;     },
-    &#47;&#47;   );
-    &#47;&#47;   userModel = UserModel(userId: user.$id, email: email, role: role, organizationId: &#39;&#39;, );
-    &#47;&#47; } else {
     final doc = result.documents.first;
     userModel = UserModel.fromJson(doc.data);
     if (userModel.role != UserRoles.admin) {
       return false;
     }
-    &#47;&#47; }
 
     prefs.saveUser(userModel);
 

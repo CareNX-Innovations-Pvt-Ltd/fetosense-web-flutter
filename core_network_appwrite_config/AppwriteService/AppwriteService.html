@@ -68,8 +68,8 @@
   <pre class="language-dart"><code class="language-dart">AppwriteService()
   : client =
         Client()
-          ..setEndpoint(&#39;http:&#47;&#47;172.172.241.56&#47;v1&#39;)
-          ..setProject(&#39;67ecd82100347201f279&#39;)
+          ..setEndpoint(AppConstants.appwriteEndpoint)
+          ..setProject(AppConstants.appwriteProjectId)
           ..setSelfSigned(status: true);</code></pre>
 </section>
 

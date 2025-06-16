@@ -78,7 +78,7 @@
             result.map((doc) {
               return {
                 &#39;id&#39;: doc.$id,
-                &#39;name&#39;: doc.data[&#39;name&#39;]?.toString() ?? &#39;&#39;,
+                &#39;name&#39;: doc.data[&#39;organizationName&#39;]?.toString() ?? &#39;&#39;,
               };
             }).toList(),
       ),
