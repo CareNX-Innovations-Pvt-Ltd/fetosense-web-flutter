@@ -85,7 +85,10 @@ class _CaptchaCheckboxState extends State<CaptchaCheckbox> {
             style: TextStyle(color: Colors.white70),
           ),
           const Spacer(),
-          const Icon(Icons.verified_user, color: Colors.white70),
+          Icon(
+            Icons.verified_user,
+            color: _isChecked ? Colors.green : Colors.white70,
+          ),
         ],
       ),
     );

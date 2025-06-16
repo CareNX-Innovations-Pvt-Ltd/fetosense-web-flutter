@@ -26,7 +26,6 @@ class LoginCubit extends Cubit<LoginState> {
       await AuthService().loginUser(
         usernameController.text,
         passwordController.text,
-
       );
       if (context.mounted) {
         emit(LoginSuccess());
@@ -34,7 +33,7 @@ class LoginCubit extends Cubit<LoginState> {
         context.go(AppRoutes.dashboard);
       }
     } catch (e) {
-      emit(LoginFailure(e.toString()));
+      emit(LoginFailure("Something went wrong."));
     }
   }
 }
