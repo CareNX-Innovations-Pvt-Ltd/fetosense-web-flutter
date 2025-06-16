@@ -29,7 +29,7 @@ class _LoginViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<LoginCubit>();
-    cubit.usernameController.text = 'mgm@belapur.com';
+    cubit.usernameController.text = 'pranav@carenx.com';
     cubit.passwordController.text = '12345678';
     return Scaffold(
       backgroundColor: const Color(0xFF1E1E1E),
