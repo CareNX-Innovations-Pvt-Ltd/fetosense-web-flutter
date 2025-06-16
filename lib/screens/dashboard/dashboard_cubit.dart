@@ -57,8 +57,9 @@ class DashboardCubit extends Cubit<DashboardState> {
     List<String> buildQueries(String type) {
       final queries = <String>[];
       if (type.isNotEmpty) queries.add(Query.equal('type', type));
-      if (isRestricted)
+      if (isRestricted) {
         queries.add(Query.equal('organizationId', userData.organizationId));
+      }
       return queries;
     }
 

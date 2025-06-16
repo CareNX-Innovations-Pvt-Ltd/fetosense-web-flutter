@@ -34,7 +34,7 @@ class DeviceRegistrationCubit extends Cubit<DeviceRegistrationState> {
               result.map((doc) {
                 return {
                   'id': doc.$id,
-                  'name': doc.data['name']?.toString() ?? '',
+                  'name': doc.data['organizationName']?.toString() ?? '',
                 };
               }).toList(),
         ),
@@ -154,7 +154,6 @@ Future<List<Document>> fetchOrganizationsFromDb(Databases db) async {
     collectionId: AppConstants.userCollectionId,
     queries: [
       Query.equal('type', 'organization'),
-      Query.equal('isDeleted', false),
     ],
   );
 

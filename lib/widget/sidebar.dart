@@ -28,7 +28,7 @@ Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
             context.pushReplacement(AppRoutes.dashboard);
           },
         ),
-        role == UserRoles.superAdmin
+        role == UserRoles.admin
             ? const _ExpandableMenu(
               icon: Icons.app_registration,
               title: "Registration",

@@ -18,29 +18,13 @@ abstract class AppConstants {
   /// Route name for mother details screens.
   static const String motherDetailsRoute = 'mother-detail-route';
 
-  /// Appwrite API endpoint URL.
-  static const String appwriteEndpoint = 'http://172.172.241.56/v1';
-
-  /// Appwrite project ID.
-  static const String appwriteProjectId = '67ecd82100347201f279';
-
-  /// Appwrite database ID.
-  static const String appwriteDatabaseId = '67ece4a7002a0a732dfd';
-
-  /// Appwrite user collection ID.
-  static const String userCollectionId = '67f36a7e002c46ea05f0';
-
-  /// Appwrite device collection ID.
-  static const String deviceCollectionId = '67f36766002068046589';
-
-  /// Appwrite tests collection ID.
-  static const String testsCollectionId = '67f3790a0024f8f61684';
-
-  /// Appwrite config collection ID.
+  static const String appwriteEndpoint = 'http://20.6.93.31/v1';
+  static const String appwriteProjectId = '684c18890002a74fff23';
+  static const String appwriteDatabaseId = '684c19ee00122a8eec2a';
+  static const String userCollectionId = '684c19fa00162a9cbc57';
+  static const String deviceCollectionId = '684c1a0200383bd0527c';
+  static const String testsCollectionId = '684c1a13001f5e7a17c5';
   static const String configCollectionId = '67fe36d100234405442e';
-
-  /// Appwrite MIS user collection ID.
-  static const String misUserCollectionId = '681857100017b4b2e416';
 
   /// Key for default test duration in app settings.
   static const String defaultTestDurationKey = 'defaultTestDurationKey';

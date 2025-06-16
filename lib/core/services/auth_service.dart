@@ -61,27 +61,11 @@ class AuthService {
       );
 
       late UserModel userModel;
-
-      // if (result.documents.isEmpty) {
-      //   await databases.createDocument(
-      //     databaseId: AppConstants.appwriteDatabaseId,
-      //     collectionId: AppConstants.userCollectionId,
-      //     documentId: user.$id,
-      //     data: {
-      //       'documentId': user.$id,
-      //       'email': email,
-      //       'designation': role,
-      //       'createdAt': DateTime.now().toIso8601String(),
-      //     },
-      //   );
-      //   userModel = UserModel(userId: user.$id, email: email, role: role, organizationId: '', );
-      // } else {
       final doc = result.documents.first;
       userModel = UserModel.fromJson(doc.data);
       if (userModel.role != UserRoles.admin) {
         return false;
       }
-      // }
 
       prefs.saveUser(userModel);
 

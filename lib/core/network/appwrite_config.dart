@@ -1,4 +1,5 @@
 import 'package:appwrite/appwrite.dart';
+import 'package:fetosense_mis/core/utils/app_constants.dart';
 
 /// Service class for configuring and providing an Appwrite [Client] instance.
 ///
@@ -12,8 +13,8 @@ class AppwriteService {
   AppwriteService()
     : client =
           Client()
-            ..setEndpoint('http://172.172.241.56/v1')
-            ..setProject('67ecd82100347201f279')
+            ..setEndpoint(AppConstants.appwriteEndpoint)
+            ..setProject(AppConstants.appwriteProjectId)
             ..setSelfSigned(status: true);
 
   /// Returns the configured Appwrite [Client] instance.
