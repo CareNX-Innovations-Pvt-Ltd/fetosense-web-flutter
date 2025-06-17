@@ -98,6 +98,32 @@
         },
       );
 
+     &#47;&#47; String docId = ID.unique();
+     &#47;&#47;  await db.createDocument(
+     &#47;&#47;    databaseId: AppConstants.appwriteDatabaseId,
+     &#47;&#47;    collectionId: AppConstants.userCollectionId,
+     &#47;&#47;    documentId: docId,
+     &#47;&#47;    data: {
+     &#47;&#47;      &#39;deviceCode&#39;: state.kitId,
+     &#47;&#47;      &#39;deviceName&#39;: state.deviceName,
+     &#47;&#47;      &#39;organizationId&#39;: state.selectedOrganizationId,
+     &#47;&#47;      &#39;organizationName&#39;: state.selectedOrganizationName,
+     &#47;&#47;      &#39;delete&#39;: false,
+     &#47;&#47;      &#39;createdBy&#39;: &#39;admin&#39;,
+     &#47;&#47;      &#39;createdOn&#39;: DateTime.now().toIso8601String(),
+     &#47;&#47;      &#39;type&#39;: &#39;device&#39;,
+     &#47;&#47;      &#39;name&#39;: state.deviceName,
+     &#47;&#47;      &#39;noOfTests&#39;: 0,
+     &#47;&#47;      &#39;noOfMother&#39;: 0,
+     &#47;&#47;      &#39;sync&#39;:1,
+     &#47;&#47;      &#39;testAccount&#39;: false,
+     &#47;&#47;      &#39;isActive&#39;: true,
+     &#47;&#47;      &#39;documentId&#39;: docId
+     &#47;&#47;    },
+     &#47;&#47;  );
+     &#47;&#47;
+
+
       emit(state.copyWith(isSubmitting: false, isSuccess: true));
     } catch (e) {
       emit(state.copyWith(isSubmitting: false, errorMessage: &#39;Error: $e&#39;));

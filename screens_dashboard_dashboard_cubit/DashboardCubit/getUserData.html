@@ -77,7 +77,7 @@
 
   final databases = Databases(client);
   final user = await _authService.getCurrentUser();
-  final isRestricted = userData.role != UserRoles.superAdmin;
+  final isRestricted = userData.role != UserRoles.admin;
 
   List&lt;String&gt; buildQueries(String type) {
     final queries = &lt;String&gt;[];
@@ -97,10 +97,6 @@
   final deviceCount = await databases.listDocuments(
     databaseId: AppConstants.appwriteDatabaseId,
     collectionId: AppConstants.deviceCollectionId,
-    queries:
-        isRestricted
-            ? [Query.equal(&#39;organizationId&#39;, userData.organizationId)]
-            : [],
   );
 
   final motherCount = await databases.listDocuments(

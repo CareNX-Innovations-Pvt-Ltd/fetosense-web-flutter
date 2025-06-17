@@ -119,8 +119,8 @@ In case of an error, an empty list is returned.</p>
 
     &#47;&#47; Fetch device documents from Appwrite database
     final result = await db.listDocuments(
-      databaseId: &#39;67ece4a7002a0a732dfd&#39;,
-      collectionId: &#39;67f36a7e002c46ea05f0&#39;,
+      databaseId: AppConstants.appwriteDatabaseId,
+      collectionId: AppConstants.userCollectionId,
       queries: queries,
     );
 

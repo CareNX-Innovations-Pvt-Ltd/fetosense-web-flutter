@@ -76,13 +76,15 @@
     UserModel? user = prefs.getUser();
     if (user?.role == UserRoles.admin) {
       try {
+        String docId = ID.unique();
         await db.createDocument(
           databaseId: AppConstants.appwriteDatabaseId,
           collectionId: AppConstants.userCollectionId,
-          documentId: ID.unique(),
+          documentId: docId,
           data: {
             &#39;organizationName&#39;: organizationController.text,
-            &#39;mobileNo&#39;: mobileController.text,
+            &#39;organizationId&#39;: docId,
+            &#39;mobileNo&#39;: int.parse(mobileController.text),
             &#39;status&#39;: state.selectedStatus,
             &#39;designation&#39;: state.selectedDesignation,
             &#39;contactPerson&#39;: contactPersonController.text,
