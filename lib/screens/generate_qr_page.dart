@@ -166,7 +166,7 @@ class _GenerateQRPageState extends State<GenerateQRPage> {
     if (_formKey.currentState!.validate()) {
       final trimmed = _kitIdController.text.trim();
       setState(() {
-        _qrData = "FETOSENSE:${base64Encode(utf8.encode(trimmed))}";
+        _qrData = "CMFETO:${base64Encode(utf8.encode(trimmed))}";
         _kitId = trimmed;
         _showQR = true;
       });

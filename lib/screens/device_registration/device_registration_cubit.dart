@@ -131,6 +131,32 @@ class DeviceRegistrationCubit extends Cubit<DeviceRegistrationState> {
           },
         );
 
+       // String docId = ID.unique();
+       //  await db.createDocument(
+       //    databaseId: AppConstants.appwriteDatabaseId,
+       //    collectionId: AppConstants.userCollectionId,
+       //    documentId: docId,
+       //    data: {
+       //      'deviceCode': state.kitId,
+       //      'deviceName': state.deviceName,
+       //      'organizationId': state.selectedOrganizationId,
+       //      'organizationName': state.selectedOrganizationName,
+       //      'delete': false,
+       //      'createdBy': 'admin',
+       //      'createdOn': DateTime.now().toIso8601String(),
+       //      'type': 'device',
+       //      'name': state.deviceName,
+       //      'noOfTests': 0,
+       //      'noOfMother': 0,
+       //      'sync':1,
+       //      'testAccount': false,
+       //      'isActive': true,
+       //      'documentId': docId
+       //    },
+       //  );
+       //
+
+
         emit(state.copyWith(isSubmitting: false, isSuccess: true));
       } catch (e) {
         emit(state.copyWith(isSubmitting: false, errorMessage: 'Error: $e'));
