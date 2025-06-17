@@ -1,5 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
+import 'package:fetosense_mis/core/utils/app_constants.dart';
 
 /// Fetches a list of devices from the Appwrite database.
 ///
@@ -52,8 +53,8 @@ Future<List<models.Document>> fetchDevices(
 
     // Fetch device documents from Appwrite database
     final result = await db.listDocuments(
-      databaseId: '67ece4a7002a0a732dfd',
-      collectionId: '67f36a7e002c46ea05f0',
+      databaseId: AppConstants.appwriteDatabaseId,
+      collectionId: AppConstants.userCollectionId,
       queries: queries,
     );
 

@@ -72,12 +72,14 @@ class OrganizationRegistrationCubit
       UserModel? user = prefs.getUser();
       if (user?.role == UserRoles.admin) {
         try {
+          String docId = ID.unique();
           await db.createDocument(
             databaseId: AppConstants.appwriteDatabaseId,
             collectionId: AppConstants.userCollectionId,
-            documentId: ID.unique(),
+            documentId: docId,
             data: {
               'organizationName': organizationController.text,
+              'organizationId': docId,
               'mobileNo': int.parse(mobileController.text),
               'status': state.selectedStatus,
               'designation': state.selectedDesignation,
