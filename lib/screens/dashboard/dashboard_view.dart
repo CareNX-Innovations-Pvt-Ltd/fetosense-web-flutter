@@ -5,6 +5,7 @@ import 'package:fetosense_mis/core/utils/preferences.dart';
 import 'package:fetosense_mis/core/utils/user_role.dart';
 import 'package:fetosense_mis/screens/analytics/doctors_analytics.dart';
 import 'package:fetosense_mis/screens/analytics/organizations_analytics.dart';
+import 'package:fetosense_mis/screens/dashboard/widget/graph_card.dart';
 import 'package:fetosense_mis/screens/device_details/device_details_view.dart';
 import 'package:fetosense_mis/screens/device_registration/device_registration_view.dart';
 import 'package:fetosense_mis/screens/doctor_details/doctor_details_view.dart';
@@ -20,6 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 import 'dashboard_cubit.dart';
+import 'widget/hover_stat_card.dart';
 
 /// The main dashboard screen widget.
 ///
@@ -98,25 +100,37 @@ class _DashboardViewState extends State<DashboardView>
             state.userEmail,
             () => context.read<DashboardCubit>().logout(context),
           ),
-          body: Column(
-            children: [
-              Expanded(
-                child: Row(
+          body: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Column(
                   children: [
-                    SizeTransition(
-                      sizeFactor: _sidebarAnimationController,
-                      axis: Axis.horizontal,
-                      child: buildSidebar(
-                        context,
-                        () => context.read<DashboardCubit>().logout(context),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          buildSidebar(
+                            context,
+                            () =>
+                                context.read<DashboardCubit>().logout(context),
+                          ),
+
+                          const SizedBox(
+                            width: 12,
+                          ), // space between sidebar and content
+                          Expanded(child: _getChild(state.childIndex, state)),
+                        ],
                       ),
                     ),
-                    Expanded(child: _getChild(state.childIndex, state)),
+                    const BottomNavBar(),
                   ],
                 ),
               ),
-              const BottomNavBar(),
-            ],
+            ),
           ),
         );
       },
@@ -127,10 +141,7 @@ class _DashboardViewState extends State<DashboardView>
     switch (childIndex) {
       case 0:
         return Column(
-          children: [
-            _buildTopStats(state),
-            Expanded(child: _buildGraphSection()),
-          ],
+          children: [_buildTopStats(state), Expanded(child: GraphCard())],
         );
       case 1:
         return const OrganizationRegistrationView();
@@ -165,82 +176,18 @@ class _DashboardViewState extends State<DashboardView>
       color: Colors.black54,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: stats.map((stat) => _buildCountItem(stat)).toList(),
-      ),
-    );
-  }
-
-  // Widget _statCard(DashboardStat stat) {
-  //   return Container(
-  //     padding: const EdgeInsets.all(16),
-  //     decoration: BoxDecoration(
-  //       color: Colors.grey.shade900,
-  //       borderRadius: BorderRadius.circular(8),
-  //     ),
-  //     child: Column(
-  //       children: [
-  //         Icon(stat.icon, color: Colors.tealAccent, size: 36),
-  //         const SizedBox(height: 10),
-  //         Text(
-  //           stat.title,
-  //           style: const TextStyle(color: Colors.white, fontSize: 16),
-  //         ),
-  //         const SizedBox(height: 5),
-  //         Text(
-  //           stat.count,
-  //           style: const TextStyle(
-  //             color: Colors.tealAccent,
-  //             fontSize: 20,
-  //             fontWeight: FontWeight.bold,
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  Widget _buildCountItem(DashboardStat state) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30.0),
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.blueGrey,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            children: [
-              Icon(state.icon, color: Colors.black),
-              const SizedBox(height: 6),
-              Text(
-                state.count.toString(),
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              Text(
-                state.title,
-                style: const TextStyle(color: Colors.black, fontSize: 14),
-              ),
-            ],
-          ),
-        ),
+        children: stats.map((stat) => HoverStatCard(stat: stat)).toList(),
       ),
     );
   }
 
   List<DashboardStat> _getDashboardStats(DashboardState state) {
-    final role = prefs.getUserRole();
     return [
-      if (role == UserRoles.admin)
-        DashboardStat(
-          icon: Icons.business,
-          title: "Organizations",
-          count: state.organizationCount.toString(),
-        ),
+      DashboardStat(
+        icon: Icons.business,
+        title: "Organizations",
+        count: state.organizationCount.toString(),
+      ),
       DashboardStat(
         icon: Icons.devices,
         title: "Devices",
@@ -257,41 +204,5 @@ class _DashboardViewState extends State<DashboardView>
         count: state.testCount.toString(),
       ),
     ];
-  }
-
-  Widget _buildGraphSection() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: LineChart(
-        LineChartData(
-          gridData: const FlGridData(show: false),
-          titlesData: const FlTitlesData(show: false),
-          borderData: FlBorderData(show: false),
-          lineBarsData: [
-            LineChartBarData(
-              spots: const [
-                FlSpot(0, 200),
-                FlSpot(1, 350),
-                FlSpot(2, 270),
-                FlSpot(3, 310),
-                FlSpot(4, 290),
-                FlSpot(5, 340),
-                FlSpot(6, 380),
-                FlSpot(7, 330),
-                FlSpot(8, 360),
-                FlSpot(9, 390),
-              ],
-              isCurved: true,
-              gradient: const LinearGradient(
-                colors: [Colors.tealAccent, Colors.blueAccent],
-              ),
-              barWidth: 3,
-              dotData: const FlDotData(show: false),
-              belowBarData: BarAreaData(show: false),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
