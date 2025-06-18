@@ -1,3 +1,4 @@
+import 'package:fetosense_mis/core/utils/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import 'columns.dart';
@@ -56,7 +57,9 @@ class _OrganizationEditPopupState extends State<OrganizationEditPopup> {
     contactPersonController = TextEditingController(
       text: data['contactPerson'] ?? '',
     );
-    mobileController = TextEditingController(text: data['mobile'] ?? '');
+    mobileController = TextEditingController(
+      text: data['mobileNo'].toString() ?? '',
+    );
     emailController = TextEditingController(text: data['email'] ?? '');
     addressController = TextEditingController(text: data['addressLine'] ?? '');
     selectedType =
@@ -84,7 +87,8 @@ class _OrganizationEditPopupState extends State<OrganizationEditPopup> {
         'status': selectedType,
         'contactPerson': contactPersonController.text.trim(),
         'designation': selectedDesignation,
-        'mobile': mobileController.text.trim(),
+        'mobileNo': int.parse(mobileController.text.toString()),
+
         'email': emailController.text.trim(),
         'addressLine': addressController.text.trim(),
         'state': selectedState,
@@ -92,8 +96,8 @@ class _OrganizationEditPopupState extends State<OrganizationEditPopup> {
       };
 
       await db.updateDocument(
-        databaseId: '67ece4a7002a0a732dfd',
-        collectionId: '67f36a7e002c46ea05f0',
+        databaseId: AppConstants.appwriteDatabaseId,
+        collectionId: AppConstants.userCollectionId,
         documentId: widget.documentId,
         data: updatedData,
       );
@@ -116,6 +120,7 @@ class _OrganizationEditPopupState extends State<OrganizationEditPopup> {
   /// and buttons for submitting or canceling the changes.
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
     return Container(
       padding: const EdgeInsets.all(20),
       constraints: const BoxConstraints(maxWidth: 1000),
@@ -190,155 +195,162 @@ class _OrganizationEditPopupState extends State<OrganizationEditPopup> {
           Expanded(
             flex: 3,
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Organization Details",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                  const SizedBox(height: 16),
-                  const Divider(color: Colors.grey),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: buildColumnWithTextField(
-                          "Organization Name",
-                          nameController,
-                          "Enter organization name",
-                          false,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: buildColumnWithDropdown(
-                          "Type",
-                          ['sold', 'demo', 'testing'],
-                          selectedType,
-                          "Select type",
-                          (val) => setState(() => selectedType = val),
-                          false,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: buildColumnWithTextField(
-                          "Contact Person",
-                          contactPersonController,
-                          "Enter contact person",
-                          false,
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: buildColumnWithDropdown(
-                          "Designation",
-                          ['Admin', 'Staff'],
-                          selectedDesignation,
-                          "Select designation",
-                          (val) => setState(() => selectedDesignation = val),
-                          false,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: buildColumnWithTextField(
-                          "Mobile",
-                          mobileController,
-                          "Enter mobile",
-                          false,
-                          isNumber: true,
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: buildColumnWithTextField(
-                          "Email",
-                          emailController,
-                          "Enter email",
-                          false,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  buildColumnWithTextField(
-                    "Address",
-                    addressController,
-                    "Enter address",
-                    false,
-                  ),
-                  const SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: buildColumnWithDropdown(
-                          "State",
-                          ['Gujarat', 'Maharashtra'],
-                          selectedState,
-                          "Select state",
-                          (val) => setState(() => selectedState = val),
-                          false,
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: buildColumnWithDropdown(
-                          "City",
-                          ['Ahmedabad', 'Mumbai'],
-                          selectedCity,
-                          "Select city",
-                          (val) => setState(() => selectedCity = val),
-                          false,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Subtle Save Button
-                      OutlinedButton(
-                        onPressed: _updateChanges,
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Color(0xFF1A86AD)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Organization Details",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                    const SizedBox(height: 16),
+                    const Divider(color: Colors.grey),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: buildColumnWithTextField(
+                            "Organization Name",
+                            nameController,
+                            "Enter organization name",
+                            false,
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
                         ),
-                        child: const Text(
-                          "Update",
-                          style: TextStyle(color: Color(0xFF1A86AD)),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: buildColumnWithDropdown(
+                            "Type",
+                            ['sold', 'demo', 'testing'],
+                            selectedType,
+                            "Select type",
+                            (val) => setState(() => selectedType = val),
+                            false,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: buildColumnWithTextField(
+                            "Contact Person",
+                            contactPersonController,
+                            "Enter contact person",
+                            false,
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        Expanded(
+                          child: buildColumnWithDropdown(
+                            "Designation",
+                            ['Admin', 'Staff'],
+                            selectedDesignation,
+                            "Select designation",
+                            (val) => setState(() => selectedDesignation = val),
+                            false,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: buildColumnWithTextField(
+                            "Mobile",
+                            mobileController,
+                            "Enter mobile",
+                            true,
+                            isNumber: true,
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        Expanded(
+                          child: buildColumnWithTextField(
+                            "Email",
+                            emailController,
+                            "Enter email",
+                            false,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    buildColumnWithTextField(
+                      "Address",
+                      addressController,
+                      "Enter address",
+                      false,
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: buildColumnWithDropdown(
+                            "State",
+                            ['Gujarat', 'Maharashtra'],
+                            selectedState,
+                            "Select state",
+                            (val) => setState(() => selectedState = val),
+                            false,
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        Expanded(
+                          child: buildColumnWithDropdown(
+                            "City",
+                            ['Ahmedabad', 'Mumbai'],
+                            selectedCity,
+                            "Select city",
+                            (val) => setState(() => selectedCity = val),
+                            false,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Subtle Save Button
+                        OutlinedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _updateChanges();
+                            }
+                          },
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: Color(0xFF1A86AD)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                          ),
+                          child: const Text(
+                            "Update",
+                            style: TextStyle(color: Color(0xFF1A86AD)),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
 
-                      // Highlighted Cancel Button
-                      ElevatedButton(
-                        onPressed: widget.onClose,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1A86AD),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
+                        // Highlighted Cancel Button
+                        ElevatedButton(
+                          onPressed: widget.onClose,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF1A86AD),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: const Text("Cancel"),
                         ),
-                        child: const Text("Cancel"),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
