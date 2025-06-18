@@ -1,13 +1,10 @@
+import 'package:fetosense_mis/screens/mother_details/widget/mother_details_table.dart';
 import 'package:fetosense_mis/widget/custom_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'mother_details_cubit.dart';
 
-/// The main view for displaying mother details.
-///
-/// Provides a [MotherDetailsCubit] to manage state and renders the [MotherDetails] UI.
 class MotherDetailsView extends StatelessWidget {
-  /// Creates a [MotherDetailsView] widget.
   const MotherDetailsView({super.key});
 
   @override
@@ -19,11 +16,7 @@ class MotherDetailsView extends StatelessWidget {
   }
 }
 
-/// Internal widget that builds the mother details UI.
-///
-/// Uses [BlocBuilder] to listen to [MotherDetailsCubit] state and renders the mother details table and filters.
 class MotherDetails extends StatelessWidget {
-  /// Creates a [MotherDetails] widget.
   const MotherDetails({super.key});
 
   @override
@@ -61,7 +54,23 @@ class MotherDetails extends StatelessWidget {
                     );
                   }
 
-                  return _buildDataTable(state);
+                  // Wrap your MotherDetailsTable inside vertical & horizontal scroll views
+                  return SingleChildScrollView(
+                    scrollDirection:
+                        Axis.horizontal, // scroll horizontally for DataTable2
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: SizedBox(
+                        width:
+                            MediaQuery.of(context).size.width *
+                            0.8, // or any suitable ratio
+
+                        child: MotherDetailsTable(
+                          filteredMothers: state.filteredMothers,
+                        ),
+                      ),
+                    ),
+                  );
                 },
               ),
             ),
