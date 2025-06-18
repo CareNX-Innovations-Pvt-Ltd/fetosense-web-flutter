@@ -142,7 +142,23 @@ Widget build(BuildContext context) {
                   );
                 }
 
-                return _buildDataTable(state);
+                &#47;&#47; Wrap your MotherDetailsTable inside vertical &amp; horizontal scroll views
+                return SingleChildScrollView(
+                  scrollDirection:
+                      Axis.horizontal, &#47;&#47; scroll horizontally for DataTable2
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SizedBox(
+                      width:
+                          MediaQuery.of(context).size.width *
+                          0.8, &#47;&#47; or any suitable ratio
+
+                      child: MotherDetailsTable(
+                        filteredMothers: state.filteredMothers,
+                      ),
+                    ),
+                  ),
+                );
               },
             ),
           ),

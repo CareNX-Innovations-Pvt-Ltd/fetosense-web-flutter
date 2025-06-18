@@ -109,36 +109,61 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: const Color(0xFF181A1B),
-    appBar: AppBar(
-      backgroundColor: const Color(0xFF181A1B),
-      title: const Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+  final cubit = context.read&lt;OrganizationCubit&gt;();
+
+  return Padding(
+    padding: const EdgeInsets.all(16),
+    child: Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF181A1B),
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: const Color(0xFF272A2C)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Icon(Icons.apartment, color: Colors.white),
-          SizedBox(width: 8),
-          Text(&#39;Organization Details&#39;, style: TextStyle(color: Colors.white)),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                const Icon(Icons.apartment, color: Colors.white),
+                const SizedBox(width: 8),
+                const Text(
+                  &#39;Organization Details&#39;,
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+                const Spacer(),
+                IconButton(
+                  icon: const Icon(Icons.download, color: Colors.white),
+                  onPressed: () {
+                    cubit.downloadExcel();
+                  },
+                  tooltip: &#39;Download Excel&#39;,
+                ),
+              ],
+            ),
+          ),
+          const OrganizationFilter(),
+          const Divider(color: Colors.grey),
+          const SizedBox(height: 10),
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection:
+                  Axis.horizontal, &#47;&#47; scroll horizontally for DataTable2
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SizedBox(
+                  width:
+                      MediaQuery.of(context).size.width *
+                      0.8, &#47;&#47; or any suitable ratio
+
+                  child: const OrganizationDataTableWidget(),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.download, color: Colors.white),
-          onPressed: () {
-            context.read&lt;OrganizationCubit&gt;().downloadExcel();
-          },
-          tooltip: &#39;Download Excel&#39;,
-        ),
-      ],
-    ),
-    body: Column(
-      children: [
-        _buildFilterSection(context),
-        _buildSearchBar(context),
-        const Divider(),
-        const SizedBox(height: 10),
-        Expanded(child: _buildOrganizationsList(context)),
-      ],
     ),
   );
 }</code></pre>
