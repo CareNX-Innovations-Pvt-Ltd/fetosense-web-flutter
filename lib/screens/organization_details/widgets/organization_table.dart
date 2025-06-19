@@ -4,7 +4,7 @@ import 'package:appwrite/models.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
-import 'package:fetosense_mis/widget/organization_edit_popup.dart';
+import 'package:fetosense_mis/screens/organization_details/widgets/organization_edit_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';

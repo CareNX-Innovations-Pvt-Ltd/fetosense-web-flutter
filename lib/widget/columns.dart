@@ -103,28 +103,35 @@ Widget buildColumnWithDropdown(
   Function(String?) onChanged,
   bool isRequired,
 ) {
+  final bool isDisabled = items.isEmpty;
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       _buildLabel(label, isRequired),
       const SizedBox(height: 8),
-      SizedBox(
-        height: 40,
-        child: DropdownButtonFormField<String>(
-          value: selectedValue,
-          items:
-              items
-                  .map(
-                    (e) => DropdownMenuItem(
-                      value: e,
-                      child: Text(e, style: const TextStyle(color: Colors.white)),
-                    ),
-                  )
-                  .toList(),
-          onChanged: onChanged,
-          decoration: _inputDecoration(hintText),
-          dropdownColor: Colors.black45,
-        ),
+      DropdownButtonFormField<String>(
+        isExpanded: true,
+        value: items.contains(selectedValue) ? selectedValue : null,
+        items:
+            items.map((e) {
+              return DropdownMenuItem<String>(
+                value: e,
+                child: Text(
+                  e,
+                  style: const TextStyle(color: Colors.white),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              );
+            }).toList(),
+        onChanged: isDisabled ? null : onChanged, // ✅ Disable dropdown if empty
+        decoration: _inputDecoration(hintText).copyWith(enabled: !isDisabled),
+        dropdownColor: Colors.black45,
+        validator:
+            isRequired
+                ? (val) =>
+                    (val == null || val.isEmpty) ? "$label is required" : null
+                : null,
       ),
     ],
   );

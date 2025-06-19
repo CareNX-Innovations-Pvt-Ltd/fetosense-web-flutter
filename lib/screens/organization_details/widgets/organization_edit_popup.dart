@@ -1,7 +1,8 @@
 import 'package:fetosense_mis/core/utils/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
-import 'columns.dart';
+import '../../../core/utils/state_map.dart';
+import '../../../widget/columns.dart';
 
 /// A StatefulWidget that represents the Organization Edit Popup.
 ///
@@ -41,6 +42,8 @@ class _OrganizationEditPopupState extends State<OrganizationEditPopup> {
   late TextEditingController mobileController;
   late TextEditingController emailController;
   late TextEditingController addressController;
+  static Map<String, List<String>> cityMap = indiaStatesWithCities;
+  static List<String> stateList = indiaStatesWithCities.keys.toList();
   String? selectedType;
   String? selectedDesignation;
   String? selectedState;
@@ -287,25 +290,45 @@ class _OrganizationEditPopupState extends State<OrganizationEditPopup> {
                     const SizedBox(height: 5),
                     Row(
                       children: [
-                        Expanded(
-                          child: buildColumnWithDropdown(
-                            "State",
-                            ['Gujarat', 'Maharashtra'],
-                            selectedState,
-                            "Select state",
-                            (val) => setState(() => selectedState = val),
-                            false,
-                          ),
-                        ),
-                        const SizedBox(width: 5),
-                        Expanded(
-                          child: buildColumnWithDropdown(
-                            "City",
-                            ['Ahmedabad', 'Mumbai'],
-                            selectedCity,
-                            "Select city",
-                            (val) => setState(() => selectedCity = val),
-                            false,
+                        Container(
+                          width:
+                              MediaQuery.of(context).size.width *
+                              0.25, // Responsive width
+                          constraints: const BoxConstraints(
+                            maxWidth: 600,
+                          ), // Allow wider layout
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: buildColumnWithDropdown(
+                                  "State",
+                                  stateList,
+                                  selectedState,
+                                  "Select state",
+                                  (val) => setState(() {
+                                    selectedState = val;
+                                    selectedCity = null;
+                                  }),
+                                  false,
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              Expanded(
+                                child: buildColumnWithDropdown(
+                                  "City",
+                                  selectedState != null &&
+                                          indiaStatesWithCities.containsKey(
+                                            selectedState,
+                                          )
+                                      ? indiaStatesWithCities[selectedState]!
+                                      : [],
+                                  selectedCity,
+                                  "Select city",
+                                  (val) => setState(() => selectedCity = val),
+                                  false,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -420,26 +443,6 @@ class _OrganizationEditPopupState extends State<OrganizationEditPopup> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _labelValueColumn(String label, dynamic value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.grey,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          value?.toString() ?? '0',
-          style: const TextStyle(color: Colors.white),
-        ),
-      ],
     );
   }
 }
