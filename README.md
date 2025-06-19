@@ -2,7 +2,7 @@
 
 Fetosense MIS is a web-based Management Information System built with **Flutter Web** and **Appwrite**, designed to manage organizational data, devices, doctors, and mothers efficiently in healthcare settings.
 
-> 🛠️ This app is strictly intended for **internal use by the Fetosense team** to track registered organizations, mothers, fetal tests, and Doppler/tablet devices — and to view associated analytics and operational insights.
+> 🛠️ This web app is linked with the [Fetosense Device App](https://github.com/CareNX-Innovations-Pvt-Ltd/fetosense_device_flutter) and the [Fetosense Remote App](https://github.com/CareNX-Innovations-Pvt-Ltd/fetosense_remote_flutter).
 
 ---
 
