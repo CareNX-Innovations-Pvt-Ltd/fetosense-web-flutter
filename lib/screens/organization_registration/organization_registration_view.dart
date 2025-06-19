@@ -1,3 +1,4 @@
+import 'package:fetosense_mis/core/utils/state_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'organization_registration_cubit.dart';
@@ -32,14 +33,10 @@ class _OrganizationRegistrationForm extends StatelessWidget {
   static const List<String> designationList = ["Manager", "Executive", "Admin"];
 
   /// List of available states for the organization address.
-  static const List<String> stateList = ["Maharashtra", "Karnataka", "Gujarat"];
+  static List<String> stateList = indiaStatesWithCities.keys.toList();
 
   /// Map of cities for each state.
-  static const Map<String, List<String>> cityMap = {
-    "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
-    "Karnataka": ["Bangalore", "Mysore"],
-    "Gujarat": ["Ahmedabad", "Surat"],
-  };
+  static Map<String, List<String>> cityMap = indiaStatesWithCities;
 
   @override
   Widget build(BuildContext context) {

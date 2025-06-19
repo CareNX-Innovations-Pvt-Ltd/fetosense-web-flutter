@@ -37,8 +37,8 @@ class DeviceEditCubit extends Cubit<DeviceEditState> {
     try {
       final result = await db.listDocuments(
         databaseId: AppConstants.appwriteDatabaseId,
-        collectionId: AppConstants.deviceCollectionId,
-        queries: [Query.equal('documentId', documentId)],
+        collectionId: AppConstants.userCollectionId,
+        queries: [Query.equal('type', 'device'), Query.equal('documentId', documentId)],
       );
 
       if (result.documents.isNotEmpty) {
