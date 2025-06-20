@@ -5,17 +5,23 @@ import 'package:fetosense_mis/screens/device_details/device_details_cubit.dart';
 import 'package:fetosense_mis/screens/doctor_details/doctor_details_cubit.dart';
 import 'package:fetosense_mis/screens/login/login_cubit.dart';
 import 'package:fetosense_mis/screens/organization_registration/organization_registration_cubit.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:appwrite/appwrite.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'firebase_options.dart';
 
 /// The entry point of the Fetosense MIS application.
 ///
 /// Initializes preferences, sets up dependency injection, and runs the app.
-void main() {
+void main() async {
   PreferenceHelper.init();
   setupLocator();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
+
 }
 
 //main.dart

@@ -1,5 +1,6 @@
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
+import 'package:fetosense_mis/core/utils/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
 import 'columns.dart';
@@ -57,8 +58,8 @@ class _DoctorEditPopupState extends State<DoctorEditPopup> {
       };
 
       await db.updateDocument(
-        databaseId: '67ece4a7002a0a732dfd',
-        collectionId: '67f36a7e002c46ea05f0',
+        databaseId: AppConstants.appwriteDatabaseId,
+        collectionId: AppConstants.userCollectionId,
         documentId: widget.documentId,
         data: updatedData,
       );

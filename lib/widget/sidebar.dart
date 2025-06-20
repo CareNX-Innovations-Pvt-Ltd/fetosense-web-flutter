@@ -68,24 +68,24 @@ Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
             ),
           ],
         ),
-        const _ExpandableMenu(
-          icon: Icons.analytics,
-          title: "Analytics",
-          children: [
-            _SidebarItem(
-              icon: Icons.medical_services,
-              title: "Doctors",
-              route: '/analytics-doctors',
-            ),
-            _SidebarItem(
-              icon: Icons.business,
-              title: "Organizations",
-              route: '/analytics-organizations',
-            ),
-          ],
-        ),
-        const _SidebarItem(icon: Icons.article, title: "Reports"),
-        const _SidebarItem(icon: Icons.settings, title: "Operations"),
+        // const _ExpandableMenu(
+        //   icon: Icons.analytics,
+        //   title: "Analytics",
+        //   children: [
+        //     _SidebarItem(
+        //       icon: Icons.medical_services,
+        //       title: "Doctors",
+        //       route: '/analytics-doctors',
+        //     ),
+        //     _SidebarItem(
+        //       icon: Icons.business,
+        //       title: "Organizations",
+        //       route: '/analytics-organizations',
+        //     ),
+        //   ],
+        // ),
+        // const _SidebarItem(icon: Icons.article, title: "Reports"),
+        // const _SidebarItem(icon: Icons.settings, title: "Operations"),
         role == UserRoles.superAdmin ? const _SidebarItem(icon: Icons.people, title: "Users") : Container(),
         const Spacer(),
       ],

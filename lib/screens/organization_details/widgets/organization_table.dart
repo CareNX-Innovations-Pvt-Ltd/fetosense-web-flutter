@@ -4,7 +4,7 @@ import 'package:appwrite/models.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
-import 'package:fetosense_mis/widget/organization_edit_popup.dart';
+import 'package:fetosense_mis/screens/organization_details/widgets/organization_edit_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -38,7 +38,7 @@ class OrganizationDataTableWidget extends StatelessWidget {
               minWidth: 1400,
               headingRowColor: WidgetStateProperty.all(const Color(0xFF1E1F21)),
               dataRowColor: WidgetStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.selected)) {
+                if (states.contains(WidgetState.selected)) {
                   return Colors.grey.shade800;
                 }
                 return const Color(0xFF121314);
@@ -140,6 +140,8 @@ class OrganizationDataTableWidget extends StatelessWidget {
     BuildContext context,
     Map<String, dynamic> organization,
   ) {
+    final cubit = context.read<OrganizationCubit>();
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -147,14 +149,16 @@ class OrganizationDataTableWidget extends StatelessWidget {
           (_) => Dialog(
             insetPadding: const EdgeInsets.all(20),
             backgroundColor: Colors.transparent,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.6,
-              height: 600,
-              child: OrganizationEditPopup(
-                client: locator<AppwriteService>().client,
-                data: organization,
-                documentId: organization['organizationId'],
-                onClose: () => Navigator.pop(context),
+            child: BlocProvider.value(
+              value: cubit,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.6,
+                height: 600,
+                child: OrganizationEditPopup(
+                  data: organization,
+                  documentId: organization['organizationId'],
+                  onClose: () => Navigator.pop(context),
+                ),
               ),
             ),
           ),

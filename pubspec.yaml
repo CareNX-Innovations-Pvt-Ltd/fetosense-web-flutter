@@ -28,6 +28,7 @@ dependencies:
   bloc: ^9.0.0
   equatable:
   data_table_2: ^2.6.0
+  firebase_core: ^3.14.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

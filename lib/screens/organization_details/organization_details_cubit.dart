@@ -18,13 +18,69 @@ part 'organization_details_state.dart';
 class OrganizationCubit extends Cubit<OrganizationState> {
   /// Appwrite [Databases] instance for organization data operations.
   final Databases db = Databases(locator<AppwriteService>().client);
+  final formKey = GlobalKey<FormState>();
+  late TextEditingController nameController;
+  late TextEditingController contactPersonController;
+  late TextEditingController mobileController;
+  late TextEditingController emailController;
+  late TextEditingController addressController;
+
+  void setSelectedState(String? stateName) {
+    print("state triggered");
+    emit(
+      state.copyWith(
+        selectedState: stateName,
+        selectedCity: null, // Clear city when state changes
+      ),
+    );
+  }
+
+  void setSelectedCity(String? cityName) {
+    emit(state.copyWith(selectedCity: cityName));
+  }
+
+  void setSelectedType(String? type) {
+    emit(state.copyWith(selectedType: type));
+  }
+
+  void setSelectedDesignation(String? designation) {
+    emit(state.copyWith(selectedDesignation: designation));
+  }
 
   /// The [BuildContext] used for showing snackbars and dialogs.
   final BuildContext context;
 
+  void initializeOrganizationFields(Map<String, dynamic> data) {
+    nameController = TextEditingController(
+      text: data['organizationName'] ?? '',
+    );
+    contactPersonController = TextEditingController(
+      text: data['contactPerson'] ?? '',
+    );
+    mobileController = TextEditingController(
+      text: data['mobileNo']?.toString() ?? '',
+    );
+    emailController = TextEditingController(text: data['email'] ?? '');
+    addressController = TextEditingController(text: data['addressLine'] ?? '');
+
+    emit(
+      state.copyWith(
+        selectedType:
+            ['sold', 'demo', 'testing'].contains(data['status'])
+                ? data['status']
+                : null,
+        selectedDesignation:
+            ['Admin', 'Staff'].contains(data['designation'])
+                ? data['designation']
+                : null,
+        selectedCity: data['city'],
+        selectedState: data['state'],
+      ),
+    );
+  }
+
   /// Creates an [OrganizationCubit] and initializes the state and data.
-  OrganizationCubit({required this.context})
-    : super(const OrganizationState()) {
+  OrganizationCubit({required this.context}) : super(OrganizationState()) {
     fetchOrganizationDetails();
   }
 
@@ -268,5 +324,48 @@ class OrganizationCubit extends Cubit<OrganizationState> {
         context,
       ).showSnackBar(SnackBar(content: Text("Failed to export: $e")));
     }
+  }
+
+  Future<void> updateChanges(String documentId) async {
+    try {
+      final updatedData = {
+        'organizationName': nameController.text.trim(),
+        'status': state.selectedType,
+        'contactPerson': contactPersonController.text.trim(),
+        'designation': state.selectedDesignation,
+        'mobileNo': int.parse(mobileController.text.toString()),
+
+        'email': emailController.text.trim(),
+        'addressLine': addressController.text.trim(),
+        'state': state.selectedState,
+        'city': state.selectedCity,
+      };
+
+      await db.updateDocument(
+        databaseId: AppConstants.appwriteDatabaseId,
+        collectionId: AppConstants.userCollectionId,
+        documentId: documentId,
+        data: updatedData,
+      );
+
+      emit(state.copyWith(organizationDetails: state.organizationDetails));
+
+      if (context.mounted) {}
+    } catch (e) {
+      print("Update error: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Update failed: $e")));
+    }
+  }
+
+  @override
+  Future<void> close() {
+    nameController.dispose();
+    contactPersonController.dispose();
+    mobileController.dispose();
+    emailController.dispose();
+    addressController.dispose();
+    return super.close();
   }
 }

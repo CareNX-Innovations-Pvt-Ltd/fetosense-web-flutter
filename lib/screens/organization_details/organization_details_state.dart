@@ -29,8 +29,13 @@ class OrganizationState extends Equatable {
   /// Error message, if any, during data fetching or processing.
   final String? errorMessage;
 
+  final String? selectedState;
+  final String? selectedCity;
+  final String? selectedType;
+  final String? selectedDesignation;
+
   /// Creates an [OrganizationState] with the given values.
-  const OrganizationState({
+  OrganizationState({
     this.organizationDetails = const [],
     this.filteredOrganizationDetails = const [],
     this.status = OrganizationStatus.initial,
@@ -38,6 +43,10 @@ class OrganizationState extends Equatable {
     this.tillDate,
     this.searchQuery = '',
     this.errorMessage,
+    this.selectedCity,
+    this.selectedState,
+    this.selectedType,
+    this.selectedDesignation,
   });
 
   /// Returns a copy of this state with updated fields if provided.
@@ -52,6 +61,10 @@ class OrganizationState extends Equatable {
     String? searchQuery,
     String? errorMessage,
     bool clearError = false,
+    String? selectedState,
+    String? selectedCity,
+    String? selectedType,
+    String? selectedDesignation,
   }) {
     return OrganizationState(
       organizationDetails: organizationDetails ?? this.organizationDetails,
@@ -62,6 +75,10 @@ class OrganizationState extends Equatable {
       tillDate: clearTillDate ? null : (tillDate ?? this.tillDate),
       searchQuery: searchQuery ?? this.searchQuery,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+      selectedState: selectedState ?? this.selectedState,
+      selectedCity: selectedCity ?? this.selectedCity,
+      selectedType: selectedType ?? this.selectedType,
+      selectedDesignation: selectedDesignation ?? this.selectedDesignation,
     );
   }
 
@@ -74,5 +91,9 @@ class OrganizationState extends Equatable {
     tillDate,
     searchQuery,
     errorMessage,
+    selectedCity,
+    selectedState,
+    selectedType,
+    selectedDesignation,
   ];
 }

@@ -1,3 +1,4 @@
+import 'package:fetosense_mis/core/utils/state_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'organization_registration_cubit.dart';
@@ -32,14 +33,10 @@ class _OrganizationRegistrationForm extends StatelessWidget {
   static const List<String> designationList = ["Manager", "Executive", "Admin"];
 
   /// List of available states for the organization address.
-  static const List<String> stateList = ["Maharashtra", "Karnataka", "Gujarat"];
+  static List<String> stateList = indiaStatesWithCities.keys.toList();
 
   /// Map of cities for each state.
-  static const Map<String, List<String>> cityMap = {
-    "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
-    "Karnataka": ["Bangalore", "Mysore"],
-    "Gujarat": ["Ahmedabad", "Surat"],
-  };
+  static Map<String, List<String>> cityMap = indiaStatesWithCities;
 
   @override
   Widget build(BuildContext context) {
@@ -118,30 +115,43 @@ class _OrganizationRegistrationForm extends StatelessWidget {
           _textField("Email", cubit.emailController, false),
         ]),
         _row([_textField("Street", cubit.streetController, true)]),
-        _row([
-          _dropdownField(
-            label: "Country",
-            items: const ["India"],
-            value: "India",
-            onChanged: (_) {},
-          ),
-          _dropdownField(
-            label: "State",
-            items: stateList,
-            value: context.select(
-              (OrganizationRegistrationCubit c) => c.state.selectedState,
+        Row(
+          children: [
+            Expanded(
+              child: _dropdownField(
+                label: "Country",
+                items: const ["India"],
+                value: "India",
+                onChanged: (_) {},
+              ),
             ),
-            onChanged: cubit.setStateName,
-          ),
-          _dropdownField(
-            label: "City",
-            items: cityMap[cubit.state.selectedState] ?? [],
-            value: context.select(
-              (OrganizationRegistrationCubit c) => c.state.selectedCity,
+            const SizedBox(width: 8),
+            Expanded(
+              child: _dropdownField(
+                label: "State",
+                items: stateList,
+                value: context.select(
+                  (OrganizationRegistrationCubit c) => c.state.selectedState,
+                ),
+                onChanged: cubit.setStateName,
+              ),
             ),
-            onChanged: cubit.setCity,
-          ),
-        ]),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _dropdownField(
+                label: "City",
+                items: cityMap[cubit.state.selectedState] ?? [],
+                value: context.select((OrganizationRegistrationCubit c) {
+                  final city = c.state.selectedCity;
+                  final cities = cityMap[c.state.selectedState] ?? [];
+                  return cities.contains(city) ? city : null;
+                }),
+
+                onChanged: cubit.setCity,
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -203,6 +213,7 @@ class _OrganizationRegistrationForm extends StatelessWidget {
         _label(label, true),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
+          isExpanded: true,
           value: value,
           items:
               items
