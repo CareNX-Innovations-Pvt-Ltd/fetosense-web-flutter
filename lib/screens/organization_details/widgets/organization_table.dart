@@ -38,7 +38,7 @@ class OrganizationDataTableWidget extends StatelessWidget {
               minWidth: 1400,
               headingRowColor: WidgetStateProperty.all(const Color(0xFF1E1F21)),
               dataRowColor: WidgetStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.selected)) {
+                if (states.contains(WidgetState.selected)) {
                   return Colors.grey.shade800;
                 }
                 return const Color(0xFF121314);
@@ -140,6 +140,8 @@ class OrganizationDataTableWidget extends StatelessWidget {
     BuildContext context,
     Map<String, dynamic> organization,
   ) {
+    final cubit = context.read<OrganizationCubit>();
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -147,14 +149,16 @@ class OrganizationDataTableWidget extends StatelessWidget {
           (_) => Dialog(
             insetPadding: const EdgeInsets.all(20),
             backgroundColor: Colors.transparent,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.6,
-              height: 600,
-              child: OrganizationEditPopup(
-                client: locator<AppwriteService>().client,
-                data: organization,
-                documentId: organization['organizationId'],
-                onClose: () => Navigator.pop(context),
+            child: BlocProvider.value(
+              value: cubit,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.6,
+                height: 600,
+                child: OrganizationEditPopup(
+                  data: organization,
+                  documentId: organization['organizationId'],
+                  onClose: () => Navigator.pop(context),
+                ),
               ),
             ),
           ),

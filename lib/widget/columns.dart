@@ -1,58 +1,47 @@
 import 'package:flutter/material.dart';
 
-/// Builds a label widget for a form field.
-///
-/// This function generates a row containing a text label for a form field.
-/// It conditionally adds a red asterisk (`*`) if the `isRequired` parameter is true.
-///
-/// [label] The text label to display for the form field.
-/// [isRequired] A boolean indicating whether the field is required. If true, an asterisk is added to the label.
 Widget _buildLabel(String label, bool isRequired) {
   return Row(
     children: [
-      Text(label, style: const TextStyle(color: Colors.white)),
-      if (isRequired) const Text(' *', style: TextStyle(color: Colors.red)),
+      Text(
+        label,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w500,
+          fontSize: 13,
+        ),
+      ),
+      if (isRequired)
+        const Text(
+          ' *',
+          style: TextStyle(color: Colors.redAccent, fontSize: 13),
+        ),
     ],
   );
 }
 
-/// Returns an [InputDecoration] for form fields with consistent styling.
-///
-/// This function provides a standard input decoration with custom styling, including a dark fill color,
-/// a border with rounded corners, and a hint text style.
-///
-/// [hintText] The hint text that will be displayed in the form field.
 InputDecoration _inputDecoration(String hintText) {
   return InputDecoration(
     hintText: hintText,
-    hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+    hintStyle: const TextStyle(color: Colors.grey, fontSize: 13),
     filled: true,
-    fillColor: const Color(0xFF181A1B),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+    fillColor: const Color(0xFF1F2123),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(1),
-      borderSide: const BorderSide(color: Color(0xFF373B3E)),
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide.none,
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(1),
-      borderSide: const BorderSide(color: Color(0xFF373B3E)),
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide.none,
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(1),
-      borderSide: const BorderSide(color: Color(0xFF373B3E), width: 1),
+      borderRadius: BorderRadius.circular(8),
+      borderSide: const BorderSide(color: Color(0xFF3E91C8), width: 1.5),
     ),
   );
 }
 
-/// Builds a form field with a text input.
-///
-/// This widget includes a label, a text field, and validation for required fields.
-///
-/// [label] The label for the form field.
-/// [controller] The controller to manage the text input.
-/// [hintText] The hint text to be displayed in the form field.
-/// [isRequired] A boolean indicating if the field is required. If true, validation is applied.
-/// [isNumber] A boolean indicating if the input should accept numeric values (defaults to false).
 Widget buildColumnWithTextField(
   String label,
   TextEditingController controller,
@@ -65,11 +54,25 @@ Widget buildColumnWithTextField(
     children: [
       _buildLabel(label, isRequired),
       const SizedBox(height: 6),
-      SizedBox(
-        height: 40,
+      Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF2A2D2F), Color(0xFF1F2123)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
         child: TextFormField(
           controller: controller,
-          style: const TextStyle(color: Colors.grey),
+          style: const TextStyle(color: Colors.white),
           keyboardType: isNumber ? TextInputType.number : TextInputType.text,
           decoration: _inputDecoration(hintText),
           validator:
@@ -85,16 +88,6 @@ Widget buildColumnWithTextField(
   );
 }
 
-/// Builds a form field with a dropdown.
-///
-/// This widget includes a label, a dropdown list, and validation for required fields.
-///
-/// [label] The label for the form field.
-/// [items] The list of items to be displayed in the dropdown.
-/// [selectedValue] The currently selected value in the dropdown.
-/// [hintText] The hint text to be displayed in the form field.
-/// [onChanged] The callback to handle when the selected value changes.
-/// [isRequired] A boolean indicating if the field is required. If true, validation is applied.
 Widget buildColumnWithDropdown(
   String label,
   List<String> items,
@@ -110,28 +103,49 @@ Widget buildColumnWithDropdown(
     children: [
       _buildLabel(label, isRequired),
       const SizedBox(height: 8),
-      DropdownButtonFormField<String>(
-        isExpanded: true,
-        value: items.contains(selectedValue) ? selectedValue : null,
-        items:
-            items.map((e) {
-              return DropdownMenuItem<String>(
-                value: e,
-                child: Text(
-                  e,
-                  style: const TextStyle(color: Colors.white),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              );
-            }).toList(),
-        onChanged: isDisabled ? null : onChanged, // ✅ Disable dropdown if empty
-        decoration: _inputDecoration(hintText).copyWith(enabled: !isDisabled),
-        dropdownColor: Colors.black45,
-        validator:
-            isRequired
-                ? (val) =>
-                    (val == null || val.isEmpty) ? "$label is required" : null
-                : null,
+      Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF2A2D2F), Color(0xFF1F2123)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: DropdownButtonFormField<String>(
+          isExpanded: true,
+          value: items.contains(selectedValue) ? selectedValue : null,
+          items:
+              items
+                  .map(
+                    (e) => DropdownMenuItem<String>(
+                      value: e,
+                      child: Text(
+                        e,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+          onChanged: isDisabled ? null : onChanged,
+          decoration: _inputDecoration(hintText),
+          dropdownColor: const Color(0xFF1F2123),
+          validator:
+              isRequired
+                  ? (val) =>
+                      (val == null || val.isEmpty) ? "$label is required" : null
+                  : null,
+        ),
       ),
     ],
   );
