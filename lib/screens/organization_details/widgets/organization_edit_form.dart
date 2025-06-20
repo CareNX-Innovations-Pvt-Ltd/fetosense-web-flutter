@@ -65,7 +65,9 @@ Widget buildNameAndTypeRow(OrganizationCubit cubit, OrganizationState state) {
       ),
       const SizedBox(width: 10),
       Expanded(
+        
         child: buildColumnWithDropdown(
+
           "Type",
           ['sold', 'demo', 'testing'],
           state.selectedType,
@@ -90,7 +92,9 @@ Widget buildContactAndDesignationRow(
           cubit.contactPersonController,
           "Enter contact person",
           false,
+
         ),
+
       ),
       const SizedBox(width: 5),
       Expanded(

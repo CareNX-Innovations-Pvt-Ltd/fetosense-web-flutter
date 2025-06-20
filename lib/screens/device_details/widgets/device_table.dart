@@ -1,7 +1,7 @@
 import 'package:appwrite/models.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:fetosense_mis/screens/device_details/device_details_cubit.dart';
-import 'package:fetosense_mis/screens/device_edit/device_edit_view.dart';
+import 'package:fetosense_mis/screens/device_details/device_edit/device_edit_view.dart';
 import 'package:fetosense_mis/utils/format_date.dart';
 import 'package:flutter/material.dart';
 

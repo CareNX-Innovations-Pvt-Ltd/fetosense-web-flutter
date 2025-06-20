@@ -1,5 +1,5 @@
 import 'package:appwrite/models.dart' as models;
-import 'package:fetosense_mis/screens/device_edit/device_edit_view.dart';
+import 'package:fetosense_mis/screens/device_details/device_edit/device_edit_view.dart';
 import 'package:fetosense_mis/utils/format_date.dart';
 import 'package:fetosense_mis/widget/custom_date_picker.dart';
 import 'package:flutter/material.dart';
