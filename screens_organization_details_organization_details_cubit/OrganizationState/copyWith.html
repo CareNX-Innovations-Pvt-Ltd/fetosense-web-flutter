@@ -65,6 +65,10 @@
 <li><span class="parameter" id="copyWith-param-searchQuery"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">searchQuery</span>, </span></li>
 <li><span class="parameter" id="copyWith-param-errorMessage"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">errorMessage</span>, </span></li>
 <li><span class="parameter" id="copyWith-param-clearError"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">clearError</span> = <span class="default-value">false</span>, </span></li>
+<li><span class="parameter" id="copyWith-param-selectedState"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">selectedState</span>, </span></li>
+<li><span class="parameter" id="copyWith-param-selectedCity"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">selectedCity</span>, </span></li>
+<li><span class="parameter" id="copyWith-param-selectedType"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">selectedType</span>, </span></li>
+<li><span class="parameter" id="copyWith-param-selectedDesignation"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">selectedDesignation</span>, </span></li>
 </ol>})
 
       
@@ -90,6 +94,10 @@
   String? searchQuery,
   String? errorMessage,
   bool clearError = false,
+  String? selectedState,
+  String? selectedCity,
+  String? selectedType,
+  String? selectedDesignation,
 }) {
   return OrganizationState(
     organizationDetails: organizationDetails ?? this.organizationDetails,
@@ -100,6 +108,10 @@
     tillDate: clearTillDate ? null : (tillDate ?? this.tillDate),
     searchQuery: searchQuery ?? this.searchQuery,
     errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+    selectedState: selectedState ?? this.selectedState,
+    selectedCity: selectedCity ?? this.selectedCity,
+    selectedType: selectedType ?? this.selectedType,
+    selectedDesignation: selectedDesignation ?? this.selectedDesignation,
   );
 }</code></pre>
 </section>

@@ -54,7 +54,7 @@
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/flutter_test/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
 <span class="name ">fetchTabletSerialNumber</span>(<wbr>)
 
       
@@ -77,8 +77,8 @@ Emits <a href="../../screens_device_edit_device_edit_cubit/DeviceEditLoaded-clas
   try {
     final result = await db.listDocuments(
       databaseId: AppConstants.appwriteDatabaseId,
-      collectionId: AppConstants.deviceCollectionId,
-      queries: [Query.equal(&#39;documentId&#39;, documentId)],
+      collectionId: AppConstants.userCollectionId,
+      queries: [Query.equal(&#39;type&#39;, &#39;device&#39;), Query.equal(&#39;documentId&#39;, documentId)],
     );
 
     if (result.documents.isNotEmpty) {

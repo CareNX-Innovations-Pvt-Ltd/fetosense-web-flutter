@@ -132,24 +132,24 @@ for navigating between different sections of the app.</p>
             ),
           ],
         ),
-        const _ExpandableMenu(
-          icon: Icons.analytics,
-          title: &quot;Analytics&quot;,
-          children: [
-            _SidebarItem(
-              icon: Icons.medical_services,
-              title: &quot;Doctors&quot;,
-              route: &#39;&#47;analytics-doctors&#39;,
-            ),
-            _SidebarItem(
-              icon: Icons.business,
-              title: &quot;Organizations&quot;,
-              route: &#39;&#47;analytics-organizations&#39;,
-            ),
-          ],
-        ),
-        const _SidebarItem(icon: Icons.article, title: &quot;Reports&quot;),
-        const _SidebarItem(icon: Icons.settings, title: &quot;Operations&quot;),
+        &#47;&#47; const _ExpandableMenu(
+        &#47;&#47;   icon: Icons.analytics,
+        &#47;&#47;   title: &quot;Analytics&quot;,
+        &#47;&#47;   children: [
+        &#47;&#47;     _SidebarItem(
+        &#47;&#47;       icon: Icons.medical_services,
+        &#47;&#47;       title: &quot;Doctors&quot;,
+        &#47;&#47;       route: &#39;&#47;analytics-doctors&#39;,
+        &#47;&#47;     ),
+        &#47;&#47;     _SidebarItem(
+        &#47;&#47;       icon: Icons.business,
+        &#47;&#47;       title: &quot;Organizations&quot;,
+        &#47;&#47;       route: &#39;&#47;analytics-organizations&#39;,
+        &#47;&#47;     ),
+        &#47;&#47;   ],
+        &#47;&#47; ),
+        &#47;&#47; const _SidebarItem(icon: Icons.article, title: &quot;Reports&quot;),
+        &#47;&#47; const _SidebarItem(icon: Icons.settings, title: &quot;Operations&quot;),
         role == UserRoles.superAdmin ? const _SidebarItem(icon: Icons.people, title: &quot;Users&quot;) : Container(),
         const Spacer(),
       ],

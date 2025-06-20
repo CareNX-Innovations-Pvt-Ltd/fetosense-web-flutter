@@ -68,16 +68,6 @@
 
     </section>
     
-<section class="desc markdown">
-  <p>Builds a form field with a dropdown.</p>
-<p>This widget includes a label, a dropdown list, and validation for required fields.</p>
-<p><code>label</code> The label for the form field.
-<code>items</code> The list of items to be displayed in the dropdown.
-<code>selectedValue</code> The currently selected value in the dropdown.
-<code>hintText</code> The hint text to be displayed in the form field.
-<code>onChanged</code> The callback to handle when the selected value changes.
-<code>isRequired</code> A boolean indicating if the field is required. If true, validation is applied.</p>
-</section>
 
 
     
@@ -91,27 +81,55 @@
   Function(String?) onChanged,
   bool isRequired,
 ) {
+  final bool isDisabled = items.isEmpty;
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       _buildLabel(label, isRequired),
       const SizedBox(height: 8),
-      SizedBox(
-        height: 40,
+      Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF2A2D2F), Color(0xFF1F2123)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
         child: DropdownButtonFormField&lt;String&gt;(
-          value: selectedValue,
+          isExpanded: true,
+          value: items.contains(selectedValue) ? selectedValue : null,
           items:
               items
                   .map(
-                    (e) =&gt; DropdownMenuItem(
+                    (e) =&gt; DropdownMenuItem&lt;String&gt;(
                       value: e,
-                      child: Text(e, style: const TextStyle(color: Colors.white)),
+                      child: Text(
+                        e,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                     ),
                   )
                   .toList(),
-          onChanged: onChanged,
+          onChanged: isDisabled ? null : onChanged,
           decoration: _inputDecoration(hintText),
-          dropdownColor: Colors.black45,
+          dropdownColor: const Color(0xFF1F2123),
+          validator:
+              isRequired
+                  ? (val) =&gt;
+                      (val == null || val.isEmpty) ? &quot;$label is required&quot; : null
+                  : null,
         ),
       ),
     ],

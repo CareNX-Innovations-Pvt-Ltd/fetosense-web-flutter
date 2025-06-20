@@ -66,15 +66,6 @@
 
     </section>
     
-<section class="desc markdown">
-  <p>Builds a form field with a text input.</p>
-<p>This widget includes a label, a text field, and validation for required fields.</p>
-<p><code>label</code> The label for the form field.
-<code>controller</code> The controller to manage the text input.
-<code>hintText</code> The hint text to be displayed in the form field.
-<code>isRequired</code> A boolean indicating if the field is required. If true, validation is applied.
-<code>isNumber</code> A boolean indicating if the input should accept numeric values (defaults to false).</p>
-</section>
 
 
     
@@ -92,11 +83,25 @@
     children: [
       _buildLabel(label, isRequired),
       const SizedBox(height: 6),
-      SizedBox(
-        height: 40,
+      Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF2A2D2F), Color(0xFF1F2123)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
         child: TextFormField(
           controller: controller,
-          style: const TextStyle(color: Colors.grey),
+          style: const TextStyle(color: Colors.white),
           keyboardType: isNumber ? TextInputType.number : TextInputType.text,
           decoration: _inputDecoration(hintText),
           validator:
