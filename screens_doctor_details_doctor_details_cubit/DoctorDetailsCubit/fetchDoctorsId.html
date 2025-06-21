@@ -106,7 +106,8 @@
     final List&lt;models.Document&gt; enrichedDocs = [];
 
     for (final doc in response.documents) {
-      final doctorName = doc.data[&#39;name&#39;] ?? &#39;Unknown&#39;;
+      log(doc.data.toString());
+      final doctorName = doc.data[&#39;doctorName&#39;] ?? &#39;Unknown&#39;;
       final mothers = await db.listDocuments(
         databaseId: AppConstants.appwriteDatabaseId,
         collectionId: AppConstants.userCollectionId,
