@@ -1,6 +1,6 @@
 import 'package:appwrite/models.dart' as models;
 import 'package:fetosense_mis/screens/doctor_details/doctor_details_cubit.dart';
-import 'package:fetosense_mis/widget/doctor_edit_popup.dart'
+import 'package:fetosense_mis/screens/doctor_details/doctoredit/doctor_edit_popup.dart'
     show DoctorEditPopup;
 import 'package:fetosense_mis/core/services/excel_services.dart';
 import 'package:fetosense_mis/utils/format_date.dart';

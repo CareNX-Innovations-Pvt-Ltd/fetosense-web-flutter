@@ -24,6 +24,7 @@ InputDecoration _inputDecoration(String hintText) {
   return InputDecoration(
     hintText: hintText,
     hintStyle: const TextStyle(color: Colors.grey, fontSize: 13),
+
     filled: true,
     fillColor: const Color(0xFF1F2123),
     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),

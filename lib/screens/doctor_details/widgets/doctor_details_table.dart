@@ -2,7 +2,7 @@ import 'package:appwrite/models.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:fetosense_mis/screens/doctor_details/doctor_details_cubit.dart';
 import 'package:fetosense_mis/utils/format_date.dart';
-import 'package:fetosense_mis/widget/doctor_edit_popup.dart';
+import 'package:fetosense_mis/screens/doctor_details/doctoredit/doctor_edit_popup.dart';
 import 'package:flutter/material.dart';
 
 class DoctorDetailsTable extends StatelessWidget {

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:equatable/equatable.dart';
@@ -83,7 +85,8 @@ class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
       final List<models.Document> enrichedDocs = [];
 
       for (final doc in response.documents) {
-        final doctorName = doc.data['name'] ?? 'Unknown';
+        log(doc.data.toString());
+        final doctorName = doc.data['doctorName'] ?? 'Unknown';
         final mothers = await db.listDocuments(
           databaseId: AppConstants.appwriteDatabaseId,
           collectionId: AppConstants.userCollectionId,
