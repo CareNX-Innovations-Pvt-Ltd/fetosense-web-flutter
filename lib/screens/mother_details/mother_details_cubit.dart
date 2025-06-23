@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:bloc/bloc.dart';
@@ -125,6 +127,7 @@ class MotherDetailsCubit extends Cubit<MotherDetailsState> {
           isLoading: false,
         ),
       );
+     
 
       _applySearchFilter();
     } catch (e) {
@@ -152,7 +155,7 @@ class MotherDetailsCubit extends Cubit<MotherDetailsState> {
                 org.data['organizationName']?.toString().toLowerCase() ?? '';
             return name.contains(keyword);
           }).toList();
-
+     
       emit(state.copyWith(filteredMothers: filtered));
     }
   }

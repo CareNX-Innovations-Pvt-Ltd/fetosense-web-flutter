@@ -39,7 +39,7 @@ class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
         state.allDoctors.where((doc) {
           final data = doc.data;
           final lower = searchTerm.toLowerCase();
-          return data['name']?.toLowerCase().contains(lower) == true ||
+          return data['doctorName']?.toLowerCase().contains(lower) == true ||
               data['email']?.toLowerCase().contains(lower) == true ||
               data['organizationName']?.toLowerCase().contains(lower) == true;
         }).toList();

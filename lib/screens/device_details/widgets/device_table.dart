@@ -21,7 +21,7 @@ class DeviceTable extends StatelessWidget {
       dataRowColor: WidgetStateProperty.resolveWith<Color?>((
         Set<WidgetState> states,
       ) {
-        if (states.contains(MaterialState.selected)) {
+        if (states.contains(WidgetState.selected)) {
           return Colors.grey.shade800;
         }
         return const Color(0xFF121314); // default row color

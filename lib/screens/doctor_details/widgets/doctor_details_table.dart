@@ -63,7 +63,7 @@ class DoctorDetailsTable extends StatelessWidget {
     final data = doc.data;
     return DataRow(
       cells: [
-        _buildDataCell(data['name'], flex: 2),
+        _buildDataCell(data['doctorName'], flex: 2),
         _buildDataCell(data['email'], flex: 2),
         _buildDataCell(data['organizationName'], flex: 2),
         _buildDataCell(data['noOfMother']),

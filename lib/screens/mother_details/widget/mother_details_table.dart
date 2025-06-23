@@ -20,11 +20,11 @@ class MotherDetailsTable extends StatelessWidget {
       horizontalMargin: 12,
       minWidth: 750,
       border: TableBorder.all(color: Colors.grey.shade700, width: 1),
-      headingRowColor: MaterialStateProperty.all(const Color(0xFF181A1B)),
-      dataRowColor: MaterialStateProperty.resolveWith<Color?>((
-        Set<MaterialState> states,
+      headingRowColor: WidgetStateProperty.all(const Color(0xFF181A1B)),
+      dataRowColor: WidgetStateProperty.resolveWith<Color?>((
+        Set<WidgetState> states,
       ) {
-        if (states.contains(MaterialState.selected)) {
+        if (states.contains(WidgetState.selected)) {
           return Colors.grey.shade800;
         }
         return const Color(0xFF121314); // default row color

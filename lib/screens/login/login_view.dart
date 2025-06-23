@@ -2,6 +2,7 @@ import 'package:fetosense_mis/core/services/auth_service.dart';
 import 'package:fetosense_mis/screens/login/widgets/captcha_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../animation/animated_logo.dart';
 import 'login_cubit.dart';
 
 /// The main login view widget.
@@ -69,6 +70,7 @@ class _LoginViewBodyState extends State<_LoginViewBody> {
                   top: MediaQuery.of(context).size.height / 2.5,
 
                   left: MediaQuery.of(context).size.width / 8,
+                  // child: const AnimatedLogo(),
                   child: Image.asset(
                     'assets/images/login/fetosense.png',
                     width: 350,
