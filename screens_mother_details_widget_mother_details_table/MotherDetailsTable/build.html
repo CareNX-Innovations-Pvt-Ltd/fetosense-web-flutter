@@ -120,11 +120,11 @@ Widget build(BuildContext context) {
     horizontalMargin: 12,
     minWidth: 750,
     border: TableBorder.all(color: Colors.grey.shade700, width: 1),
-    headingRowColor: MaterialStateProperty.all(const Color(0xFF181A1B)),
-    dataRowColor: MaterialStateProperty.resolveWith&lt;Color?&gt;((
-      Set&lt;MaterialState&gt; states,
+    headingRowColor: WidgetStateProperty.all(const Color(0xFF181A1B)),
+    dataRowColor: WidgetStateProperty.resolveWith&lt;Color?&gt;((
+      Set&lt;WidgetState&gt; states,
     ) {
-      if (states.contains(MaterialState.selected)) {
+      if (states.contains(WidgetState.selected)) {
         return Colors.grey.shade800;
       }
       return const Color(0xFF121314); &#47;&#47; default row color

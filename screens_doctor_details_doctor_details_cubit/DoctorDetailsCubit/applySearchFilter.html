@@ -75,7 +75,7 @@
       state.allDoctors.where((doc) {
         final data = doc.data;
         final lower = searchTerm.toLowerCase();
-        return data[&#39;name&#39;]?.toLowerCase().contains(lower) == true ||
+        return data[&#39;doctorName&#39;]?.toLowerCase().contains(lower) == true ||
             data[&#39;email&#39;]?.toLowerCase().contains(lower) == true ||
             data[&#39;organizationName&#39;]?.toLowerCase().contains(lower) == true;
       }).toList();

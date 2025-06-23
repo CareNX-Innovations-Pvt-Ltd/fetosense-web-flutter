@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the initialize method from the DoctorEditCubit class, for the Dart programming language.">
-  <title>initialize method - DoctorEditCubit class - doctor_edit_cubit library - Dart API</title>
+  <meta name="description" content="API docs for the createState method from the AnimatedLogo class, for the Dart programming language.">
+  <title>createState method - AnimatedLogo class - animated_logo library - Dart API</title>
 
 
   
@@ -25,11 +25,11 @@
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">fetosense_mis</a></li>
-    <li><a href="../../screens_doctor_details_doctoredit_doctor_edit_cubit/">screens&#47;doctor_details&#47;doctoredit&#47;doctor_edit_cubit.dart</a></li>
-    <li><a href="../../screens_doctor_details_doctoredit_doctor_edit_cubit/DoctorEditCubit-class.html">DoctorEditCubit</a></li>
-    <li class="self-crumb">initialize method</li>
+    <li><a href="../../animation_animated_logo/">animation&#47;animated_logo.dart</a></li>
+    <li><a href="../../animation_animated_logo/AnimatedLogo-class.html">AnimatedLogo</a></li>
+    <li class="self-crumb">createState method</li>
   </ol>
-  <div class="self-name">initialize</div>
+  <div class="self-name">createState</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,36 +46,48 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="screens_doctor_details_doctoredit_doctor_edit_cubit&#47;DoctorEditCubit-class-sidebar.html"
+    data-above-sidebar="animation_animated_logo&#47;AnimatedLogo-class-sidebar.html"
     data-below-sidebar="">
     <div>
-<h1><span class="kind-method">initialize</span> method 
+<h1><span class="kind-method">createState</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
-<span class="returntype">void</span>
-<span class="name ">initialize</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="initialize-param-data"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">data</span></span></li>
-</ol>)
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../animation_animated_logo/AnimatedLogo-class.html">AnimatedLogo</a></span>&gt;</span></span>
+<span class="name ">createState</span>(<wbr>)
 
-      
+      <div class="features"><span class="feature">override</span></div>
 
     </section>
     
 <section class="desc markdown">
-  <p>Initialize the form with existing doctor data.</p>
+  <p>Creates the mutable state for this widget at a given location in the tree.</p>
+<p>Subclasses should override this method to return a newly created
+instance of their associated <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> subclass:</p>
+<pre class="language-dart"><code class="language-dart">@override
+State&lt;SomeWidget&gt; createState() =&gt; _SomeWidgetState();
+</code></pre>
+<p>The framework can call this method multiple times over the lifetime of
+a <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a>. For example, if the widget is inserted into the tree
+in multiple locations, the framework will create a separate <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> object
+for each location. Similarly, if the widget is removed from the tree and
+later inserted into the tree again, the framework will call <a href="../../animation_animated_logo/AnimatedLogo/createState.html">createState</a>
+again to create a fresh <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> object, simplifying the lifecycle of
+<a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> objects.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">void initialize(Map&lt;String, dynamic&gt; data) {
-  nameController.text = data[&#39;doctorName&#39;] ?? &#39;&#39;;
-  mobileController.text = data[&#39;mobileNo&#39;].toString();
-  emailController.text = data[&#39;email&#39;] ?? &#39;&#39;;
-  emit(DoctorEditLoaded());
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">@override
+State&lt;AnimatedLogo&gt; createState() =&gt; _AnimatedLogoState();</code></pre>
 </section>
 
 
@@ -89,12 +101,12 @@
 </header>
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">fetosense_mis</a></li>
-    <li><a href="../../screens_doctor_details_doctoredit_doctor_edit_cubit/">doctor_edit_cubit</a></li>
-    <li><a href="../../screens_doctor_details_doctoredit_doctor_edit_cubit/DoctorEditCubit-class.html">DoctorEditCubit</a></li>
-    <li class="self-crumb">initialize method</li>
+    <li><a href="../../animation_animated_logo/">animated_logo</a></li>
+    <li><a href="../../animation_animated_logo/AnimatedLogo-class.html">AnimatedLogo</a></li>
+    <li class="self-crumb">createState method</li>
 </ol>
 
-    <h5>DoctorEditCubit class</h5>
+    <h5>AnimatedLogo class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
