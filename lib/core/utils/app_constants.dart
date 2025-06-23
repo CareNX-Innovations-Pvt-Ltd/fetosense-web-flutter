@@ -18,7 +18,7 @@ abstract class AppConstants {
   /// Route name for mother details screens.
   static const String motherDetailsRoute = 'mother-detail-route';
 
-  static const String appwriteEndpoint = 'http://20.6.93.31/v1';
+  static const String appwriteEndpoint = 'https://appwrite.fetosense.com/v1';
   static const String appwriteProjectId = '684c18890002a74fff23';
   static const String appwriteDatabaseId = '684c19ee00122a8eec2a';
   static const String userCollectionId = '684c19fa00162a9cbc57';
