@@ -9,19 +9,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'firebase_options.dart';
-
 /// The entry point of the Fetosense MIS application.
 ///
 /// Initializes preferences, sets up dependency injection, and runs the app.
 void main() async {
   PreferenceHelper.init();
   setupLocator();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   runApp(const MyApp());
-
 }
 
 //main.dart
