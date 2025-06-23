@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,8 +21,8 @@ class DoctorEditCubit extends Cubit<DoctorEditState> {
 
   /// Initialize the form with existing doctor data.
   void initialize(Map<String, dynamic> data) {
-    nameController.text = data['name'] ?? '';
-    mobileController.text = data['mobile'] ?? '';
+    nameController.text = data['doctorName'] ?? '';
+    mobileController.text = data['mobileNo'].toString();
     emailController.text = data['email'] ?? '';
     emit(DoctorEditLoaded());
   }
@@ -30,8 +32,8 @@ class DoctorEditCubit extends Cubit<DoctorEditState> {
     emit(DoctorEditSaving());
     try {
       final updatedData = {
-        'name': nameController.text.trim(),
-        'mobile': mobileController.text.trim(),
+        'doctorName': nameController.text.trim(),
+        'mobileNo': 0,
         'email': emailController.text.trim(),
       };
 
