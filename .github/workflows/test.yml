@@ -1,0 +1,28 @@
+name: Flutter Unit Tests (test-cases branch only)
+
+on:
+  push:
+    branches: [ test-cases ]
+  pull_request:
+    branches: [ test-cases ]
+
+jobs:
+  test:
+    name: Run Flutter Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.7'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run unit tests
+        run: flutter test
