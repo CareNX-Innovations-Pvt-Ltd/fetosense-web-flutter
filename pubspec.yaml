@@ -29,10 +29,14 @@ dependencies:
   equatable:
   data_table_2: ^2.6.0
   firebase_core: ^3.14.0
+  universal_html: ^2.2.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.1
+  mocktail: ^1.0.0
+
 
 flutter:
   uses-material-design: true

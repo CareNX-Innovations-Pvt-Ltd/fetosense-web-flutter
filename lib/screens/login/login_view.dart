@@ -1,8 +1,6 @@
-import 'package:fetosense_mis/core/services/auth_service.dart';
 import 'package:fetosense_mis/screens/login/widgets/captcha_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../animation/animated_logo.dart';
 import 'login_cubit.dart';
 
 /// The main login view widget.

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'dart:html' as html;
+// import 'dart:html' if (dart.library.js_interop) 'dart:html' as html;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/rendering.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:universal_html/html.dart' as html;
 
 /// A StatefulWidget that represents the QR Code generation page.
 ///
