@@ -112,7 +112,7 @@ Widget build(BuildContext context) {
   return MultiBlocProvider(
     providers: [
       &#47;&#47;&#47; Provides [LoginCubit] for authentication state management.
-      BlocProvider(create: (context) =&gt; LoginCubit()),
+      BlocProvider(create: (context) =&gt; LoginCubit(locator.get())),
 
       &#47;&#47;&#47; Provides [OrganizationRegistrationCubit] for organization registration state.
       BlocProvider(create: (context) =&gt; OrganizationRegistrationCubit()),

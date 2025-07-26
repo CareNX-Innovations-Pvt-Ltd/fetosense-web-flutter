@@ -81,7 +81,7 @@
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      _buildLabel(label, isRequired),
+      buildLabel(label, isRequired),
       const SizedBox(height: 6),
       Container(
         decoration: BoxDecoration(
@@ -103,7 +103,7 @@
           controller: controller,
           style: const TextStyle(color: Colors.white),
           keyboardType: isNumber ? TextInputType.number : TextInputType.text,
-          decoration: _inputDecoration(hintText),
+          decoration: inputDecoration(hintText),
           validator:
               isRequired
                   ? (value) =&gt;

@@ -54,7 +54,8 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">LoginCubit</span>(<wbr>)
+      <span class="name ">LoginCubit</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="-param-_authService"><span class="type-annotation"><a href="../../core_services_auth_service/AuthService-class.html">AuthService</a></span> <span class="parameter-name">_authService</span></span></li>
+</ol>)
     </section>
     
 <section class="desc markdown">
@@ -65,7 +66,7 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">LoginCubit() : super(LoginInitial());</code></pre>
+  <pre class="language-dart"><code class="language-dart">LoginCubit(this._authService) : super(LoginInitial());</code></pre>
 </section>
 
 

@@ -110,8 +110,8 @@ and</li>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
   return BlocProvider(
-    create: (_) =&gt; LoginCubit(),
-    child: const _LoginViewBody(),
+    create: (_) =&gt; LoginCubit(locator.get&lt;AuthService&gt;()),
+    child: const LoginViewBody(),
   );
 }</code></pre>
 </section>

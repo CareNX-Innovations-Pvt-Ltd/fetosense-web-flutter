@@ -109,58 +109,68 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  int currentYear = DateTime.now().year; &#47;&#47; ✅ Get current year dynamically
+  int currentYear = DateTime.now().year;
 
   return Container(
     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
     color: const Color(0xFF181A1B),
     child: Row(
-      mainAxisAlignment:
-          MainAxisAlignment.spaceBetween, &#47;&#47; Space elements properly
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        &#47;&#47; Left Side: Company Name &amp; Year
-        Row(
-          children: [
-            &#47;&#47; Copyright Icon
-            const SizedBox(width: 5),
-            GestureDetector(
-              onTap: () =&gt; _launchURL(&quot;https:&#47;&#47;carenx.com&#47;&quot;), &#47;&#47; Open URL
-              child: Text(
-                &quot;CareNX Innovations Pvt&#47;Ltd.&quot;,
-                style: TextStyle(
-                  color: Colors.cyan[600],
-                  fontSize: 14,
-                ), &#47;&#47; Cyan Link
+        &#47;&#47; Left Side
+        Expanded(
+          child: Row(
+            children: [
+              const SizedBox(width: 5),
+              Flexible(
+                child: GestureDetector(
+                  onTap: () =&gt; _launchURL(&quot;https:&#47;&#47;carenx.com&#47;&quot;),
+                  child: Text(
+                    &quot;CareNX Innovations Pvt&#47;Ltd.&quot;,
+                    style: TextStyle(
+                      color: Colors.cyan[600],
+                      fontSize: 14,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(width: 5),
-            const Icon(Icons.copyright, color: Colors.white, size: 12),
-            Text(
-              &quot;$currentYear&quot;,
-              style: const TextStyle(color: Colors.white, fontSize: 14),
-            ), &#47;&#47; Current Year
-          ],
+              const SizedBox(width: 5),
+              const Icon(Icons.copyright, color: Colors.white, size: 12),
+              Text(
+                &quot;$currentYear&quot;,
+                style: const TextStyle(color: Colors.white, fontSize: 14),
+              ),
+            ],
+          ),
         ),
 
-        &#47;&#47; Right Side: Version &amp; Powered By
-        Row(
-          children: [
-            const Text(
-              &quot;Version V1.1.1 Powered By &quot;,
-              style: TextStyle(color: Colors.white, fontSize: 14),
-            ),
-            GestureDetector(
-              onTap: () =&gt; _launchURL(&quot;https:&#47;&#47;carenx.com&#47;&quot;), &#47;&#47; Open URL
-              child: Text(
-                &quot;CareNX&quot;,
-                style: TextStyle(
-                  color: Colors.cyan[600],
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ), &#47;&#47; Cyan Link
+        &#47;&#47; Right Side
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const Flexible(
+                child: Text(
+                  &quot;Version V1.1.1 Powered By &quot;,
+                  style: TextStyle(color: Colors.white, fontSize: 14),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-          ],
+              GestureDetector(
+                onTap: () =&gt; _launchURL(&quot;https:&#47;&#47;carenx.com&#47;&quot;),
+                child: Text(
+                  &quot;CareNX&quot;,
+                  style: TextStyle(
+                    color: Colors.cyan[600],
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     ),

@@ -86,7 +86,7 @@
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      _buildLabel(label, isRequired),
+      buildLabel(label, isRequired),
       const SizedBox(height: 8),
       Container(
         decoration: BoxDecoration(
@@ -123,7 +123,7 @@
                   )
                   .toList(),
           onChanged: isDisabled ? null : onChanged,
-          decoration: _inputDecoration(hintText),
+          decoration: inputDecoration(hintText),
           dropdownColor: const Color(0xFF1F2123),
           validator:
               isRequired
