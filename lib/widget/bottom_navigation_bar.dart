@@ -14,14 +14,6 @@ import 'package:url_launcher/url_launcher.dart';
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
 
-  /// Launches the provided URL in an external application (browser).
-  ///
-  /// Uses the `url_launcher` package to launch the URL.
-  /// If the URL cannot be launched, it prints a debug message.
-  ///
-  /// [url] The URL to be opened in the browser.
-
-  // Function to launch a URL
   void _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
@@ -33,58 +25,68 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int currentYear = DateTime.now().year; // ✅ Get current year dynamically
+    int currentYear = DateTime.now().year;
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       color: const Color(0xFF181A1B),
       child: Row(
-        mainAxisAlignment:
-            MainAxisAlignment.spaceBetween, // Space elements properly
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Left Side: Company Name & Year
-          Row(
-            children: [
-              // Copyright Icon
-              const SizedBox(width: 5),
-              GestureDetector(
-                onTap: () => _launchURL("https://carenx.com/"), // Open URL
-                child: Text(
-                  "CareNX Innovations Pvt/Ltd.",
-                  style: TextStyle(
-                    color: Colors.cyan[600],
-                    fontSize: 14,
-                  ), // Cyan Link
+          // Left Side
+          Expanded(
+            child: Row(
+              children: [
+                const SizedBox(width: 5),
+                Flexible(
+                  child: GestureDetector(
+                    onTap: () => _launchURL("https://carenx.com/"),
+                    child: Text(
+                      "CareNX Innovations Pvt/Ltd.",
+                      style: TextStyle(
+                        color: Colors.cyan[600],
+                        fontSize: 14,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 5),
-              const Icon(Icons.copyright, color: Colors.white, size: 12),
-              Text(
-                "$currentYear",
-                style: const TextStyle(color: Colors.white, fontSize: 14),
-              ), // Current Year
-            ],
+                const SizedBox(width: 5),
+                const Icon(Icons.copyright, color: Colors.white, size: 12),
+                Text(
+                  "$currentYear",
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                ),
+              ],
+            ),
           ),
 
-          // Right Side: Version & Powered By
-          Row(
-            children: [
-              const Text(
-                "Version V1.1.1 Powered By ",
-                style: TextStyle(color: Colors.white, fontSize: 14),
-              ),
-              GestureDetector(
-                onTap: () => _launchURL("https://carenx.com/"), // Open URL
-                child: Text(
-                  "CareNX",
-                  style: TextStyle(
-                    color: Colors.cyan[600],
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ), // Cyan Link
+          // Right Side
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const Flexible(
+                  child: Text(
+                    "Version V1.1.1 Powered By ",
+                    style: TextStyle(color: Colors.white, fontSize: 14),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-            ],
+                GestureDetector(
+                  onTap: () => _launchURL("https://carenx.com/"),
+                  child: Text(
+                    "CareNX",
+                    style: TextStyle(
+                      color: Colors.cyan[600],
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

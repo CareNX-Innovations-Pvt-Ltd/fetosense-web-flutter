@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget _buildLabel(String label, bool isRequired) {
+Widget buildLabel(String label, bool isRequired) {
   return Row(
     children: [
       Text(
@@ -20,7 +20,7 @@ Widget _buildLabel(String label, bool isRequired) {
   );
 }
 
-InputDecoration _inputDecoration(String hintText) {
+InputDecoration inputDecoration(String hintText) {
   return InputDecoration(
     hintText: hintText,
     hintStyle: const TextStyle(color: Colors.grey, fontSize: 13),
@@ -53,7 +53,7 @@ Widget buildColumnWithTextField(
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      _buildLabel(label, isRequired),
+      buildLabel(label, isRequired),
       const SizedBox(height: 6),
       Container(
         decoration: BoxDecoration(
@@ -75,7 +75,7 @@ Widget buildColumnWithTextField(
           controller: controller,
           style: const TextStyle(color: Colors.white),
           keyboardType: isNumber ? TextInputType.number : TextInputType.text,
-          decoration: _inputDecoration(hintText),
+          decoration: inputDecoration(hintText),
           validator:
               isRequired
                   ? (value) =>
@@ -102,7 +102,7 @@ Widget buildColumnWithDropdown(
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      _buildLabel(label, isRequired),
+      buildLabel(label, isRequired),
       const SizedBox(height: 8),
       Container(
         decoration: BoxDecoration(
@@ -139,7 +139,7 @@ Widget buildColumnWithDropdown(
                   )
                   .toList(),
           onChanged: isDisabled ? null : onChanged,
-          decoration: _inputDecoration(hintText),
+          decoration: inputDecoration(hintText),
           dropdownColor: const Color(0xFF1F2123),
           validator:
               isRequired

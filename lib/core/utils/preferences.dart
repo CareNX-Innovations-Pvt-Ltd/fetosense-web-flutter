@@ -45,8 +45,10 @@ class PreferenceHelper {
   }
 
   /// Sets the auto-login preference.
-  void setAutoLogin(bool isAutoLogin) =>
-      _prefsInstance.setBool(autoLogin, isAutoLogin);
+  Future<void> setAutoLogin(bool isAutoLogin) async {
+    await _prefsInstance.setBool(autoLogin, isAutoLogin);
+  }
+
 
   /// Gets the auto-login preference, returns `false` if not set.
   bool getAutoLogin() => _prefsInstance.getBool(autoLogin) ?? false;

@@ -2,6 +2,7 @@
 ///
 /// This file registers singleton instances for services used throughout the app.
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
+import 'package:fetosense_mis/core/services/auth_service.dart';
 import 'package:fetosense_mis/core/utils/preferences.dart';
 import 'package:get_it/get_it.dart';
 
@@ -14,4 +15,5 @@ GetIt locator = GetIt.instance;
 void setupLocator() {
   locator.registerSingleton(AppwriteService());
   locator.registerSingleton(PreferenceHelper());
+  locator.registerSingleton(AuthService());
 }

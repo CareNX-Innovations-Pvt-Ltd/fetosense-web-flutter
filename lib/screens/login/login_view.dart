@@ -1,6 +1,8 @@
+import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/screens/login/widgets/captcha_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../core/services/auth_service.dart';
 import 'login_cubit.dart';
 
 /// The main login view widget.
@@ -12,20 +14,20 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => LoginCubit(),
-      child: const _LoginViewBody(),
+      create: (_) => LoginCubit(locator.get<AuthService>()),
+      child: const LoginViewBody(),
     );
   }
 }
 
-class _LoginViewBody extends StatefulWidget {
-  const _LoginViewBody();
+class LoginViewBody extends StatefulWidget {
+  const LoginViewBody({super.key});
 
   @override
-  State<_LoginViewBody> createState() => _LoginViewBodyState();
+  State<LoginViewBody> createState() => LoginViewBodyState();
 }
 
-class _LoginViewBodyState extends State<_LoginViewBody> {
+class LoginViewBodyState extends State<LoginViewBody> {
   bool isChecked = false;
   @override
   @override

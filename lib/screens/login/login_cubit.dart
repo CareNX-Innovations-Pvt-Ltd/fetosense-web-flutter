@@ -12,8 +12,10 @@ part 'login_state.dart';
 ///
 /// Handles user input, password visibility, and authentication logic.
 class LoginCubit extends Cubit<LoginState> {
+  final AuthService _authService;
+
   /// Creates a [LoginCubit] and initializes the state.
-  LoginCubit() : super(LoginInitial());
+  LoginCubit(this._authService) : super(LoginInitial());
 
   /// Controller for the username input field.
   final usernameController = TextEditingController();
@@ -36,19 +38,31 @@ class LoginCubit extends Cubit<LoginState> {
   /// Navigates to the dashboard on success, or shows an error on failure.
   Future<void> loginUser(BuildContext context) async {
     emit(LoginLoading());
+
     try {
-      final bool success = await AuthService().loginUser(
+      final bool success = await _authService.loginUser(
         usernameController.text,
         passwordController.text,
       );
-      if (context.mounted && success) {
+
+      if (success) {
         emit(LoginSuccess());
-        locator<PreferenceHelper>().setAutoLogin(true);
-        context.go(AppRoutes.dashboard);
-      } else {
-        emit(LoginFailure('Doctors/User cannot access the dashboard.'));
+
+        try {
+          await locator<PreferenceHelper>().setAutoLogin(true);
+          if (context.mounted) {
+            GoRouter.of(context).go(AppRoutes.dashboard);
+          }
+        } catch (_) {
+          // Optional: log error
+        }
+
+        return; // ✅ Prevent reaching catch again
       }
+
+      emit(LoginFailure('Doctors/User cannot access the dashboard.'));
     } catch (e) {
+      // Emit failure only if success block didn’t already emit
       emit(LoginFailure(e.toString()));
     }
   }

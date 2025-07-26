@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class CaptchaCheckbox extends StatefulWidget {
   final Function(bool) onVerified;
@@ -65,31 +66,33 @@ class _CaptchaCheckboxState extends State<CaptchaCheckbox> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-      child: Row(
-        children: [
-          Checkbox(
-            value: _isChecked,
-            onChanged: (value) {
-              if (_captchaPassed) {
-                setState(() => _isChecked = value ?? false);
-                widget.onVerified(_isChecked);
-              } else {
-                _showCaptchaDialog();
-              }
-            },
-            activeColor: Colors.tealAccent[700],
-            checkColor: Colors.white,
-          ),
-          const Text(
-            "I'm not a robot",
-            style: TextStyle(color: Colors.white70),
-          ),
-          const Spacer(),
-          Icon(
-            Icons.verified_user,
-            color: _isChecked ? Colors.green : Colors.white70,
-          ),
-        ],
+      child: Expanded(
+        child: Row(
+          children: [
+            Checkbox(
+              value: _isChecked,
+              onChanged: (value) {
+                if (_captchaPassed) {
+                  setState(() => _isChecked = value ?? false);
+                  widget.onVerified(_isChecked);
+                } else {
+                  _showCaptchaDialog();
+                }
+              },
+              activeColor: Colors.tealAccent[700],
+              checkColor: Colors.white,
+            ),
+            const Text(
+              "I'm not a robot",
+              style: TextStyle(color: Colors.white70),
+            ),
+            const Spacer(),
+            Icon(
+              Icons.verified_user,
+              color: _isChecked ? Colors.green : Colors.white70,
+            ),
+          ],
+        ),
       ),
     );
   }
