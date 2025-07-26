@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         /// Provides [LoginCubit] for authentication state management.
-        BlocProvider(create: (context) => LoginCubit()),
+        BlocProvider(create: (context) => LoginCubit(locator.get())),
 
         /// Provides [OrganizationRegistrationCubit] for organization registration state.
         BlocProvider(create: (context) => OrganizationRegistrationCubit()),

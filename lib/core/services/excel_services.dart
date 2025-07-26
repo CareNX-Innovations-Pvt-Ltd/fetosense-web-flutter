@@ -1,8 +1,8 @@
-import 'dart:html' as html;
 import 'package:fetosense_mis/core/models/org_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:excel/excel.dart';
 import 'package:appwrite/models.dart' as models;
+import 'package:universal_html/html.dart' as html;
 
 /// A service for exporting device data to an Excel file.
 ///
@@ -197,10 +197,10 @@ class ExcelExportService {
 
         sheet.appendRow([
           data['name'] ?? '',
-          doc.deviceCount ?? '',
-          doc.doctorCount ?? '',
-          doc.motherCount ?? '',
-          doc.testCount ?? '',
+          doc.deviceCount,
+          doc.doctorCount,
+          doc.motherCount,
+          doc.testCount,
           data['mobile'] ?? '',
           data['status'] ?? '',
           data['created_on'] ?? '',

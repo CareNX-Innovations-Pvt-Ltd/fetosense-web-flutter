@@ -1,6 +1,8 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 
+import '../core/utils/app_constants.dart';
+
 /// Fetches a list of doctors from the Appwrite database.
 ///
 /// This function queries the Appwrite database for documents in the specified
@@ -53,8 +55,8 @@ Future<List<models.Document>> fetchDoctors(
 
     // Fetch doctor documents from Appwrite database
     final result = await db.listDocuments(
-      databaseId: '67ece4a7002a0a732dfd',
-      collectionId: '67f36a7e002c46ea05f0',
+      databaseId: AppConstants.appwriteDatabaseId,
+      collectionId: AppConstants.userCollectionId,
       queries: queries,
     );
 

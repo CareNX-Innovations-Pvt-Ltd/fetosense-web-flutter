@@ -2,7 +2,7 @@ part of 'login_cubit.dart';
 
 /// Base class for all login states.
 @immutable
-sealed class LoginState {}
+class LoginState {}
 
 /// State representing the initial state of the login screen.
 class LoginInitial extends LoginState {}
