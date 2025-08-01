@@ -20,11 +20,11 @@ class DoctorAnalyticsPage extends StatefulWidget {
   const DoctorAnalyticsPage({super.key});
 
   @override
-  State<DoctorAnalyticsPage> createState() => _DoctorAnalyticsPageState();
+  State<DoctorAnalyticsPage> createState() => DoctorAnalyticsPageState();
 }
 
 /// The state for [DoctorAnalyticsPage], handling tab switching, data loading, and chart rendering.
-class _DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
+class DoctorAnalyticsPageState extends State<DoctorAnalyticsPage>
     with TickerProviderStateMixin {
   /// Controller for switching between weekly and monthly tabs.
   late TabController _tabController;

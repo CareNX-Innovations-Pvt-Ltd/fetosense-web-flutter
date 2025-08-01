@@ -16,9 +16,17 @@ import 'package:flutter/cupertino.dart';
 /// Appwrite account API for user management.
 
 class AuthService {
-  final Account account = Account(locator<AppwriteService>().client);
-  final Databases databases = Databases(locator<AppwriteService>().client);
-  final prefs = locator<PreferenceHelper>();
+  final Account account;
+  final Databases databases;
+  final PreferenceHelper prefs;
+
+  AuthService({
+    Account? account,
+    Databases? databases,
+    PreferenceHelper? prefs,
+  })  : account = account ?? Account(locator<AppwriteService>().client),
+        databases = databases ?? Databases(locator<AppwriteService>().client),
+        prefs = prefs ?? locator<PreferenceHelper>();
 
   /// Registers a new user with the provided [email] and [password].
   ///

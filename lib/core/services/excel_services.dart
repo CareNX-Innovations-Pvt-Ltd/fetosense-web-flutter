@@ -18,13 +18,15 @@ class ExcelExportService {
   ///
   /// [context]: The [BuildContext] used to show error messages.
   /// [documents]: The list of Appwrite [Document] objects containing device data to export.
+  ///
+  static Excel Function() excelFactory = Excel.createExcel;
   static Future<void> exportDevicesToExcel(
     BuildContext context,
     List<models.Document> documents,
   ) async {
     try {
       // Create a new Excel file and select the first sheet
-      final excel = Excel.createExcel();
+      final excel = excelFactory();
       final Sheet sheet = excel['Sheet1'];
 
       // Add headers to the sheet
@@ -76,7 +78,7 @@ class ExcelExportService {
   ) async {
     try {
       // Create a new Excel file and select the first sheet
-      final excel = Excel.createExcel();
+      final excel = excelFactory();
       final Sheet sheet = excel['Sheet1'];
 
       // Add headers to the sheet
@@ -130,7 +132,7 @@ class ExcelExportService {
   ) async {
     try {
       // Create a new Excel file and select the first sheet
-      final excel = Excel.createExcel();
+      final excel = excelFactory();
       final Sheet sheet = excel['Sheet1'];
 
       // Add headers to the sheet
@@ -172,7 +174,7 @@ class ExcelExportService {
   ) async {
     try {
       // Create a new Excel file and select the first sheet
-      final excel = Excel.createExcel();
+      final excel = excelFactory();
       final Sheet sheet = excel['Sheet1'];
 
       // Add headers to the sheet
