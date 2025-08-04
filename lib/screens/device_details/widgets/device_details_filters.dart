@@ -8,10 +8,10 @@ class DeviceDetailsFilters extends StatelessWidget {
   final DeviceDetailsState state;
 
   const DeviceDetailsFilters({
-    Key? key,
+    super.key,
     required this.cubit,
     required this.state,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

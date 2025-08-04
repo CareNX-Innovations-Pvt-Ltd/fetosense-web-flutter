@@ -10,7 +10,7 @@ import 'device_edit_cubit.dart';
 
 /// A popup widget for editing device details.
 ///
-/// Wraps the [_DeviceEditView] with a [BlocProvider] and initializes the cubit with device data.
+/// Wraps the [DeviceEditView] with a [BlocProvider] and initializes the cubit with device data.
 class DeviceEditPopup extends StatelessWidget {
   /// The device data to edit.
   final Map<String, dynamic> data;
@@ -38,7 +38,7 @@ class DeviceEditPopup extends StatelessWidget {
       create:
           (_) =>
               DeviceEditCubit(db: db, documentId: documentId)..initialize(data),
-      child: _DeviceEditView(data: data, onClose: onClose),
+      child: DeviceEditView(data: data, onClose: onClose),
     );
   }
 }
@@ -46,15 +46,15 @@ class DeviceEditPopup extends StatelessWidget {
 /// Internal widget that builds the device edit UI.
 ///
 /// Uses [BlocBuilder] to listen to [DeviceEditCubit] state and renders the edit form.
-class _DeviceEditView extends StatelessWidget {
+class DeviceEditView extends StatelessWidget {
   /// The device data to edit.
   final Map<String, dynamic> data;
 
   /// Callback to close the popup.
   final VoidCallback onClose;
 
-  /// Creates a [_DeviceEditView] widget.
-  const _DeviceEditView({required this.data, required this.onClose});
+  /// Creates a [DeviceEditView] widget.
+  const DeviceEditView({required this.data, required this.onClose});
 
   @override
   Widget build(BuildContext context) {

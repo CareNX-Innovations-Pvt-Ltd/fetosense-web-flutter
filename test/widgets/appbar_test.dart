@@ -1,54 +1,53 @@
 import 'package:fetosense_mis/widget/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 
-// Mock the necessary dependencies
-class MockVoidCallback extends Mock {
+import 'package:mocktail/mocktail.dart';
+
+class MockCallback extends Mock {
   void call();
 }
 
 void main() {
-  group('AppBar Tests', () {
-    testWidgets('AppBar displays logo, menu icon, user email, and account icon', (WidgetTester tester) async {
-      final mockToggleSidebar = MockVoidCallback();
-      final mockOnLogout = MockVoidCallback();
-      const userEmail = 'testuser@example.com';
+  testWidgets('AppBar displays logo, menu icon, user email, and handles all interactions', (tester) async {
+    final toggleSidebar = MockCallback();
+    final onLogout = MockCallback();
+    const email = 'testuser@example.com';
 
-      await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(
+      MaterialApp(
         home: Scaffold(
-          appBar: buildAppBar(mockToggleSidebar.call, userEmail, mockOnLogout.call),
+          appBar: buildAppBar(toggleSidebar, email, onLogout),
         ),
-      ));
+      ),
+    );
 
-      // Verify logo is displayed
-      expect(find.byType(Image), findsOneWidget);
-      // You might want to add a more specific check for the image asset if possible
+    // Check logo
+    final logo = find.byType(Image);
+    expect(logo, findsOneWidget);
 
-      // Verify menu icon is displayed
-      expect(find.byIcon(Icons.menu), findsOneWidget);
+    // Check user email
+    expect(find.text(email), findsOneWidget);
 
-      // Verify user email is displayed
-      expect(find.text(userEmail), findsOneWidget);
+    // Check sidebar menu button and tap
+    final menuButton = find.byIcon(Icons.menu);
+    expect(menuButton, findsOneWidget);
+    await tester.tap(menuButton);
+    verify(() => toggleSidebar()).called(1);
 
-      // Verify account icon is displayed
-      expect(find.byIcon(Icons.account_circle), findsOneWidget);
-    });
+    // Check account icon
+    final accountIcon = find.byIcon(Icons.account_circle);
+    expect(accountIcon, findsOneWidget);
+    await tester.tap(accountIcon);
+    await tester.pumpAndSettle();
 
-    testWidgets('Tapping menu icon calls toggleSidebar', (WidgetTester tester) async {
-      final mockToggleSidebar = MockVoidCallback();
-      final mockOnLogout = MockVoidCallback();
-      const userEmail = 'testuser@example.com';
+    // Ensure popup appears
+    expect(find.byType(PopupMenuItem<String>), findsOneWidget);
+    expect(find.text('Logout'), findsOneWidget);
 
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          appBar: buildAppBar(mockToggleSidebar.call, userEmail, mockOnLogout.call),
-        ),
-      ));
-
-      await tester.tap(find.byIcon(Icons.menu));
-      verify(mockToggleSidebar.call()).called(1);
-    });
-
+    // Tap logout
+    await tester.tap(find.text('Logout'));
+    await tester.pumpAndSettle();
+    verify(() => onLogout()).called(1);
   });
 }
