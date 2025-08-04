@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the createState method from the DoctorAnalyticsPage class, for the Dart programming language.">
-  <title>createState method - DoctorAnalyticsPage class - doctors_analytics library - Dart API</title>
+  <meta name="description" content="API docs for the prepareTrend method from the DoctorAnalyticsPageState class, for the Dart programming language.">
+  <title>prepareTrend method - DoctorAnalyticsPageState class - doctors_analytics library - Dart API</title>
 
 
   
@@ -26,10 +26,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">fetosense_mis</a></li>
     <li><a href="../../screens_analytics_doctors_analytics/">screens&#47;analytics&#47;doctors_analytics.dart</a></li>
-    <li><a href="../../screens_analytics_doctors_analytics/DoctorAnalyticsPage-class.html">DoctorAnalyticsPage</a></li>
-    <li class="self-crumb">createState method</li>
+    <li><a href="../../screens_analytics_doctors_analytics/DoctorAnalyticsPageState-class.html">DoctorAnalyticsPageState</a></li>
+    <li class="self-crumb">prepareTrend method</li>
   </ol>
-  <div class="self-name">createState</div>
+  <div class="self-name">prepareTrend</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,48 +46,62 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="screens_analytics_doctors_analytics&#47;DoctorAnalyticsPage-class-sidebar.html"
+    data-above-sidebar="screens_analytics_doctors_analytics&#47;DoctorAnalyticsPageState-class-sidebar.html"
     data-below-sidebar="">
     <div>
-<h1><span class="kind-method">createState</span> method 
+<h1><span class="kind-method">prepareTrend</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
-  <div>
-    <ol class="annotation-list">
-        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
-    </ol>
-  </div>
-<span class="returntype"><a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../screens_analytics_doctors_analytics/DoctorAnalyticsPage-class.html">DoctorAnalyticsPage</a></span>&gt;</span></span>
-<span class="name ">createState</span>(<wbr>)
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>&gt;</span></span>
+<span class="name ">prepareTrend</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="prepareTrend-param-docs"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/appwrite/13.0.0/appwrite.models/Document-class.html">Document</a></span>&gt;</span></span> <span class="parameter-name">docs</span>, </span></li>
+<li><span class="parameter" id="prepareTrend-param-type"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">type</span></span></li>
+</ol>)
 
-      <div class="features"><span class="feature">override</span></div>
+      
 
     </section>
     
 <section class="desc markdown">
-  <p>Creates the mutable state for this widget at a given location in the tree.</p>
-<p>Subclasses should override this method to return a newly created
-instance of their associated <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> subclass:</p>
-<pre class="language-dart"><code class="language-dart">@override
-State&lt;SomeWidget&gt; createState() =&gt; _SomeWidgetState();
-</code></pre>
-<p>The framework can call this method multiple times over the lifetime of
-a <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a>. For example, if the widget is inserted into the tree
-in multiple locations, the framework will create a separate <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> object
-for each location. Similarly, if the widget is removed from the tree and
-later inserted into the tree again, the framework will call <a href="../../screens_analytics_doctors_analytics/DoctorAnalyticsPage/createState.html">createState</a>
-again to create a fresh <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> object, simplifying the lifecycle of
-<a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> objects.</p>
+  <p>Processes a list of documents and returns a time-bucketed list of doctor registrations.</p>
+<p><code>docs</code> - List of Appwrite documents.
+<code>type</code> - Either <code>'weekly'</code> or <code>'monthly'</code>.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@override
-State&lt;DoctorAnalyticsPage&gt; createState() =&gt; DoctorAnalyticsPageState();</code></pre>
+  <pre class="language-dart"><code class="language-dart">List&lt;Map&lt;String, dynamic&gt;&gt; prepareTrend(
+  List&lt;models.Document&gt; docs,
+  String type,
+) {
+  final trendMap = &lt;String, int&gt;{};
+
+  for (final doc in docs) {
+    final createdOn = doc.data[&#39;createdOn&#39;];
+    if (createdOn == null) continue;
+
+    final date = DateTime.parse(createdOn);
+    final key =
+        (type == &#39;weekly&#39;)
+            ? &#39;${date.year}-W${getWeek(date)}&#39;
+            : DateFormat(&#39;yyyy-MM&#39;).format(date);
+
+    trendMap[key] = (trendMap[key] ?? 0) + 1;
+  }
+
+  final result =
+      trendMap.entries
+          .map((e) =&gt; {&#39;createdOn&#39;: e.key, &#39;noOfDoctors&#39;: e.value})
+          .toList();
+
+  result.sort(
+    (a, b) =&gt; (a[&#39;createdOn&#39;] as String).compareTo(b[&#39;createdOn&#39;] as String),
+  );
+  return result;
+}</code></pre>
 </section>
 
 
@@ -102,11 +116,11 @@ State&lt;DoctorAnalyticsPage&gt; createState() =&gt; DoctorAnalyticsPageState();
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">fetosense_mis</a></li>
     <li><a href="../../screens_analytics_doctors_analytics/">doctors_analytics</a></li>
-    <li><a href="../../screens_analytics_doctors_analytics/DoctorAnalyticsPage-class.html">DoctorAnalyticsPage</a></li>
-    <li class="self-crumb">createState method</li>
+    <li><a href="../../screens_analytics_doctors_analytics/DoctorAnalyticsPageState-class.html">DoctorAnalyticsPageState</a></li>
+    <li class="self-crumb">prepareTrend method</li>
 </ol>
 
-    <h5>DoctorAnalyticsPage class</h5>
+    <h5>DoctorAnalyticsPageState class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">

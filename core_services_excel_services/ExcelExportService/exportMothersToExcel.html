@@ -74,7 +74,7 @@
 ) async {
   try {
     &#47;&#47; Create a new Excel file and select the first sheet
-    final excel = Excel.createExcel();
+    final excel = excelFactory();
     final Sheet sheet = excel[&#39;Sheet1&#39;];
 
     &#47;&#47; Add headers to the sheet

@@ -77,39 +77,25 @@ The <code>userEmail</code> is the email address of the currently logged-in user 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">PreferredSizeWidget buildAppBar(VoidCallback toggleSidebar, String userEmail, VoidCallback onLogout) {
+  <pre class="language-dart"><code class="language-dart">PreferredSizeWidget buildAppBar(
+    VoidCallback toggleSidebar,
+    String userEmail,
+    VoidCallback onLogout,
+    ) {
   return AppBar(
     backgroundColor: const Color(0xFF181A1B),
     title: Image.asset(&#39;assets&#47;images&#47;login&#47;fetosense.png&#39;, height: 30),
     leading: IconButton(
+      key: const Key(&#39;toggleSidebarButton&#39;),
       icon: Icon(Icons.menu, color: Colors.grey[600]),
       onPressed: toggleSidebar,
     ),
     actions: [
       Padding(
         padding: const EdgeInsets.only(right: 16),
-        child: Row(
-          children: [
-            &#47;&#47;&#47; Displays the email address of the currently logged-in user.
-            Text(userEmail, style: const TextStyle(color: Colors.white)),
-            const SizedBox(width: 8),
-
-            &#47;&#47;&#47; Dropdown icon with logout option
-            PopupMenuButton&lt;String&gt;(
-              icon: Icon(Icons.account_circle, color: Colors.grey[600]),
-              onSelected: (value) {
-                if (value == &#39;logout&#39;) {
-                  onLogout();
-                }
-              },
-              itemBuilder: (context) =&gt; [
-                const PopupMenuItem&lt;String&gt;(
-                  value: &#39;logout&#39;,
-                  child: Text(&#39;Logout&#39;),
-                ),
-              ],
-            ),
-          ],
+        child: UserMenu(
+          email: userEmail,
+          onLogout: onLogout,
         ),
       ),
     ],

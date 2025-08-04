@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the DeviceEditPopup class from the device_edit_view library, for the Dart programming language.">
-  <title>DeviceEditPopup class - device_edit_view library - Dart API</title>
+  <meta name="description" content="API docs for the DeviceEditView class from the device_edit_view library, for the Dart programming language.">
+  <title>DeviceEditView class - device_edit_view library - Dart API</title>
 
 
   
@@ -26,9 +26,9 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../index.html">fetosense_mis</a></li>
     <li><a href="../screens_device_details_device_edit_device_edit_view/">screens&#47;device_details&#47;device_edit&#47;device_edit_view.dart</a></li>
-    <li class="self-crumb">DeviceEditPopup class</li>
+    <li class="self-crumb">DeviceEditView class</li>
   </ol>
-  <div class="self-name">DeviceEditPopup</div>
+  <div class="self-name">DeviceEditView</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,16 +46,16 @@
     id="dartdoc-main-content"
     class="main-content"
     data-above-sidebar="screens_device_details_device_edit_device_edit_view&#47;screens_device_details_device_edit_device_edit_view-library-sidebar.html"
-    data-below-sidebar="screens_device_details_device_edit_device_edit_view&#47;DeviceEditPopup-class-sidebar.html">
+    data-below-sidebar="screens_device_details_device_edit_device_edit_view&#47;DeviceEditView-class-sidebar.html">
     <div>
-<h1><span class="kind-class">DeviceEditPopup</span> class 
+<h1><span class="kind-class">DeviceEditView</span> class 
  
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>A popup widget for editing device details.</p>
-<p>Wraps the <a href="../screens_device_details_device_edit_device_edit_view/DeviceEditView-class.html">DeviceEditView</a> with a <a href="https://pub.dev/documentation/flutter_bloc/9.1.0/flutter_bloc/BlocProvider-class.html">BlocProvider</a> and initializes the cubit with device data.</p>
+  <p>Internal widget that builds the device edit UI.</p>
+<p>Uses <a href="https://pub.dev/documentation/flutter_bloc/9.1.0/flutter_bloc/BlocBuilder-class.html">BlocBuilder</a> to listen to <a href="../screens_device_details_device_edit_device_edit_cubit/DeviceEditCubit-class.html">DeviceEditCubit</a> state and renders the edit form.</p>
 </section>
 
 
@@ -69,7 +69,7 @@
         <li><a href="https://api.flutter.dev/flutter/foundation/DiagnosticableTree-class.html">DiagnosticableTree</a></li>
         <li><a href="https://api.flutter.dev/flutter/widgets/Widget-class.html">Widget</a></li>
         <li><a href="https://api.flutter.dev/flutter/widgets/StatelessWidget-class.html">StatelessWidget</a></li>
-      <li>DeviceEditPopup</li>
+      <li>DeviceEditView</li>
     </ul>
   </dd>
 
@@ -88,11 +88,11 @@
   <section class="summary offset-anchor" id="constructors">
     <h2>Constructors</h2>
     <dl class="constructor-summary-list">
-        <dt id="DeviceEditPopup.new" class="callable">
-          <span class="name"><a href="../screens_device_details_device_edit_device_edit_view/DeviceEditPopup/DeviceEditPopup.html">DeviceEditPopup.new</a></span><span class="signature">({<span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span><span class="parameter" id="-param-data"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">data</span>, </span><span class="parameter" id="-param-documentId"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">documentId</span>, </span><span class="parameter" id="-param-onClose"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/VoidCallback.html">VoidCallback</a></span> <span class="parameter-name">onClose</span></span>})</span>
+        <dt id="DeviceEditView.new" class="callable">
+          <span class="name"><a href="../screens_device_details_device_edit_device_edit_view/DeviceEditView/DeviceEditView.html">DeviceEditView.new</a></span><span class="signature">({<span class="parameter" id="-param-data"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">data</span>, </span><span class="parameter" id="-param-onClose"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/VoidCallback.html">VoidCallback</a></span> <span class="parameter-name">onClose</span></span>})</span>
         </dt>
         <dd>
-          Creates a <a href="../screens_device_details_device_edit_device_edit_view/DeviceEditPopup-class.html">DeviceEditPopup</a> widget.
+          Creates a <a href="../screens_device_details_device_edit_device_edit_view/DeviceEditView-class.html">DeviceEditView</a> widget.
             <div class="constructor-modifier features">const</div>
         </dd>
     </dl>
@@ -104,25 +104,13 @@
     <h2>Properties</h2>
     <dl class="properties">
         <dt id="data" class="property">
-  <span class="name"><a href="../screens_device_details_device_edit_device_edit_view/DeviceEditPopup/data.html">data</a></span>
+  <span class="name"><a href="../screens_device_details_device_edit_device_edit_view/DeviceEditView/data.html">data</a></span>
   <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>
   
 
 </dt>
 <dd>
   The device data to edit.
-  <div class="features"><span class="feature">final</span></div>
-
-</dd>
-
-        <dt id="documentId" class="property">
-  <span class="name"><a href="../screens_device_details_device_edit_device_edit_view/DeviceEditPopup/documentId.html">documentId</a></span>
-  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
-  
-
-</dt>
-<dd>
-  The document ID of the device.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -152,7 +140,7 @@
 </dd>
 
         <dt id="onClose" class="property">
-  <span class="name"><a href="../screens_device_details_device_edit_device_edit_view/DeviceEditPopup/onClose.html">onClose</a></span>
+  <span class="name"><a href="../screens_device_details_device_edit_device_edit_view/DeviceEditView/onClose.html">onClose</a></span>
   <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-ui/VoidCallback.html">VoidCallback</a></span>
   
 
@@ -185,7 +173,7 @@
     <h2>Methods</h2>
     <dl class="callables">
         <dt id="build" class="callable">
-  <span class="name"><a href="../screens_device_details_device_edit_device_edit_view/DeviceEditPopup/build.html">build</a></span><span class="signature">(<wbr><span class="parameter" id="build-param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span></span>)
+  <span class="name"><a href="../screens_device_details_device_edit_device_edit_view/DeviceEditView/build.html">build</a></span><span class="signature">(<wbr><span class="parameter" id="build-param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span></span>)
     <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/widgets/Widget-class.html">Widget</a></span>
   </span>
   
@@ -354,7 +342,7 @@ tools and by <a href="https://api.flutter.dev/flutter/foundation/DiagnosticsNode
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../index.html">fetosense_mis</a></li>
     <li><a href="../screens_device_details_device_edit_device_edit_view/">device_edit_view</a></li>
-    <li class="self-crumb">DeviceEditPopup class</li>
+    <li class="self-crumb">DeviceEditView class</li>
 </ol>
 
     <h5>device_edit_view library</h5>

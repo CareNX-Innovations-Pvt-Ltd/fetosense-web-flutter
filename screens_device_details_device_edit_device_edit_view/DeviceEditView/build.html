@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the build method from the DeviceEditPopup class, for the Dart programming language.">
-  <title>build method - DeviceEditPopup class - device_edit_view library - Dart API</title>
+  <meta name="description" content="API docs for the build method from the DeviceEditView class, for the Dart programming language.">
+  <title>build method - DeviceEditView class - device_edit_view library - Dart API</title>
 
 
   
@@ -26,7 +26,7 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">fetosense_mis</a></li>
     <li><a href="../../screens_device_details_device_edit_device_edit_view/">screens&#47;device_details&#47;device_edit&#47;device_edit_view.dart</a></li>
-    <li><a href="../../screens_device_details_device_edit_device_edit_view/DeviceEditPopup-class.html">DeviceEditPopup</a></li>
+    <li><a href="../../screens_device_details_device_edit_device_edit_view/DeviceEditView-class.html">DeviceEditView</a></li>
     <li class="self-crumb">build method</li>
   </ol>
   <div class="self-name">build</div>
@@ -46,7 +46,7 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="screens_device_details_device_edit_device_edit_view&#47;DeviceEditPopup-class-sidebar.html"
+    data-above-sidebar="screens_device_details_device_edit_device_edit_view&#47;DeviceEditView-class-sidebar.html"
     data-below-sidebar="">
     <div>
 <h1><span class="kind-method">build</span> method 
@@ -95,7 +95,7 @@ and</li>
 <li>any ambient state obtained from the <code>context</code> using
 <a href="https://api.flutter.dev/flutter/widgets/BuildContext/dependOnInheritedWidgetOfExactType.html">BuildContext.dependOnInheritedWidgetOfExactType</a>.</li>
 </ul>
-<p>If a widget's <a href="../../screens_device_details_device_edit_device_edit_view/DeviceEditPopup/build.html">build</a> method is to depend on anything else, use a
+<p>If a widget's <a href="../../screens_device_details_device_edit_device_edit_view/DeviceEditView/build.html">build</a> method is to depend on anything else, use a
 <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a> instead.</p>
 <p>See also:</p>
 <ul>
@@ -109,14 +109,35 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  final client = locator&lt;AppwriteService&gt;().client;
-  final db = Databases(client);
+  final cubit = context.read&lt;DeviceEditCubit&gt;();
 
-  return BlocProvider(
-    create:
-        (_) =&gt;
-            DeviceEditCubit(db: db, documentId: documentId)..initialize(data),
-    child: DeviceEditView(data: data, onClose: onClose),
+  return BlocListener&lt;DeviceEditCubit, DeviceEditState&gt;(
+    listener: (context, state) {
+      if (state is DeviceEditSaved) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text(&#39;Device updated successfully&#39;)),
+        );
+        onClose();
+      } else if (state is DeviceEditError) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(state.message)));
+      }
+    },
+    child: Container(
+      constraints: const BoxConstraints(maxWidth: 1000),
+      decoration: BoxDecoration(
+        color: const Color(0xFF181A1B),
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: const Color(0xFF3E4346)),
+      ),
+      child: Row(
+        children: [
+          DeviceInfoCard(data: data),
+          DeviceEditForm(cubit: cubit, onClose: onClose),
+        ],
+      ),
+    ),
   );
 }</code></pre>
 </section>
@@ -133,11 +154,11 @@ Widget build(BuildContext context) {
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">fetosense_mis</a></li>
     <li><a href="../../screens_device_details_device_edit_device_edit_view/">device_edit_view</a></li>
-    <li><a href="../../screens_device_details_device_edit_device_edit_view/DeviceEditPopup-class.html">DeviceEditPopup</a></li>
+    <li><a href="../../screens_device_details_device_edit_device_edit_view/DeviceEditView-class.html">DeviceEditView</a></li>
     <li class="self-crumb">build method</li>
 </ol>
 
-    <h5>DeviceEditPopup class</h5>
+    <h5>DeviceEditView class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">

@@ -63,14 +63,6 @@
 
     </section>
     
-<section class="desc markdown">
-  <p>Exports the given list of device <code>documents</code> to an Excel file and triggers a download in the browser.</p>
-<p>This method creates a new Excel file, adds headers and device data rows, and then
-initiates a download of the generated <code>.xlsx</code> file for the user. If an error occurs,
-a snackbar with an error message is shown using the provided <code>context</code>.</p>
-<p><code>context</code>: The <a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a> used to show error messages.
-<code>documents</code>: The list of Appwrite <a href="https://pub.dev/documentation/web/1.1.1/web/Document-extension-type.html">Document</a> objects containing device data to export.</p>
-</section>
 
 
     
@@ -82,7 +74,7 @@ a snackbar with an error message is shown using the provided <code>context</code
 ) async {
   try {
     &#47;&#47; Create a new Excel file and select the first sheet
-    final excel = Excel.createExcel();
+    final excel = excelFactory();
     final Sheet sheet = excel[&#39;Sheet1&#39;];
 
     &#47;&#47; Add headers to the sheet

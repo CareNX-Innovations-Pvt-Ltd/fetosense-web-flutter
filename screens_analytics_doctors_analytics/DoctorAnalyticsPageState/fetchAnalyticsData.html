@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the createState method from the DoctorAnalyticsPage class, for the Dart programming language.">
-  <title>createState method - DoctorAnalyticsPage class - doctors_analytics library - Dart API</title>
+  <meta name="description" content="API docs for the fetchAnalyticsData method from the DoctorAnalyticsPageState class, for the Dart programming language.">
+  <title>fetchAnalyticsData method - DoctorAnalyticsPageState class - doctors_analytics library - Dart API</title>
 
 
   
@@ -26,10 +26,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">fetosense_mis</a></li>
     <li><a href="../../screens_analytics_doctors_analytics/">screens&#47;analytics&#47;doctors_analytics.dart</a></li>
-    <li><a href="../../screens_analytics_doctors_analytics/DoctorAnalyticsPage-class.html">DoctorAnalyticsPage</a></li>
-    <li class="self-crumb">createState method</li>
+    <li><a href="../../screens_analytics_doctors_analytics/DoctorAnalyticsPageState-class.html">DoctorAnalyticsPageState</a></li>
+    <li class="self-crumb">fetchAnalyticsData method</li>
   </ol>
-  <div class="self-name">createState</div>
+  <div class="self-name">fetchAnalyticsData</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,48 +46,76 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="screens_analytics_doctors_analytics&#47;DoctorAnalyticsPage-class-sidebar.html"
+    data-above-sidebar="screens_analytics_doctors_analytics&#47;DoctorAnalyticsPageState-class-sidebar.html"
     data-below-sidebar="">
     <div>
-<h1><span class="kind-method">createState</span> method 
+<h1><span class="kind-method">fetchAnalyticsData</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
-  <div>
-    <ol class="annotation-list">
-        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
-    </ol>
-  </div>
-<span class="returntype"><a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../screens_analytics_doctors_analytics/DoctorAnalyticsPage-class.html">DoctorAnalyticsPage</a></span>&gt;</span></span>
-<span class="name ">createState</span>(<wbr>)
+<span class="returntype"><a href="https://api.flutter.dev/flutter/flutter_test/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">fetchAnalyticsData</span>(<wbr>)
 
-      <div class="features"><span class="feature">override</span></div>
+      
 
     </section>
     
 <section class="desc markdown">
-  <p>Creates the mutable state for this widget at a given location in the tree.</p>
-<p>Subclasses should override this method to return a newly created
-instance of their associated <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> subclass:</p>
-<pre class="language-dart"><code class="language-dart">@override
-State&lt;SomeWidget&gt; createState() =&gt; _SomeWidgetState();
-</code></pre>
-<p>The framework can call this method multiple times over the lifetime of
-a <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a>. For example, if the widget is inserted into the tree
-in multiple locations, the framework will create a separate <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> object
-for each location. Similarly, if the widget is removed from the tree and
-later inserted into the tree again, the framework will call <a href="../../screens_analytics_doctors_analytics/DoctorAnalyticsPage/createState.html">createState</a>
-again to create a fresh <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> object, simplifying the lifecycle of
-<a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> objects.</p>
+  <p>Fetches doctor registration data from Appwrite and prepares data for both weekly and monthly charts.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@override
-State&lt;DoctorAnalyticsPage&gt; createState() =&gt; DoctorAnalyticsPageState();</code></pre>
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; fetchAnalyticsData() async {
+  final userData = prefs.getUser();
+  if (userData == null) return;
+  final isRestricted = userData.role != UserRoles.superAdmin;
+
+  List&lt;String&gt; buildQueries(String type) {
+    final queries = &lt;String&gt;[];
+    if (type.isNotEmpty) queries.add(Query.equal(&#39;type&#39;, type));
+    if (isRestricted) {
+      queries.add(Query.equal(&#39;organizationId&#39;, userData.organizationId));
+    }
+    return queries;
+  }
+
+  try {
+    final response = await database.listDocuments(
+      databaseId: AppConstants.appwriteDatabaseId,
+      collectionId: AppConstants.userCollectionId,
+      queries: buildQueries(&#39;doctor&#39;),
+    );
+
+    final docs = response.documents;
+    if (docs.isEmpty) {
+      setState(() =&gt; isLoading = false);
+      return;
+    }
+
+    final weeklyTrend = prepareTrend(docs, &#39;weekly&#39;);
+    final monthlyTrend = prepareTrend(docs, &#39;monthly&#39;);
+
+    setState(() {
+      weeklySpots = buildSpots(weeklyTrend);
+      weeklyLabels =
+          weeklyTrend.map((e) =&gt; e[&#39;createdOn&#39;] as String).toList();
+
+      monthlySpots = buildSpots(monthlyTrend);
+      monthlyLabels =
+          monthlyTrend.map((e) =&gt; e[&#39;createdOn&#39;] as String).toList();
+
+      isChartDataAvailable = true;
+      isLoading = false;
+    });
+  } catch (e) {
+    debugPrint(&quot;Error fetching data: $e&quot;);
+    setState(() =&gt; isLoading = false);
+  }
+}</code></pre>
 </section>
 
 
@@ -102,11 +130,11 @@ State&lt;DoctorAnalyticsPage&gt; createState() =&gt; DoctorAnalyticsPageState();
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">fetosense_mis</a></li>
     <li><a href="../../screens_analytics_doctors_analytics/">doctors_analytics</a></li>
-    <li><a href="../../screens_analytics_doctors_analytics/DoctorAnalyticsPage-class.html">DoctorAnalyticsPage</a></li>
-    <li class="self-crumb">createState method</li>
+    <li><a href="../../screens_analytics_doctors_analytics/DoctorAnalyticsPageState-class.html">DoctorAnalyticsPageState</a></li>
+    <li class="self-crumb">fetchAnalyticsData method</li>
 </ol>
 
-    <h5>DoctorAnalyticsPage class</h5>
+    <h5>DoctorAnalyticsPageState class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
