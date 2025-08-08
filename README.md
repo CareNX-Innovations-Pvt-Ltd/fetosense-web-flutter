@@ -1,5 +1,10 @@
 #  Fetosense MIS (Flutter Web + Appwrite)
 
+[![Discord](https://img.shields.io/discord/1403264387069775945?label=Join%20our%20Discord&logo=discord&style=flat)](https://discord.gg/aTBs7mCWgK)
+[![License](https://img.shields.io/github/license/CareNX-Innovations-Pvt-Ltd/fetosense_device_flutter)](LICENSE)
+[![Last Commit](https://img.shields.io/github/last-commit/CareNX-Innovations-Pvt-Ltd/fetosense-web-flutter)](https://github.com/CareNX-Innovations-Pvt-Ltd/fetosense-web-flutter/commits/main/)
+[![Issues](https://img.shields.io/github/issues/CareNX-Innovations-Pvt-Ltd/fetosense_device_flutter)](https://github.com/CareNX-Innovations-Pvt-Ltd/fetosense_device_flutter/issues)
+
 Fetosense MIS is a web-based Management Information System built with **Flutter Web** and **Appwrite**, designed to manage organizational data, devices, doctors, and mothers efficiently in healthcare settings.
 
 > 🛠️ This web app is linked with the [Fetosense Device App](https://github.com/CareNX-Innovations-Pvt-Ltd/fetosense_device_flutter) and the [Fetosense Remote App](https://github.com/CareNX-Innovations-Pvt-Ltd/fetosense_remote_flutter).
@@ -133,3 +138,12 @@ This project can be deployed using:
 Fetosense is an innovative fetal monitoring solution. This MIS portal complements the solution by offering efficient backend tools to manage healthcare operations, device deployments, and patient insights.
 
 ---
+
+## 💬 Join Our Discord Community
+
+Have questions, feedback, or want to contribute?  
+Join our official **Discord server** to connect with developers, collaborators, and contributors:
+
+[![Discord](https://img.shields.io/discord/1403264387069775945?label=Join%20us%20on%20Discord&logo=discord&color=7289da&style=flat)](https://discord.gg/aTBs7mCWgK)
+
+> 💡 Whether you're here to report bugs, suggest features, or just say hi — we’d love to have you!
