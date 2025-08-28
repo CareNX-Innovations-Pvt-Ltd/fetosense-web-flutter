@@ -111,6 +111,11 @@ You can find the Project Charter [<u>here</u>](https://github.com/CareNX-Innovat
 flutter test
 ```
 
+## Test Coverage
+
+![Test Coverage](assets/test-coverage.png)
+
+
 ---
 
 ##  Deployment
