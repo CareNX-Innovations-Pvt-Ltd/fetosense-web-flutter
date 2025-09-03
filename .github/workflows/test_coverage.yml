@@ -1,0 +1,41 @@
+name: Flutter Coverage Report
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify coverage report exists
+        run: |
+          if [ ! -f coverage/html/index.html ]; then
+            echo "❌ coverage/html/index.html not found. Please generate locally and push it."
+            exit 1
+          fi
+          echo "✅ Coverage report found."
+      - name: Extract coverage percentage
+        id: coverage
+        run: |
+          # Extract the first percentage number from index.html (overall coverage)
+          percent=$(grep -oP '\d+%' coverage/html/index.html | head -1 | tr -d '%')
+          echo "Coverage detected: $percent%"
+          echo "percent=$percent" >> $GITHUB_OUTPUT
+      - name: Enforce minimum coverage (40%)
+        run: |
+          if [ "${{ steps.coverage.outputs.percent }}" -lt 40 ]; then
+            echo "❌ Coverage ${{ steps.coverage.outputs.percent }}% is below required 40%"
+            exit 1
+          else
+            echo "✅ Coverage ${{ steps.coverage.outputs.percent }}% meets requirement"
+          fi
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/html
