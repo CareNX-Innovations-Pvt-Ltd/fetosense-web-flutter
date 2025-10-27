@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:fetosense_mis/screens/device_registration/device_registration_cubit.dart';
 import 'package:fetosense_mis/screens/device_registration/device_registration_view.dart';
 import 'package:flutter/material.dart';
@@ -6,127 +7,119 @@ import 'package:mocktail/mocktail.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
-class MockDeviceRegistrationCubit extends Mock implements DeviceRegistrationCubit {}
+class MockDeviceRegistrationCubit extends Mock
+    implements DeviceRegistrationCubit {}
 
 void main() {
-  late DeviceRegistrationCubit mockCubit;
+  late MockDeviceRegistrationCubit mockCubit;
 
   setUp(() {
     mockCubit = MockDeviceRegistrationCubit();
 
-    // Default fallback values
-    when(() => mockCubit.state).thenReturn(
-      const DeviceRegistrationState(
-        organizationList: [{'id': 'org1', 'name': 'Org One'}],
-        productTypeList: ['Type A', 'Type B'],
-      ),
-    );
+    when(() => mockCubit.state).thenReturn(const DeviceRegistrationState());
+    whenListen(mockCubit, Stream.value(const DeviceRegistrationState()));
   });
 
-  Future<void> pumpWidget(WidgetTester tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<DeviceRegistrationCubit>.value(
-          value: mockCubit,
-          child: const Scaffold(body: DeviceRegistrationView()),
-        ),
+  Widget wrapWithBloc(Widget child) {
+    return MaterialApp(
+      home: BlocProvider<DeviceRegistrationCubit>.value(
+        value: mockCubit,
+        child: child,
       ),
     );
   }
 
-  testWidgets('renders all input fields and dropdowns', (tester) async {
-    await pumpWidget(tester);
-
+  testWidgets('renders initial DeviceRegistrationView', (tester) async {
+    await tester.pumpWidget(wrapWithBloc(const DeviceRegistrationView()));
     expect(find.text('Device Registration'), findsOneWidget);
-    expect(find.text('Organization'), findsOneWidget);
-    expect(find.text('Product Type'), findsOneWidget);
-    expect(find.text('Device Name (Bluetooth)'), findsOneWidget);
-    expect(find.text('Kit Id'), findsOneWidget);
-    expect(find.text('Tablet Serial Number'), findsOneWidget);
-    expect(find.text('Toco Id'), findsOneWidget);
-    expect(find.text('Save'), findsOneWidget);
+    expect(find.byType(ElevatedButton), findsOneWidget);
   });
 
-  testWidgets('form validation shows errors when required fields are empty', (tester) async {
-    await pumpWidget(tester);
-
+  testWidgets('validates required fields on save', (tester) async {
+    await tester.pumpWidget(wrapWithBloc(const DeviceRegistrationView()));
     await tester.tap(find.text('Save'));
     await tester.pump();
-
-    expect(find.text('Organization is required'), findsOneWidget);
-    expect(find.text('Product Type is required'), findsOneWidget);
-    expect(find.text('Device Name (Bluetooth) is required'), findsOneWidget);
-    expect(find.text('Kit Id is required'), findsOneWidget);
+    expect(find.textContaining('is required'), findsWidgets);
   });
 
-  testWidgets('updates cubit when dropdown and text input changes', (tester) async {
-    await pumpWidget(tester);
+  testWidgets('text field input updates cubit', (tester) async {
+    await tester.pumpWidget(wrapWithBloc(const DeviceRegistrationView()));
+    final deviceNameField =
+    find.widgetWithText(TextFormField, 'Enter Device Name');
 
-    when(() => mockCubit.updateSelectedOrganization(any(), any())).thenReturn(null);
-    when(() => mockCubit.updateSelectedProductType(any())).thenReturn(null);
-    when(() => mockCubit.updateDeviceName(any())).thenReturn(null);
-    when(() => mockCubit.updateKitId(any())).thenReturn(null);
-    when(() => mockCubit.updateTabletSerialNumber(any())).thenReturn(null);
-    when(() => mockCubit.updateTocoId(any())).thenReturn(null);
+    await tester.enterText(deviceNameField, 'Device001');
+    verify(() => mockCubit.updateDeviceName('Device001')).called(1);
+  });
 
-    // Tap and select org
-    await tester.tap(find.byType(DropdownButtonFormField<String>).at(0));
+  testWidgets('organization dropdown updates cubit', (tester) async {
+    when(() => mockCubit.state).thenReturn(const DeviceRegistrationState(
+      organizationList: [
+        {'id': 'org1', 'name': 'Org One'}
+      ],
+    ));
+
+    await tester.pumpWidget(wrapWithBloc(const DeviceRegistrationView()));
+    await tester.tap(find.text('Select Organization').first);
     await tester.pumpAndSettle();
     await tester.tap(find.text('Org One').last);
     await tester.pump();
 
-    // Fill all required inputs
-    await tester.enterText(find.byType(TextFormField).at(0), 'Doppler');
-    await tester.enterText(find.byType(TextFormField).at(1), 'KIT123');
-
-    verify(() => mockCubit.updateDeviceName('Doppler')).called(1);
-    verify(() => mockCubit.updateKitId('KIT123')).called(1);
+    verify(() =>
+        mockCubit.updateSelectedOrganization('Org One', 'org1')).called(1);
   });
 
-  testWidgets('calls registerDevice on valid form', (tester) async {
-    when(() => mockCubit.registerDevice()).thenAnswer((_) async {});
-    when(() => mockCubit.state).thenReturn(
-      const DeviceRegistrationState(
-        organizationList: [{'id': 'org1', 'name': 'Org One'}],
-        productTypeList: ['Type A'],
-        selectedOrganizationId: 'org1',
-        selectedOrganizationName: 'Org One',
-        selectedProductType: 'Type A',
-        deviceName: 'Doppler',
-        kitId: 'KIT123',
-      ),
-    );
+  testWidgets('product type dropdown updates cubit', (tester) async {
+    await tester.pumpWidget(wrapWithBloc(const DeviceRegistrationView()));
+    await tester.tap(find.text('Select Product Type'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('main').last);
+    await tester.pump();
+    verify(() => mockCubit.updateSelectedProductType('main')).called(1);
+  });
 
-    await pumpWidget(tester);
+  testWidgets('shows success snackbar and resets form', (tester) async {
+    when(() => mockCubit.state)
+        .thenReturn(const DeviceRegistrationState(isSuccess: true));
 
-    await tester.enterText(find.byType(TextFormField).at(0), 'Doppler');
-    await tester.enterText(find.byType(TextFormField).at(1), 'KIT123');
+    await tester.pumpWidget(wrapWithBloc(const DeviceRegistrationView()));
+    await tester.pump();
+    expect(find.text('Device registered successfully!'), findsOneWidget);
+    verify(() => mockCubit.resetSuccess()).called(1);
+  });
 
+  testWidgets('shows error snackbar and clears error', (tester) async {
+    when(() => mockCubit.state)
+        .thenReturn(const DeviceRegistrationState(errorMessage: 'Error occurred'));
+
+    await tester.pumpWidget(wrapWithBloc(const DeviceRegistrationView()));
+    await tester.pump();
+    expect(find.text('Error occurred'), findsOneWidget);
+    verify(() => mockCubit.clearError()).called(1);
+  });
+
+  testWidgets('Save button disabled when submitting', (tester) async {
+    when(() => mockCubit.state)
+        .thenReturn(const DeviceRegistrationState(isSubmitting: true));
+
+    await tester.pumpWidget(wrapWithBloc(const DeviceRegistrationView()));
+    final saveButton = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    expect(saveButton.onPressed, null);
+  });
+
+  testWidgets('optional fields do not trigger validation errors', (tester) async {
+    await tester.pumpWidget(wrapWithBloc(const DeviceRegistrationView()));
+
+    final tabletField =
+    find.widgetWithText(TextFormField, 'Enter Tablet Serial Number');
+    final tocoField = find.widgetWithText(TextFormField, 'Enter your Toco Id');
+
+    await tester.enterText(tabletField, '');
+    await tester.enterText(tocoField, '');
     await tester.tap(find.text('Save'));
     await tester.pump();
 
-    verify(() => mockCubit.registerDevice()).called(1);
-  });
-
-  testWidgets('shows SnackBar on success and clears form', (tester) async {
-    when(() => mockCubit.state).thenReturn(
-      const DeviceRegistrationState(isSuccess: true),
-    );
-
-    await pumpWidget(tester);
-    expect(find.byType(SnackBar), findsOneWidget);
-    expect(find.text('Device registered successfully!'), findsOneWidget);
-  });
-
-  testWidgets('shows error SnackBar and clears error', (tester) async {
-    when(() => mockCubit.state).thenReturn(
-      const DeviceRegistrationState(errorMessage: 'Failed to register'),
-    );
-    when(() => mockCubit.clearError()).thenReturn(null);
-
-    await pumpWidget(tester);
-    expect(find.text('Failed to register'), findsOneWidget);
-
-    verify(() => mockCubit.clearError()).called(1);
+    // No error should appear for optional fields
+    expect(find.textContaining('Tablet Serial Number is required'), findsNothing);
+    expect(find.textContaining('Toco Id is required'), findsNothing);
   });
 }

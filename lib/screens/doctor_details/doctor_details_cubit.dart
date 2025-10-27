@@ -21,7 +21,7 @@ class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
   }
 
   /// Appwrite [Databases] instance for doctor data operations.
-  final Databases db = Databases(locator<AppwriteService>().client);
+  late final Databases db = Databases(locator<AppwriteService>().client);
 
   /// Updates the from-date filter and emits the new state.
   void updateFromDate(DateTime? date) {

@@ -17,18 +17,18 @@ part 'dashboard_state.dart';
 /// Handles user data retrieval, sidebar state, and dashboard statistics such as organization,
 /// device, mother, and test counts. Uses Appwrite for backend data and supports role-based access.
 class DashboardCubit extends Cubit<DashboardState> {
-  /// Service for authentication and user management.
-  final AuthService _authService = AuthService();
+  final AuthService _authService;
+  final Databases databases;
+  final PreferenceHelper prefs;
 
-  /// Appwrite client instance for API calls.
-  final client = locator<AppwriteService>().client;
-
-  /// Helper for accessing user preferences.
-  final prefs = locator<PreferenceHelper>();
-
-  /// Creates a [DashboardCubit] and initializes user data.
-  DashboardCubit()
-    : super(
+  DashboardCubit({
+    AuthService? authService,
+    Databases? databases,
+    PreferenceHelper? prefs,
+  })  : _authService = authService ?? AuthService(),
+        databases = databases ?? Databases(locator<AppwriteService>().client),
+        prefs = prefs ?? locator<PreferenceHelper>(),
+        super(
         const DashboardState(
           userEmail: "",
           isSidebarOpen: false,
@@ -42,15 +42,10 @@ class DashboardCubit extends Cubit<DashboardState> {
     getUserData();
   }
 
-  /// Fetches user data and dashboard statistics from Appwrite.
-  ///
-  /// Updates the state with user email and counts for organizations, devices, mothers, and tests.
   Future<void> getUserData() async {
     final userData = prefs.getUser();
-
     if (userData == null) return;
 
-    final databases = Databases(client);
     final user = await _authService.getCurrentUser();
     final isRestricted = userData.role != UserRoles.admin;
 
@@ -83,10 +78,9 @@ class DashboardCubit extends Cubit<DashboardState> {
     final testCount = await databases.listDocuments(
       databaseId: AppConstants.appwriteDatabaseId,
       collectionId: AppConstants.testsCollectionId,
-      queries:
-          isRestricted
-              ? [Query.equal('organizationId', userData.organizationId)]
-              : [],
+      queries: isRestricted
+          ? [Query.equal('organizationId', userData.organizationId)]
+          : [],
     );
 
     emit(

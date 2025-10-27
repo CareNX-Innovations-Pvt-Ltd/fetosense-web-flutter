@@ -66,18 +66,18 @@ class MotherDetailsTable extends StatelessWidget {
             final data = org.data;
             return DataRow(
               cells: [
-                _buildDataCell(data['name']),
-                _buildDataCell(data['organizationName']),
-                _buildDataCell(data['deviceName']),
-                _buildDataCell(data['doctorName']),
-                _buildDataCell(data['noOfTests']),
+                buildDataCell(data['name']),
+                buildDataCell(data['organizationName']),
+                buildDataCell(data['deviceName']),
+                buildDataCell(data['doctorName']),
+                buildDataCell(data['noOfTests']),
               ],
             );
           }).toList(),
     );
   }
 
-  DataCell _buildDataCell(dynamic value, {int flex = 1}) {
+  DataCell buildDataCell(dynamic value, {int flex = 1}) {
     return DataCell(
       ConstrainedBox(
         constraints: BoxConstraints(maxWidth: flex * 130),
