@@ -1,7 +1,9 @@
 import 'package:fetosense_mis/core/models/user_model.dart';
+import 'package:fetosense_mis/core/network/appwrite_config.dart';
+import 'package:fetosense_mis/core/services/auth_service.dart';
 import 'package:fetosense_mis/core/utils/preferences.dart';
 import 'package:fetosense_mis/core/utils/user_role.dart';
-import 'package:fetosense_mis/screens/device_details/device_edit/device_edit_cubit.dart';
+import 'package:fetosense_mis/screens/dashboard/dashboard_cubit.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
@@ -10,167 +12,172 @@ import 'package:flutter/material.dart';
 
 import '../screens/organization_analytics_test.dart';
 
+import 'package:go_router/go_router.dart';
+
+// Mock classes
+class MockAuthService extends Mock implements AuthService {}
 
 class MockDatabases extends Mock implements Databases {}
 
 class MockPreferenceHelper extends Mock implements PreferenceHelper {}
 
-class MockDocument extends Mock implements models.Document {}
-
-class MockDocumentList extends Mock implements models.DocumentList {}
+class MockUser extends Mock implements models.User {}
 
 void main() {
-  late DeviceEditCubit cubit;
+  late DashboardCubit cubit;
+  late MockAuthService mockAuth;
   late MockDatabases mockDb;
   late MockPreferenceHelper mockPrefs;
+  late models.User appwriteUser;
 
   setUp(() {
+    mockAuth = MockAuthService();
     mockDb = MockDatabases();
     mockPrefs = MockPreferenceHelper();
+
+    // Override locator services
+    locator.registerSingleton<AuthService>(mockAuth);
     locator.registerSingleton<PreferenceHelper>(mockPrefs);
-    cubit = DeviceEditCubit(db: mockDb, documentId: 'doc123');
+    locator.registerSingleton<AppwriteService>(AppwriteService());
+
+    appwriteUser = MockUser();
+    when(() => appwriteUser.email).thenReturn('test@example.com');
   });
 
-  tearDown(() async {
-    await cubit.close();
+  tearDown(() {
     locator.reset();
   });
 
-  test('initialize sets controller values and fetches tablet serial', () async {
-    final mock = MockDocumentList();
-    when(() => mock.documents).thenReturn([]);
-    when(() => mockDb.listDocuments(
-      databaseId: any(named: 'databaseId'),
-      collectionId: any(named: 'collectionId'),
-      queries: any(named: 'queries'),
-    )).thenAnswer((_) async => mock);
+  test('initial state', () {
+    cubit = DashboardCubit(
+      authService: mockAuth,
+      databases: mockDb,
+      prefs: mockPrefs,
+    );
 
-    cubit.initialize({'deviceCode': 'DEV123', 'deviceId': 'DID123'});
-
-    expect(cubit.deviceCodeController.text, 'DEV123');
-    expect(cubit.deviceNameController.text, 'DID123');
+    expect(cubit.state.userEmail, '');
+    expect(cubit.state.isSidebarOpen, false);
+    expect(cubit.state.childIndex, 0);
   });
 
-  test('fetchTabletSerialNumber emits loading then loaded', () async {
-    final doc = MockDocument();
-    when(() => doc.data).thenReturn({'tabletSerialNumber': 'TAB999'});
-    final list = MockDocumentList();
-    when(() => list.documents).thenReturn([doc]);
+  test('toggleSidebar flips state', () {
+    cubit = DashboardCubit(
+      authService: mockAuth,
+      databases: mockDb,
+      prefs: mockPrefs,
+    );
 
-    when(() => mockDb.listDocuments(
-      databaseId: any(named: 'databaseId'),
-      collectionId: any(named: 'collectionId'),
-      queries: any(named: 'queries'),
-    )).thenAnswer((_) async => list);
-
-    final states = <DeviceEditState>[];
-    cubit.stream.listen(states.add);
-
-    await cubit.fetchTabletSerialNumber();
-
-    expect(states[0], isA<DeviceEditLoading>());
-    expect(states[1], isA<DeviceEditLoaded>());
-    expect(cubit.tabletSerialNumberController.text, 'TAB999');
+    final initial = cubit.state.isSidebarOpen;
+    cubit.toggleSidebar();
+    expect(cubit.state.isSidebarOpen, !initial);
   });
 
-  test('fetchTabletSerialNumber emits error on failure', () async {
-    when(() => mockDb.listDocuments(
-      databaseId: any(named: 'databaseId'),
-      collectionId: any(named: 'collectionId'),
-      queries: any(named: 'queries'),
-    )).thenThrow(Exception('DB error'));
+  test('changeChildIndex updates state', () {
+    cubit = DashboardCubit(
+      authService: mockAuth,
+      databases: mockDb,
+      prefs: mockPrefs,
+    );
 
-    final states = <DeviceEditState>[];
-    cubit.stream.listen(states.add);
-
-    await cubit.fetchTabletSerialNumber();
-
-    expect(states[0], isA<DeviceEditLoading>());
-    expect(states[1], isA<DeviceEditError>());
+    cubit.changeChildIndex(2);
+    expect(cubit.state.childIndex, 2);
   });
 
-  test('updateChanges as admin emits saving and saved', () async {
-    final user = UserModel(role: UserRoles.admin, userId: '', email: '', organizationId: '');
-    when(() => mockPrefs.getUser()).thenReturn(user);
+  test('getUserData with null user returns early', () async {
+    when(() => mockPrefs.getUser()).thenReturn(null);
 
-    // simulate controllers
-    cubit.deviceCodeController.text = 'D123';
-    cubit.deviceNameController.text = 'Doppler';
+    cubit = DashboardCubit(
+      authService: mockAuth,
+      databases: mockDb,
+      prefs: mockPrefs,
+    );
 
-    // simulate tablet doc lookup
-    final doc = MockDocument();
-    when(() => doc.$id).thenReturn('tablet-id');
-    final list = MockDocumentList();
-    when(() => list.documents).thenReturn([doc]);
-
-    when(() => mockDb.updateDocument(
-      databaseId: any(named: 'databaseId'),
-      collectionId: any(named: 'collectionId'),
-      documentId: any(named: 'documentId'),
-      data: any(named: 'data'),
-    )).thenAnswer((_) async => MockDocument());
-
-    when(() => mockDb.listDocuments(
-      databaseId: any(named: 'databaseId'),
-      collectionId: any(named: 'collectionId'),
-      queries: any(named: 'queries'),
-    )).thenAnswer((_) async => list);
-
-    final states = <DeviceEditState>[];
-    cubit.stream.listen(states.add);
-
-    await cubit.updateChanges();
-
-    expect(states[0], isA<DeviceEditSaving>());
-    expect(states[1], isA<DeviceEditSaved>());
+    await cubit.getUserData();
+    expect(cubit.state.userEmail, '');
   });
 
-  test('updateChanges as non-admin emits error', () async {
-    final user = UserModel(role: UserRoles.user, userId: '', email: '', organizationId: ''); // Not admin
-    when(() => mockPrefs.getUser()).thenReturn(user);
+  test('getUserData success for admin user', () async {
+    final userData = UserModel(
+      userId: 'userId',
+      email: 'email',
+      role: UserRoles.admin, // make sure this matches your enum
+      organizationId: 'organizationId',
+    );
 
-    final states = <DeviceEditState>[];
-    cubit.stream.listen(states.add);
+    when(() => mockPrefs.getUser()).thenReturn(userData);
+    when(() => mockAuth.getCurrentUser()).thenAnswer((_) async => appwriteUser);
 
-    await cubit.updateChanges();
+    when(
+          () => mockDb.listDocuments(
+        databaseId: any(named: 'databaseId'),
+        collectionId: any(named: 'collectionId'),
+        queries: any(named: 'queries'),
+      ),
+    ).thenAnswer((_) async => models.DocumentList(total: 5, documents: []));
 
-    expect(states[0], isA<DeviceEditSaving>());
-    expect(states[1], isA<DeviceEditError>());
+    cubit = DashboardCubit(
+      authService: mockAuth,
+      databases: mockDb,
+      prefs: mockPrefs,
+    );
+
+    await cubit.getUserData();
+
+    expect(cubit.state.userEmail, 'test@example.com');
+    expect(cubit.state.organizationCount, 5);
+    expect(cubit.state.motherCount, 5);
   });
 
-  test('updateChanges handles updateDocument failure', () async {
-    final user = UserModel(role: UserRoles.admin, userId: '', email: '', organizationId: '');
-    when(() => mockPrefs.getUser()).thenReturn(user);
+  test('getUserData success for restricted user', () async {
+    final userData = UserModel(
+      userId: 'userId',
+      email: 'email',
+      role: 'restricted', // non-admin role
+      organizationId: 'organizationId',
+    );
 
-    cubit.deviceCodeController.text = 'D123';
-    cubit.deviceNameController.text = 'Doppler';
+    when(() => mockPrefs.getUser()).thenReturn(userData);
+    when(() => mockAuth.getCurrentUser()).thenAnswer((_) async => appwriteUser);
 
-    when(() => mockDb.updateDocument(
-      databaseId: any(named: 'databaseId'),
-      collectionId: any(named: 'collectionId'),
-      documentId: any(named: 'documentId'),
-      data: any(named: 'data'),
-    )).thenThrow(Exception('update error'));
+    when(
+          () => mockDb.listDocuments(
+        databaseId: any(named: 'databaseId'),
+        collectionId: any(named: 'collectionId'),
+        queries: any(named: 'queries'),
+      ),
+    ).thenAnswer((_) async => models.DocumentList(total: 2, documents: []));
 
-    final states = <DeviceEditState>[];
-    cubit.stream.listen(states.add);
+    cubit = DashboardCubit(
+      authService: mockAuth,
+      databases: mockDb,
+      prefs: mockPrefs,
+    );
 
-    await cubit.updateChanges();
+    await cubit.getUserData();
 
-    expect(states[0], isA<DeviceEditSaving>());
-    expect(states[1], isA<DeviceEditError>());
+    expect(cubit.state.userEmail, 'test@example.com');
+    expect(cubit.state.organizationCount, 2);
   });
 
-  test('close disposes all controllers', () async {
-    final c1 = cubit.deviceCodeController;
-    final c2 = cubit.tabletSerialNumberController;
-    final c3 = cubit.deviceNameController;
+  testWidgets('logout calls AuthService and navigates', (tester) async {
+    cubit = DashboardCubit(
+      authService: mockAuth,
+      databases: mockDb,
+      prefs: mockPrefs,
+    );
 
-    expect(c1, isNotNull);
-    await cubit.close();
+    final mockContext = GlobalKey<NavigatorState>();
+    final goRouter = GoRouter(
+      initialLocation: '/',
+      navigatorKey: mockContext,
+      routes: [],
+    );
 
-    expect(() => c1.text, throwsA(isA<AssertionError>()));
-    expect(() => c2.text, throwsA(isA<AssertionError>()));
-    expect(() => c3.text, throwsA(isA<AssertionError>()));
+    when(() => mockAuth.logoutUser()).thenAnswer((_) async {});
+
+    await tester.pumpWidget(MaterialApp.router(routerConfig: goRouter));
+
+    await cubit.logout(mockContext.currentContext!);
+    verify(() => mockAuth.logoutUser()).called(1);
   });
 }

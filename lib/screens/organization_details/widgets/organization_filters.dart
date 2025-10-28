@@ -22,7 +22,7 @@ class OrganizationFilter extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: _buildDatePicker(
+                child: buildDatePicker(
                   context,
                   'From Date',
                   state.fromDate,
@@ -31,7 +31,7 @@ class OrganizationFilter extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: _buildDatePicker(
+                child: buildDatePicker(
                   context,
                   'Till Date',
                   state.tillDate,
@@ -67,7 +67,7 @@ class OrganizationFilter extends StatelessWidget {
     );
   }
 
-  Widget _buildDatePicker(
+  Widget buildDatePicker(
     BuildContext context,
     String label,
     DateTime? selectedDate,

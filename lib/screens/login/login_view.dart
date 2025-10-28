@@ -127,7 +127,7 @@ class LoginViewBodyState extends State<LoginViewBody> {
                         TextField(
                           controller: cubit.usernameController,
                           style: const TextStyle(color: Colors.white),
-                          decoration: _customInputDecoration(
+                          decoration: customInputDecoration(
                             "Email",
                             Icons.person,
                           ),
@@ -138,7 +138,7 @@ class LoginViewBodyState extends State<LoginViewBody> {
                           controller: cubit.passwordController,
                           obscureText: obscurePassword,
                           style: const TextStyle(color: Colors.white),
-                          decoration: _customInputDecoration(
+                          decoration: customInputDecoration(
                             "Password",
                             Icons.lock,
                           ).copyWith(
@@ -246,7 +246,7 @@ class LoginViewBodyState extends State<LoginViewBody> {
   }
 }
 
-InputDecoration _customInputDecoration(String label, IconData icon) {
+InputDecoration customInputDecoration(String label, IconData icon) {
   return InputDecoration(
     hintText: label,
     hintStyle: const TextStyle(color: Colors.white60),
