@@ -273,7 +273,7 @@ Widget build(BuildContext context) {
                       TextField(
                         controller: cubit.usernameController,
                         style: const TextStyle(color: Colors.white),
-                        decoration: _customInputDecoration(
+                        decoration: customInputDecoration(
                           &quot;Email&quot;,
                           Icons.person,
                         ),
@@ -284,7 +284,7 @@ Widget build(BuildContext context) {
                         controller: cubit.passwordController,
                         obscureText: obscurePassword,
                         style: const TextStyle(color: Colors.white),
-                        decoration: _customInputDecoration(
+                        decoration: customInputDecoration(
                           &quot;Password&quot;,
                           Icons.lock,
                         ).copyWith(

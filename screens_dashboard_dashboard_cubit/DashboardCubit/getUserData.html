@@ -61,10 +61,6 @@
 
     </section>
     
-<section class="desc markdown">
-  <p>Fetches user data and dashboard statistics from Appwrite.</p>
-<p>Updates the state with user email and counts for organizations, devices, mothers, and tests.</p>
-</section>
 
 
     
@@ -72,10 +68,8 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; getUserData() async {
   final userData = prefs.getUser();
-
   if (userData == null) return;
 
-  final databases = Databases(client);
   final user = await _authService.getCurrentUser();
   final isRestricted = userData.role != UserRoles.admin;
 
@@ -108,10 +102,9 @@
   final testCount = await databases.listDocuments(
     databaseId: AppConstants.appwriteDatabaseId,
     collectionId: AppConstants.testsCollectionId,
-    queries:
-        isRestricted
-            ? [Query.equal(&#39;organizationId&#39;, userData.organizationId)]
-            : [],
+    queries: isRestricted
+        ? [Query.equal(&#39;organizationId&#39;, userData.organizationId)]
+        : [],
   );
 
   emit(

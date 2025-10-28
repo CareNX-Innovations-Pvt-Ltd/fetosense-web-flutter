@@ -166,11 +166,11 @@ Widget build(BuildContext context) {
           final data = org.data;
           return DataRow(
             cells: [
-              _buildDataCell(data[&#39;name&#39;]),
-              _buildDataCell(data[&#39;organizationName&#39;]),
-              _buildDataCell(data[&#39;deviceName&#39;]),
-              _buildDataCell(data[&#39;doctorName&#39;]),
-              _buildDataCell(data[&#39;noOfTests&#39;]),
+              buildDataCell(data[&#39;name&#39;]),
+              buildDataCell(data[&#39;organizationName&#39;]),
+              buildDataCell(data[&#39;deviceName&#39;]),
+              buildDataCell(data[&#39;doctorName&#39;]),
+              buildDataCell(data[&#39;noOfTests&#39;]),
             ],
           );
         }).toList(),
