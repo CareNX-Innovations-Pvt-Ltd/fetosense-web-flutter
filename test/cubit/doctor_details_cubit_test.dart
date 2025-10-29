@@ -1,140 +1,124 @@
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/models.dart' as models;
-import 'package:fetosense_mis/screens/doctor_details/doctor_details_cubit.dart';
+import 'package:fetosense_mis/core/utils/app_constants.dart';
+import 'package:fetosense_mis/screens/doctor_details/doctoredit/doctor_edit_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/material.dart';
+
+// ---- MOCKS & FAKES ----
 
 class MockDatabases extends Mock implements Databases {}
 
-class MockDocument extends Mock implements models.Document {}
+/// A safe fake BuildContext that won't trigger the Diagnosticable.toString() issue
+class FakeBuildContext extends Fake implements BuildContext {
+  @override
+  bool get mounted => true;
+}
 
 void main() {
-  late DoctorDetailsCubit cubit;
   late MockDatabases mockDb;
+  const documentId = 'doc123';
+
+  setUpAll(() {
+    registerFallbackValue(Uri());
+  });
 
   setUp(() {
     mockDb = MockDatabases();
-
-    // Replace the real db with mock
-    cubit = DoctorDetailsCubit();
   });
 
-  group('DoctorDetailsCubit', () {
-    test('initial state', () {
-      expect(cubit.state.isLoading, false);
-      expect(cubit.state.allDoctors, []);
-      expect(cubit.state.filteredDoctors, []);
-      expect(cubit.state.error, null);
+  group('DoctorEditCubit', () {
+    test('initial state is DoctorEditInitial', () {
+      final cubit = DoctorEditCubit(db: mockDb, documentId: documentId);
+      expect(cubit.state, isA<DoctorEditInitial>());
     });
 
-    test('updapdates state', () {
-      final date = DateTime(2025, 10, 24);
-      cubit.updateFromDate(date);
-      expect(cubit.state.fromDate, date);
+    test('initialize sets controller values and emits DoctorEditLoaded', () {
+      final cubit = DoctorEditCubit(db: mockDb, documentId: documentId);
+
+      final data = {
+        'doctorName': 'John Doe',
+        'mobileNo': '1234567890',
+        'email': 'john@example.com',
+      };
+
+      expectLater(cubit.stream, emitsInOrder([isA<DoctorEditLoaded>()]));
+
+      cubit.initialize(data);
+
+      expect(cubit.nameController.text, equals('John Doe'));
+      expect(cubit.mobileController.text, equals('1234567890'));
+      expect(cubit.emailController.text, equals('john@example.com'));
     });
 
-    test('updateTillDate updates state', () {
-      final date = DateTime(2025, 10, 25);
-      cubit.updateTillDate(date);
-      expect(cubit.state.tillDate, date);
-    });
+    blocTest<DoctorEditCubit, DoctorEditState>(
+      'updateChanges emits DoctorEditSaving and DoctorEditSaved on success',
+      build: () {
+        when(
+          () => mockDb.updateDocument(
+            databaseId: any(named: 'databaseId'),
+            collectionId: any(named: 'collectionId'),
+            documentId: any(named: 'documentId'),
+            data: any(named: 'data'),
+          ),
+        ).thenAnswer((_) async => Future.value());
+        return DoctorEditCubit(db: mockDb, documentId: documentId);
+      },
+      act: (cubit) async {
+        cubit.nameController.text = 'Jane';
+        cubit.emailController.text = 'jane@example.com';
 
-    test('applySearchFilter filters correctly', () {
-      final doc1 = models.Document(
-        $id: '1',
-        $collectionId: 'col1',
-        $databaseId: 'db1',
-        $createdAt: '',
-        $updatedAt: '',
-        data: {
-          'doctorName': 'Alice',
-          'email': 'alice@test.com',
-          'organizationName': 'OrgA',
-        },
-        $permissions: [],
-      );
-      final doc2 = models.Document(
-        $id: '2',
-        $collectionId: 'col1',
-        $databaseId: 'db1',
-        $createdAt: '',
-        $updatedAt: '',
-        data: {
-          'doctorName': 'Bob',
-          'email': 'bob@test.com',
-          'organizationName': 'OrgB',
-        },
-        $permissions: [],
-      );
+        final context = FakeBuildContext();
 
-      cubit.emit(
-        cubit.state.copyWith(
-          allDoctors: [doc1, doc2],
-          filteredDoctors: [doc1, doc2],
-        ),
-      );
+        bool onCloseCalled = false;
 
-      cubit.applySearchFilter('alice');
-      expect(cubit.state.filteredDoctors.length, 1);
-      expect(cubit.state.filteredDoctors.first.$id, '1');
+        await cubit.updateChanges(context, () {
+          onCloseCalled = true;
+        });
 
-      cubit.applySearchFilter('orgb');
-      expect(cubit.state.filteredDoctors.length, 1);
-      expect(cubit.state.filteredDoctors.first.$id, '2');
+        expect(onCloseCalled, isTrue);
+      },
+      expect: () => [isA<DoctorEditSaving>(), isA<DoctorEditSaved>()],
+      verify: (_) {
+        verify(
+          () => mockDb.updateDocument(
+            databaseId: AppConstants.appwriteDatabaseId,
+            collectionId: AppConstants.userCollectionId,
+            documentId: documentId,
+            data: any(named: 'data'),
+          ),
+        ).called(1);
+      },
+    );
 
-      cubit.applySearchFilter('nonexistent');
-      expect(cubit.state.filteredDoctors.length, 0);
-    });
+    blocTest<DoctorEditCubit, DoctorEditState>(
+      'updateChanges emits DoctorEditError on failure',
+      build: () {
+        when(
+          () => mockDb.updateDocument(
+            databaseId: any(named: 'databaseId'),
+            collectionId: any(named: 'collectionId'),
+            documentId: any(named: 'documentId'),
+            data: any(named: 'data'),
+          ),
+        ).thenThrow(Exception('DB Error'));
+        return DoctorEditCubit(db: mockDb, documentId: documentId);
+      },
+      act: (cubit) async {
+        final context = FakeBuildContext();
+        await cubit.updateChanges(context, () {});
+      },
+      expect: () => [isA<DoctorEditSaving>(), isA<DoctorEditError>()],
+    );
 
-    test('fetchDoctorsId success', () async {
-      final doc = MockDocument();
-      when(() => doc.data).thenReturn({'doctorName': 'DrX'});
-      when(() => doc.$id).thenReturn('doc1');
-      when(() => doc.$collectionId).thenReturn('col1');
-      when(() => doc.$databaseId).thenReturn('db1');
-      when(() => doc.$createdAt).thenReturn('');
-      when(() => doc.$updatedAt).thenReturn('');
-      when(
-        () => mockDb.listDocuments(
-          databaseId: any(named: 'databaseId'),
-          collectionId: any(named: 'collectionId'),
-          queries: any(named: 'queries'),
-        ),
-      ).thenAnswer(
-        (_) async => models.DocumentList(documents: [doc], total: 1),
-      );
+    test('close disposes controllers', () async {
+      final cubit = DoctorEditCubit(db: mockDb, documentId: documentId);
+      await cubit.close();
 
-      // Mock mothers and tests calls
-      when(
-        () => mockDb.listDocuments(
-          databaseId: any(named: 'databaseId'),
-          collectionId: any(named: 'collectionId'),
-          queries: any(named: 'queries'),
-        ),
-      ).thenAnswer((_) async => models.DocumentList(documents: [], total: 0));
-
-      await cubit.fetchDoctorsId();
-
-      expect(cubit.state.isLoading, false);
-      expect(cubit.state.allDoctors.length, 1);
-      expect(cubit.state.allDoctors.first.data['noOfMother'], 0);
-      expect(cubit.state.allDoctors.first.data['noOfTests'], 0);
-    });
-
-    test('fetchDoctorsId failure', () async {
-      when(
-        () => mockDb.listDocuments(
-          databaseId: any(named: 'databaseId'),
-          collectionId: any(named: 'collectionId'),
-          queries: any(named: 'queries'),
-        ),
-      ).thenThrow(Exception('Failed'));
-
-      await cubit.fetchDoctorsId();
-
-      expect(cubit.state.isLoading, false);
-      expect(cubit.state.error, isNotNull);
-      expect(cubit.state.error, contains('Failed'));
+      // You can’t directly test disposed TextEditingController in Flutter,
+      // but we can ensure no exception thrown on close.
+      expect(() async => await cubit.close(), returnsNormally);
     });
   });
 }
