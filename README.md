@@ -5,6 +5,7 @@
 [![Last Commit](https://img.shields.io/github/last-commit/CareNX-Innovations-Pvt-Ltd/fetosense-web-flutter)](https://github.com/CareNX-Innovations-Pvt-Ltd/fetosense-web-flutter/commits/main/)
 [![Issues](https://img.shields.io/github/issues/CareNX-Innovations-Pvt-Ltd/fetosense_device_flutter)](https://github.com/CareNX-Innovations-Pvt-Ltd/fetosense_device_flutter/issues)
 [![codecov](https://codecov.io/gh/CareNX-Innovations-Pvt-Ltd/fetosense-web-flutter/branch/main/graph/badge.svg)](https://codecov.io/gh/CareNX-Innovations-Pvt-Ltd/fetosense-web-flutter)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/11419/badge)](https://www.bestpractices.dev/projects/11419)
 
 Fetosense MIS is a web-based Management Information System built with **Flutter Web** and **Appwrite**, designed to manage organizational data, devices, doctors, and mothers efficiently in healthcare settings.
 
