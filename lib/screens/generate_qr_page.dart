@@ -48,14 +48,15 @@ class _GenerateQRPageState extends State<GenerateQRPage> {
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            // crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
                 "Generate QR Code",
-                style: TextStyle(color: Colors.white, fontSize: 15),
+                style: TextStyle(color: Colors.white, fontSize: 18),
               ),
               const SizedBox(height: 10),
-              Container(height: 1, color: Colors.white),
+              // Container(height: 1, color: Colors.white),
               const SizedBox(height: 20),
 
               // Kit ID Field
@@ -102,7 +103,7 @@ class _GenerateQRPageState extends State<GenerateQRPage> {
                   ),
                   child: const Text(
                     "Generate",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                 ),
               ),

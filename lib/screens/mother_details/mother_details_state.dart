@@ -27,7 +27,6 @@ class MotherDetailsState extends Equatable {
   /// Error message, if any, during data fetching or processing.
   final String? errorMessage;
 
-  /// Creates a [MotherDetailsState] with the given values.
   const MotherDetailsState({
     this.allMothers = const [],
     this.filteredMothers = const [],
@@ -39,13 +38,19 @@ class MotherDetailsState extends Equatable {
   });
 
   /// Returns a copy of this state with updated fields if provided.
+  ///
+  /// Supports overriding DateTime fields with null using override flags
+  /// so clearing the dates works properly.
   MotherDetailsState copyWith({
     List<models.Document>? allMothers,
     List<models.Document>? filteredMothers,
+
     DateTime? fromDate,
-    bool clearFromDate = false,
+    bool overrideFromDate = false,
+
     DateTime? tillDate,
-    bool clearTillDate = false,
+    bool overrideTillDate = false,
+
     String? searchQuery,
     bool? isLoading,
     String? errorMessage,
@@ -54,10 +59,14 @@ class MotherDetailsState extends Equatable {
     return MotherDetailsState(
       allMothers: allMothers ?? this.allMothers,
       filteredMothers: filteredMothers ?? this.filteredMothers,
-      fromDate: clearFromDate ? null : (fromDate ?? this.fromDate),
-      tillDate: clearTillDate ? null : (tillDate ?? this.tillDate),
+
+      // IMPORTANT: This allows explicitly setting null (clear date)
+      fromDate: overrideFromDate ? fromDate : (fromDate ?? this.fromDate),
+      tillDate : overrideTillDate ? tillDate : (tillDate ?? this.tillDate),
+
       searchQuery: searchQuery ?? this.searchQuery,
       isLoading: isLoading ?? this.isLoading,
+
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
     );
   }

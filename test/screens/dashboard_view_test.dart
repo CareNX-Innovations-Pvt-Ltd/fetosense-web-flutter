@@ -48,7 +48,7 @@ void main() {
       organizationCount: 2,
       deviceCount: 5,
       motherCount: 10,
-      testCount: 15,
+      testCount: 15, tests: [],referralCount: 1
     ));
   });
 
@@ -89,7 +89,7 @@ void main() {
         organizationCount: 1,
         deviceCount: 1,
         motherCount: 1,
-        testCount: 1,
+        testCount: 1, tests: [],referralCount: 1
       ));
 
       await tester.pumpWidget(
@@ -124,7 +124,7 @@ void main() {
       organizationCount: 1,
       deviceCount: 1,
       motherCount: 1,
-      testCount: 1,
+      testCount: 1, tests: [],referralCount: 1
     ));
 
     await tester.pumpWidget(
@@ -146,7 +146,8 @@ void main() {
       organizationCount: 1,
       deviceCount: 1,
       motherCount: 1,
-      testCount: 1,
+      testCount: 1, tests: [],
+      referralCount: 1
     ));
 
     await tester.pump();

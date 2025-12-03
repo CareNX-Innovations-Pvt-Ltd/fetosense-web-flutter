@@ -19,20 +19,14 @@ class OrganizationCubit extends Cubit<OrganizationState> {
   /// Appwrite [Databases] instance for organization data operations.
   final Databases db = Databases(locator<AppwriteService>().client);
   final formKey = GlobalKey<FormState>();
-  late TextEditingController nameController;
-  late TextEditingController contactPersonController;
-  late TextEditingController mobileController;
-  late TextEditingController emailController;
-  late TextEditingController addressController;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController contactPersonController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
   void setSelectedState(String? stateName) {
-    print("state triggered");
-    emit(
-      state.copyWith(
-        selectedState: stateName,
-        selectedCity: null, // Clear city when state changes
-      ),
-    );
+    emit(state.copyWith(selectedState: stateName, selectedCity: null));
   }
 
   void setSelectedCity(String? cityName) {
@@ -80,8 +74,9 @@ class OrganizationCubit extends Cubit<OrganizationState> {
   }
 
   /// Creates an [OrganizationCubit] and initializes the state and data.
-  OrganizationCubit({required this.context}) : super(OrganizationState()) {
+  OrganizationCubit({required this.context}) : super(const OrganizationState()) {
     fetchOrganizationDetails();
+    computeDeviceStats();
   }
 
   /// Fetches organizations from the database based on the date range.
@@ -102,7 +97,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
 
       // For each organization, fetch the counts from other collections
       for (final org in organizations) {
-        final String orgId = org.$id;
+        final String orgId = org.data['organizationName'] ?? '';
 
         // Fetch counts for this organization from different collections
         final deviceCount = await _getDeviceCount(orgId);
@@ -142,6 +137,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     }
   }
 
+  /// Fetches the count of devices for a specific organization
   Future<int> _getDeviceCount(String organizationId) async {
     try {
       final result = await db.listDocuments(
@@ -181,7 +177,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
         databaseId: AppConstants.appwriteDatabaseId,
         collectionId: AppConstants.userCollectionId,
         queries: [
-          Query.equal('organizationId', organizationId),
+          Query.equal('organizationName', organizationId),
           Query.equal('type', 'doctor'),
         ],
       );
@@ -255,6 +251,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     }
   }
 
+  /// Updates the search query and applies the filter.
   void updateSearchQuery(String query) {
     emit(state.copyWith(searchQuery: query));
     applySearchFilter();
@@ -271,11 +268,11 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     } else {
       final filtered =
           state.organizationDetails.where((orgDetail) {
-            // Since we're storing a list of documents, we need to access the first one
             if (orgDetail.organizations.isEmpty) return false;
 
             final org = orgDetail.organizations.first;
-            final name = org.data['name']?.toString().toLowerCase() ?? '';
+            final name =
+                org.data['organizationName']?.toString().toLowerCase() ?? '';
             return name.contains(keyword);
           }).toList();
 
@@ -306,7 +303,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
 
         exportData.add({
           'Organization ID': org.$id,
-          'Organization Name': org.data['name'] ?? 'Unknown',
+          'Organization Name': org.data['organizationName'] ?? 'Unknown',
           'Device Count': orgDetail.deviceCount,
           'Mother Count': orgDetail.motherCount,
           'Test Count': orgDetail.testCount,
@@ -326,6 +323,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     }
   }
 
+  /// Updates organization details in the database.
   Future<void> updateChanges(String documentId) async {
     try {
       final updatedData = {
@@ -367,5 +365,82 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     emailController.dispose();
     addressController.dispose();
     return super.close();
+  }
+
+  /// Computes statistics for devices, mothers, doctors, and tests per organization.
+  Future<void> computeDeviceStats() async {
+    final testResult = await db.listDocuments(
+      databaseId: AppConstants.appwriteDatabaseId,
+      collectionId: AppConstants.testsCollectionId,
+    );
+
+    final Map<String, int> testsPerOrg = {};
+
+    for (var doc in testResult.documents) {
+      final data = doc.data;
+      final orgId = data['organizationId'];
+
+      if (orgId == null || orgId.isEmpty) continue;
+
+      testsPerOrg[orgId] = (testsPerOrg[orgId] ?? 0) + 1;
+    }
+
+    final motherResult = await db.listDocuments(
+      databaseId: AppConstants.appwriteDatabaseId,
+      collectionId: AppConstants.userCollectionId,
+      queries: [Query.equal('type', 'mother')],
+    );
+
+    final Map<String, int> mothersPerOrg = {};
+
+    for (var doc in motherResult.documents) {
+      final data = doc.data;
+      final orgId = data['organizationId'];
+
+      if (orgId == null || orgId.isEmpty) continue;
+
+      mothersPerOrg[orgId] = (mothersPerOrg[orgId] ?? 0) + 1;
+    }
+
+    final doctorResult = await db.listDocuments(
+      databaseId: AppConstants.appwriteDatabaseId,
+      collectionId: AppConstants.userCollectionId,
+      queries: [Query.equal('type', 'doctor')],
+    );
+
+    final Map<String, int> doctorsPerOrg = {};
+
+    for (var doc in doctorResult.documents) {
+      final data = doc.data;
+      final orgId = data['organizationId'];
+
+      if (orgId == null || orgId.isEmpty) continue;
+
+      doctorsPerOrg[orgId] = (doctorsPerOrg[orgId] ?? 0) + 1;
+    }
+
+    final deviceResult = await db.listDocuments(
+      databaseId: AppConstants.appwriteDatabaseId,
+      collectionId: AppConstants.deviceCollectionId,
+    );
+
+    final Map<String, int> devicesPerOrg = {};
+
+    for (var doc in deviceResult.documents) {
+      final data = doc.data;
+      final orgId = data['organizationId'];
+
+      if (orgId == null || orgId.isEmpty) continue;
+
+      devicesPerOrg[orgId] = (devicesPerOrg[orgId] ?? 0) + 1;
+    }
+    emit(
+      state.copyWith(
+        testsPerOrg: testsPerOrg,
+        mothersPerOrg: mothersPerOrg,
+        doctorsPerOrg: doctorsPerOrg,
+        devicesPerOrg: devicesPerOrg,
+      ),
+    );
   }
 }

@@ -8,7 +8,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mockito/mockito.dart';
 
-
 class MockDoctorDetailsCubit extends MockCubit<DoctorDetailsState>
     implements DoctorDetailsCubit {}
 
@@ -21,14 +20,22 @@ void main() {
     // Default state
     when(() => mockCubit.state).thenReturn(
       const DoctorDetailsState(
-        allDoctors: [],
         filteredDoctors: [],
-    isLoading: false, fromDate: null, tillDate: null, error: '',
-      ) as DoctorDetailsState Function(),
+        fromDate: null,
+        tillDate: null,
+        doctorDetails: [],
+        searchQuery: '',
+        status: DoctorStatus.initial,
+        errorMessage: '',
+        clearError: false,
+        clearFromDate: false,
+        clearTillDate: false,
+      )
+          as DoctorDetailsState Function(),
     );
 
     // Mock fetchDoctorsId so it does nothing
-    when(() => mockCubit.fetchDoctorsId()).thenAnswer(await Future.value());
+    when(() => mockCubit.fetchDoctorDetails()).thenAnswer(await Future.value());
   });
 
   testWidgets('DoctorDetailsView renders correctly', (tester) async {
@@ -42,7 +49,7 @@ void main() {
     );
 
     // Should call fetchDoctorsId once on build
-    verify(() => mockCubit.fetchDoctorsId()).called(1);
+    verify(() => mockCubit.fetchDoctorDetails()).called(1);
 
     // Verify loading indicator is not shown initially
     expect(find.byType(CircularProgressIndicator), findsNothing);
@@ -52,9 +59,16 @@ void main() {
 
     // Trigger loading state
     const loadingState = DoctorDetailsState(
-      allDoctors: [],
       filteredDoctors: [],
- isLoading: true, fromDate: null, tillDate: null, error: '',
+      fromDate: null,
+      tillDate: null,
+      doctorDetails: [],
+      searchQuery: '',
+      status: DoctorStatus.initial,
+      errorMessage: '',
+      clearError: false,
+      clearFromDate: false,
+      clearTillDate: false,
     );
     mockCubit.emit(loadingState);
     await tester.pump();
@@ -63,12 +77,16 @@ void main() {
 
     // Trigger error state
     const errorState = DoctorDetailsState(
-      allDoctors: [],
       filteredDoctors: [],
-      isLoading: false,
-      error: 'Failed to load',
       fromDate: null,
       tillDate: null,
+      doctorDetails: [],
+      searchQuery: '',
+      status: DoctorStatus.initial,
+      errorMessage: '',
+      clearError: false,
+      clearFromDate: false,
+      clearTillDate: false,
     );
     mockCubit.emit(errorState);
     await tester.pump();

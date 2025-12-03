@@ -33,9 +33,13 @@ class OrganizationState extends Equatable {
   final String? selectedCity;
   final String? selectedType;
   final String? selectedDesignation;
+  final Map<String, int>? testsPerOrg;
+  final Map<String, int>? mothersPerOrg;
+  final Map<String, int>? doctorsPerOrg;
+  final Map<String, int>? devicesPerOrg;
 
   /// Creates an [OrganizationState] with the given values.
-  OrganizationState({
+  const OrganizationState({
     this.organizationDetails = const [],
     this.filteredOrganizationDetails = const [],
     this.status = OrganizationStatus.initial,
@@ -47,6 +51,10 @@ class OrganizationState extends Equatable {
     this.selectedState,
     this.selectedType,
     this.selectedDesignation,
+    this.devicesPerOrg,
+    this.doctorsPerOrg,
+    this.mothersPerOrg,
+    this.testsPerOrg,
   });
 
   /// Returns a copy of this state with updated fields if provided.
@@ -65,6 +73,10 @@ class OrganizationState extends Equatable {
     String? selectedCity,
     String? selectedType,
     String? selectedDesignation,
+    Map<String, int>? testsPerOrg,
+    Map<String, int>? mothersPerOrg,
+    Map<String, int>? doctorsPerOrg,
+    Map<String, int>? devicesPerOrg,
   }) {
     return OrganizationState(
       organizationDetails: organizationDetails ?? this.organizationDetails,
@@ -79,6 +91,10 @@ class OrganizationState extends Equatable {
       selectedCity: selectedCity ?? this.selectedCity,
       selectedType: selectedType ?? this.selectedType,
       selectedDesignation: selectedDesignation ?? this.selectedDesignation,
+      testsPerOrg: testsPerOrg ?? this.testsPerOrg,
+      mothersPerOrg: mothersPerOrg ?? this.mothersPerOrg,
+      doctorsPerOrg: doctorsPerOrg ?? this.doctorsPerOrg,
+      devicesPerOrg: devicesPerOrg ?? this.devicesPerOrg,
     );
   }
 

@@ -26,7 +26,12 @@ class DeviceDetailsState {
   /// The current search query for filtering devices.
   final String searchQuery;
 
-  /// Creates a [DeviceDetailsState] with the given values.
+  final List<Test>? noOfTests;
+
+  final Map<String, int> testsPerDevice;
+  final Map<String, int> mothersPerDevice;
+
+
   DeviceDetailsState({
     required this.allDevices,
     required this.filteredDevices,
@@ -35,6 +40,9 @@ class DeviceDetailsState {
     required this.fromDate,
     required this.tillDate,
     required this.searchQuery,
+    required this.noOfTests,
+    this.testsPerDevice = const {},
+    this.mothersPerDevice = const {},
   });
 
   /// Returns the initial state for device details.
@@ -46,26 +54,45 @@ class DeviceDetailsState {
     fromDate: null,
     tillDate: null,
     searchQuery: '',
+    noOfTests: [],
+    testsPerDevice: {},
+    mothersPerDevice: {},
   );
 
   /// Returns a copy of this state with updated fields if provided.
+  ///
+  /// Supports overriding nullable DateTime values (required for clearing filters).
   DeviceDetailsState copyWith({
     List<models.Document>? allDevices,
     List<models.Document>? filteredDevices,
     bool? isLoading,
     String? errorMessage,
+
     DateTime? fromDate,
+    bool overrideFromDate = false,
+
     DateTime? tillDate,
+    bool overrideTillDate = false,
+
     String? searchQuery,
+    List<Test>? noOfTests,
+    Map<String, int>? testsPerDevice,
+    Map<String, int>? mothersPerDevice,
+
   }) {
     return DeviceDetailsState(
       allDevices: allDevices ?? this.allDevices,
       filteredDevices: filteredDevices ?? this.filteredDevices,
       isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage ?? this.errorMessage,
-      fromDate: fromDate ?? this.fromDate,
-      tillDate: tillDate ?? this.tillDate,
+
+      fromDate: overrideFromDate ? fromDate : (fromDate ?? this.fromDate),
+      tillDate: overrideTillDate ? tillDate : (tillDate ?? this.tillDate),
+
       searchQuery: searchQuery ?? this.searchQuery,
+      noOfTests: noOfTests ?? this.noOfTests,
+      testsPerDevice: testsPerDevice ?? this.testsPerDevice,
+      mothersPerDevice: mothersPerDevice ?? this.mothersPerDevice,
     );
   }
 }

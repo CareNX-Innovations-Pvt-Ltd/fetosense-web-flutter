@@ -19,7 +19,7 @@ void main() {
       tillDate: DateTime(2023, 12, 31),
       isLoading: false,
       errorMessage: '',
-      searchQuery: '', filteredDevices: [],
+      searchQuery: '', filteredDevices: [], noOfTests: [],
     ).copyWith(
       fromDate: DateTime(2024, 1, 1),
       tillDate: DateTime(2024, 12, 31),
@@ -27,11 +27,10 @@ void main() {
   });
 
   Widget buildTestWidget() {
-    return MaterialApp(
+    return const MaterialApp(
       home: Scaffold(
         body: DeviceDetailsFilters(
-          cubit: mockCubit,
-          state: testState,
+
         ),
       ),
     );

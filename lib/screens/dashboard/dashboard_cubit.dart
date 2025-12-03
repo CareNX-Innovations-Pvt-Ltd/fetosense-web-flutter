@@ -1,5 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:bloc/bloc.dart';
+import 'package:fetosense_mis/core/models/test_model.dart';
 import 'package:fetosense_mis/core/network/appwrite_config.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/core/services/auth_service.dart';
@@ -20,26 +21,30 @@ class DashboardCubit extends Cubit<DashboardState> {
   final AuthService _authService;
   final Databases databases;
   final PreferenceHelper prefs;
+  List<Test> tests = [];
 
   DashboardCubit({
     AuthService? authService,
     Databases? databases,
     PreferenceHelper? prefs,
-  })  : _authService = authService ?? AuthService(),
-        databases = databases ?? Databases(locator<AppwriteService>().client),
-        prefs = prefs ?? locator<PreferenceHelper>(),
-        super(
-        const DashboardState(
-          userEmail: "",
-          isSidebarOpen: false,
-          childIndex: 0,
-          organizationCount: 0,
-          deviceCount: 0,
-          motherCount: 0,
-          testCount: 0,
-        ),
-      ) {
+  }) : _authService = authService ?? AuthService(),
+       databases = databases ?? Databases(locator<AppwriteService>().client),
+       prefs = prefs ?? locator<PreferenceHelper>(),
+       super(
+         const DashboardState(
+           userEmail: "",
+           isSidebarOpen: false,
+           childIndex: 0,
+           organizationCount: 0,
+           deviceCount: 0,
+           motherCount: 0,
+           testCount: 0,
+           tests: [],
+            referralCount: 0,
+         ),
+       ) {
     getUserData();
+    fetchAllTests();
   }
 
   Future<void> getUserData() async {
@@ -78,9 +83,12 @@ class DashboardCubit extends Cubit<DashboardState> {
     final testCount = await databases.listDocuments(
       databaseId: AppConstants.appwriteDatabaseId,
       collectionId: AppConstants.testsCollectionId,
-      queries: isRestricted
-          ? [Query.equal('organizationId', userData.organizationId)]
-          : [],
+    );
+
+    final referrals = await databases.listDocuments(
+      databaseId: AppConstants.appwriteDatabaseId,
+      collectionId: AppConstants.testsCollectionId,
+      queries: [Query.equal('referral', true)],
     );
 
     emit(
@@ -90,6 +98,7 @@ class DashboardCubit extends Cubit<DashboardState> {
         deviceCount: deviceCount.total,
         motherCount: motherCount.total,
         testCount: testCount.total,
+        referralCount: referrals.total,
       ),
     );
   }
@@ -104,6 +113,50 @@ class DashboardCubit extends Cubit<DashboardState> {
 
   Future<void> logout(BuildContext context) async {
     await _authService.logoutUser();
-    context.go(AppRoutes.login);
+    context.pushReplacementNamed(AppRoutes.login);
+  }
+
+  Future<void> fetchAllTests() async {
+    const int batchSize = 300;
+    int offset = 0;
+
+    List<Test> allTests = [];
+
+      try {
+        while (true) {
+        final result = await databases.listDocuments(
+          databaseId: AppConstants.appwriteDatabaseId,
+          collectionId: AppConstants.testsCollectionId,
+          queries: [
+            Query.limit(batchSize),
+            Query.offset(offset),
+          ],);
+        final mapped = result.documents
+            .map((doc) => Test.fromMap(doc.data, doc.$id))
+            .toList();
+
+        allTests.addAll(mapped);
+
+        if (result.documents.length < batchSize) break;
+        offset += batchSize;
+        }
+
+        print("Fetched raw tests: ${allTests.length}");
+
+        // Filter invalid dates
+        allTests = allTests.where((t) {
+          return t.organizationName == 'Nelson Hospital';
+        }).toList();
+
+        print("Valid tests after filtering: ${allTests.length}");
+
+        allTests.sort((a, b) => a.createdOn!.compareTo(b.createdOn!));
+
+        emit(state.copyWith(tests: allTests));
+      } catch (e, s) {
+        print(s);
+        print(e);
+      }
+
   }
 }

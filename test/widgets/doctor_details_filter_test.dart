@@ -16,21 +16,28 @@ void main() {
   setUp(() {
     cubit = MockDoctorDetailsCubit();
     state = DoctorDetailsState(
-      allDoctors: [],
+      // allDoctors: [],
       filteredDoctors: [],
       fromDate: DateTime(2025, 10, 24),
       tillDate: DateTime(2025, 10, 25),
-      isLoading: false,
-      error: null,
+      status: DoctorStatus.initial,
+      clearError: false,
+      clearFromDate: true,
+      clearTillDate: true,
+      doctorDetails: [],
+      errorMessage: '',
+      searchQuery: '',
+      // isLoading: false,
+      // error: null,
     );
   });
 
   group('DoctorDetailsFilters Widget', () {
     testWidgets('renders correctly', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
-            body: DoctorDetailsFilters(cubit: cubit, state: state),
+            body: DoctorDetailsFilters(),
           ),
         ),
       );
@@ -43,89 +50,89 @@ void main() {
     });
 
     testWidgets('calls cubit.updateFromDate on From Date callbacks', (tester) async {
-      cubit.updateFromDate(DateTime(2025, 10, 26));
-      verify(() => cubit.updateFromDate(DateTime(2025, 10, 26))).called(1);
+      cubit.setFromDate(DateTime(2025, 10, 26));
+      verify(() => cubit.setFromDate(DateTime(2025, 10, 26))).called(1);
 
-      cubit.updateFromDate(null);
-      verify(() => cubit.updateFromDate(null)).called(1);
+      cubit.setFromDate(null);
+      verify(() => cubit.setFromDate(null)).called(1);
     });
 
     testWidgets('calls cubit.updateTillDate on Till Date callbacks', (tester) async {
-      cubit.updateTillDate(DateTime(2025, 10, 27));
-      verify(() => cubit.updateTillDate(DateTime(2025, 10, 27))).called(1);
+      cubit.setTillDate(DateTime(2025, 10, 27));
+      verify(() => cubit.setTillDate(DateTime(2025, 10, 27))).called(1);
 
-      cubit.updateTillDate(null);
-      verify(() => cubit.updateTillDate(null)).called(1);
+      cubit.setTillDate(null);
+      verify(() => cubit.setTillDate(null)).called(1);
     });
 
     testWidgets('calls cubit.fetchDoctorsId when Get Data button is tapped', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
-            body: DoctorDetailsFilters(cubit: cubit, state: state),
+            body: DoctorDetailsFilters(),
           ),
         ),
       );
 
       await tester.tap(find.text('Get Data'));
-      verify(() => cubit.fetchDoctorsId()).called(1);
+      verify(() => cubit.fetchDoctorDetails()).called(1);
     });
 
     testWidgets('calls cubit.applySearchFilter on text input', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
-            body: DoctorDetailsFilters(cubit: cubit, state: state),
+            body: DoctorDetailsFilters(),
           ),
         ),
       );
 
       final textField = find.byType(TextField);
       await tester.enterText(textField, 'Dr. Smith');
-      verify(() => cubit.applySearchFilter('Dr. Smith')).called(1);
+      verify(() => cubit.applySearchFilter()).called(1);
     });
   });
 
   group('DoctorDetailsState', () {
     test('initial state has correct default values', () {
       final initial = DoctorDetailsState.initial();
-      expect(initial.allDoctors, []);
+      expect(initial.doctorDetails, []);
       expect(initial.filteredDoctors, []);
       expect(initial.fromDate, null);
       expect(initial.tillDate, null);
-      expect(initial.isLoading, false);
-      expect(initial.error, null);
+      expect(initial.clearError, false);
+      expect(initial.errorMessage, null);
     });
 
     test('copyWith updates provided fields', () {
       final newDoc = MockDocument();
       final newState = state.copyWith(
-        allDoctors: [newDoc],
+        doctorDetails: [newDoc],
         filteredDoctors: [newDoc],
         fromDate: DateTime(2025, 11, 1),
         tillDate: DateTime(2025, 11, 2),
-        isLoading: true,
-        error: 'Error message',
+        clearError: true,
+        errorMessage: 'Error message',
       );
 
-      expect(newState.allDoctors, [newDoc]);
+      expect(newState.doctorDetails, [newDoc]);
       expect(newState.filteredDoctors, [newDoc]);
       expect(newState.fromDate, DateTime(2025, 11, 1));
       expect(newState.tillDate, DateTime(2025, 11, 2));
-      expect(newState.isLoading, true);
-      expect(newState.error, 'Error message');
+      expect(newState.clearError, true);
+      expect(newState.errorMessage, 'Error message');
     });
 
     test('props contains all fields for Equatable', () {
       expect(
         state.props,
         [
-          state.allDoctors,
+          state.doctorDetails,
           state.filteredDoctors,
           state.fromDate,
           state.tillDate,
-          state.isLoading,
-          state.error,
+          state.clearError,
+          state.errorMessage,
         ],
       );
     });

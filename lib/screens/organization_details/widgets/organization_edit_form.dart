@@ -217,7 +217,7 @@ Widget buildActionButtons(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           padding: const EdgeInsets.symmetric(horizontal: 20),
         ),
-        child: const Text("Cancel"),
+        child: const Text("Cancel", style: TextStyle(color: Colors.white),),
       ),
     ],
   );

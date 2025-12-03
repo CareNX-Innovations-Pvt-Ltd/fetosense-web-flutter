@@ -12,6 +12,12 @@ class DoctorDetailsTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (state.status == DoctorStatus.loading) {
+      return const Center(
+        child: CircularProgressIndicator(color: Colors.tealAccent),
+      );
+    }
+
     if (state.filteredDoctors.isEmpty) {
       return const Center(
         child: Text("No data available", style: TextStyle(color: Colors.white)),
@@ -39,8 +45,8 @@ class DoctorDetailsTable extends StatelessWidget {
         _buildDataColumn('Mother'),
         _buildDataColumn('Test'),
         _buildDataColumn('CreatedOn', flex: 2),
-        _buildDataColumn('L.O.T', flex: 2),
-        _buildDataColumn('Version'),
+        // _buildDataColumn('L.O.T', flex: 2),
+        // _buildDataColumn('Version'),
         _buildDataColumn('Action'),
       ],
       rows:
@@ -63,14 +69,14 @@ class DoctorDetailsTable extends StatelessWidget {
     final data = doc.data;
     return DataRow(
       cells: [
-        _buildDataCell(data['doctorName'], flex: 2),
+        _buildDataCell(data['name'], flex: 2),
         _buildDataCell(data['email'], flex: 2),
         _buildDataCell(data['organizationName'], flex: 2),
         _buildDataCell(data['noOfMother']),
         _buildDataCell(data['noOfTests']),
-        _buildDataCell(formatDate(data['createdOn']), flex: 2),
-        _buildDataCell(formatDate(data['lastLoginTime']), flex: 2),
-        _buildDataCell(data['appVersion']),
+        _buildDataCell(formatDate(doc.$createdAt), flex: 2),
+        // _buildDataCell(formatDate(data['lastLoginTime']), flex: 2),
+        // _buildDataCell(data['appVersion']),
         DataCell(
           TextButton(
             onPressed: () => _showEditDialog(context, doc),

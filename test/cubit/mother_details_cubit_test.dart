@@ -132,7 +132,7 @@ void main() {
       build: () => cubit,
       act: (cubit) {
         cubit.fromDateController.text = '2025-10-29';
-        cubit.clearFromDate();
+        cubit.clearAllFilters();
       },
       expect: () => [
         isA<MotherDetailsState>().having((s) => s, 'clear', true),
@@ -165,7 +165,7 @@ void main() {
       build: () => cubit,
       act: (cubit) {
         cubit.tillDateController.text = '2025-10-29';
-        cubit.clearTillDate();
+        cubit.clearAllFilters();
       },
       expect: () => [
         isA<MotherDetailsState>().having((s) => s, 'clear', true),

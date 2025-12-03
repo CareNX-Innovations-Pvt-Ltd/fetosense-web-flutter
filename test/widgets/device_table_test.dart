@@ -32,7 +32,7 @@ void main() {
       tillDate: DateTime(2023, 12, 31),
       isLoading: false,
       errorMessage: '',
-      searchQuery: '', filteredDevices: [],
+      searchQuery: '', filteredDevices: [], noOfTests: [],
     ).copyWith(filteredDevices: [device]);
   });
 

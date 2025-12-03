@@ -27,7 +27,7 @@ class _SplashViewState extends State<SplashView> {
       _handleAutoLogin();
     } else {
       if(mounted){
-        context.goNamed(AppRoutes.login);
+        context.replaceNamed(AppRoutes.login);
       }
     }
   }
@@ -35,11 +35,11 @@ class _SplashViewState extends State<SplashView> {
   Future<void> _handleAutoLogin() async {
     try {
       if (mounted) {
-        context.goNamed(AppRoutes.dashboard);
+        context.replaceNamed(AppRoutes.dashboard);
       }
     } catch (e) {
       if (mounted) {
-        context.goNamed(AppRoutes.login);
+        context.replaceNamed(AppRoutes.login);
       }
       debugPrint("Auto-login failed: $e");
     }

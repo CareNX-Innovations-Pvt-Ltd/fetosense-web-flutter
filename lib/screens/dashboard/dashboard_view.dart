@@ -2,7 +2,6 @@ import 'package:fetosense_mis/core/models/models.dart';
 import 'package:fetosense_mis/core/models/user_model.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/core/utils/preferences.dart';
-import 'package:fetosense_mis/core/utils/user_role.dart';
 import 'package:fetosense_mis/screens/analytics/doctors_analytics.dart';
 import 'package:fetosense_mis/screens/analytics/organizations_analytics.dart';
 import 'package:fetosense_mis/screens/dashboard/widget/graph_card.dart';
@@ -18,7 +17,6 @@ import 'package:fetosense_mis/widget/bottom_navigation_bar.dart';
 import 'package:fetosense_mis/widget/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fl_chart/fl_chart.dart';
 
 import 'dashboard_cubit.dart';
 import 'widget/hover_stat_card.dart';
@@ -138,10 +136,14 @@ class _DashboardViewState extends State<DashboardView>
   }
 
   Widget _getChild(int childIndex, DashboardState state) {
+    print('--------> ${state.tests.length} tests fetched.');
     switch (childIndex) {
       case 0:
         return Column(
-          children: [_buildTopStats(state), Expanded(child: GraphCard())],
+          children: [
+            _buildTopStats(state),
+            Expanded(child: GraphCard(tests: state.tests)),
+          ],
         );
       case 1:
         return const OrganizationRegistrationView();
@@ -171,12 +173,18 @@ class _DashboardViewState extends State<DashboardView>
   Widget _buildTopStats(DashboardState state) {
     final stats = _getDashboardStats(state);
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      color: Colors.black54,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: stats.map((stat) => HoverStatCard(stat: stat)).toList(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.all(Radius.circular(12))
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: stats.map((stat) => HoverStatCard(stat: stat)).toList(),
+        ),
       ),
     );
   }
@@ -202,6 +210,11 @@ class _DashboardViewState extends State<DashboardView>
         icon: Icons.monitor_heart,
         title: "Tests",
         count: state.testCount.toString(),
+      ),
+      DashboardStat(
+        icon: Icons.account_circle_outlined,
+        title: "Referrals",
+        count: state.referralCount.toString(),
       ),
     ];
   }

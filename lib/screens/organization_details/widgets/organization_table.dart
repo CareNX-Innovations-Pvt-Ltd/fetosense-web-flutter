@@ -1,9 +1,4 @@
-import 'dart:developer';
-
-import 'package:appwrite/models.dart';
 import 'package:data_table_2/data_table_2.dart';
-import 'package:fetosense_mis/core/network/appwrite_config.dart';
-import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/screens/organization_details/widgets/organization_edit_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +15,9 @@ class OrganizationDataTableWidget extends StatelessWidget {
       builder: (context, state) {
         switch (state.status) {
           case OrganizationStatus.loading:
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(color: Colors.tealAccent),
+            );
 
           case OrganizationStatus.error:
             return Center(child: Text('Error: ${state.errorMessage}'));
@@ -50,8 +47,8 @@ class OrganizationDataTableWidget extends StatelessWidget {
                 _buildDataColumn('Doctors'),
                 _buildDataColumn('Mother'),
                 _buildDataColumn('Test'),
-                _buildDataColumn('Mobile'),
-                _buildDataColumn('Status'),
+                // _buildDataColumn('Mobile'),
+                // _buildDataColumn('Status'),
                 _buildDataColumn('Created On', flex: 2),
                 _buildDataColumn('Address', flex: 3),
                 _buildDataColumn('Email', flex: 2),
@@ -60,17 +57,17 @@ class OrganizationDataTableWidget extends StatelessWidget {
               rows:
                   state.filteredOrganizationDetails.map((orgDetail) {
                     final data = orgDetail.organizations.first.data;
-                    log(data.toString());
+                    // log(data.toString());
 
                     return DataRow(
                       cells: [
                         _buildDataCell(data['organizationName'], flex: 2),
-                        _buildDataCell(data['deviceName']),
-                        _buildDataCell(data['doctors']),
-                        _buildDataCell(data['mother']),
-                        _buildDataCell(data['test']),
-                        _buildDataCell(data['mobileNo']),
-                        _buildDataCell(data['status']),
+                        _buildDataCell(data['noOfDevices']),
+                        _buildDataCell(1),
+                        _buildDataCell(data['noOfMother']),
+                        _buildDataCell(data['noOfTests']),
+                        // _buildDataCell(data['mobileNo']),
+                        // _buildDataCell(data['status']),
                         _buildDataCell(
                           data['createdOn'] != null
                               ? DateFormat(
