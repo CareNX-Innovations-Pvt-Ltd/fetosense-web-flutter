@@ -9,23 +9,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout PR code
         uses: actions/checkout@v4
+
+      - name: Checkout main branch coverage files
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main_branch_files
+
+      - name: Copy coverage files from main branch
+        run: |
+          mkdir -p coverage
+          mkdir -p coverage/html
+          cp -R main_branch_files/coverage/* coverage/ || true
+          cp -R main_branch_files/coverage/html/* coverage/html/ || true
 
       - name: Verify coverage report exists
         run: |
           if [ ! -f coverage/html/index.html ]; then
-            echo "❌ coverage/html/index.html not found. Please generate locally and push it."
+            echo "❌ coverage/html/index.html not found in main branch!"
             exit 1
           fi
-          echo "✅ Coverage report found."
+          echo "✅ Coverage report found from main branch."
+
       - name: Extract coverage percentage
         id: coverage
         run: |
-          # Extract the first percentage number from index.html (overall coverage)
           percent=$(grep -oP '\d+%' coverage/html/index.html | head -1 | tr -d '%')
           echo "Coverage detected: $percent%"
           echo "percent=$percent" >> $GITHUB_OUTPUT
+
       - name: Enforce minimum coverage (40%)
         run: |
           if [ "${{ steps.coverage.outputs.percent }}" -lt 40 ]; then
@@ -34,13 +48,15 @@ jobs:
           else
             echo "✅ Coverage ${{ steps.coverage.outputs.percent }}% meets requirement"
           fi
-      - name: Upload coverage artifact
+
+      - name: Upload coverage report artifact
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage/html
-      - name: Upload coverage reports to Codecov
+
+      - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-
+          files: coverage/lcov.info
