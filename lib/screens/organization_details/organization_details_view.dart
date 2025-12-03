@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:fetosense_mis/screens/organization_details/organization_details_cubit.dart';
 import 'package:fetosense_mis/screens/organization_details/widgets/organization_filters.dart';
 import 'package:fetosense_mis/screens/organization_details/widgets/organization_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 /// The main page view for displaying organization details.
 ///
@@ -70,8 +67,7 @@ class OrganizationDetailsView extends StatelessWidget {
             const SizedBox(height: 10),
             Expanded(
               child: SingleChildScrollView(
-                scrollDirection:
-                    Axis.horizontal, // scroll horizontally for DataTable2
+                scrollDirection: Axis.horizontal,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: SizedBox(

@@ -2,7 +2,9 @@ import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/core/utils/app_routes.dart';
 import 'package:fetosense_mis/core/utils/preferences.dart';
 import 'package:fetosense_mis/core/utils/user_role.dart';
+import 'package:fetosense_mis/screens/dashboard/dashboard_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 /// Builds a sidebar for navigation with expandable menus and hover effects.
@@ -20,13 +22,10 @@ Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SidebarItem(
+        const _SidebarItem(
           icon: Icons.dashboard,
           title: "Dashboard",
-          onTap: () {
-            // Navigator.pushNamed(context, '/dashboard');
-            context.pushReplacement(AppRoutes.dashboard);
-          },
+          index: 0,
         ),
         role == UserRoles.admin
             ? const _ExpandableMenu(
@@ -35,10 +34,10 @@ Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
               children: [
                 _SidebarItem(
                   title: "Organization",
-                  route: '/organization-registration',
+                  index: 1,
                 ),
-                _SidebarItem(title: "Device", route: '/device-registration'),
-                _SidebarItem(title: "Generate QR", route: '/generate-qr'),
+                _SidebarItem(title: "Device", index: 2,),
+                _SidebarItem(title: "Generate QR", index: 3,),
               ],
             )
             : Container(),
@@ -49,22 +48,22 @@ Widget buildSidebar(BuildContext context, VoidCallback logoutCallback) {
             _SidebarItem(
               icon: Icons.business,
               title: "Organizations",
-              route: '/mis-organizations',
+              index: 4,
             ),
             _SidebarItem(
               icon: Icons.tablet_mac,
               title: "Device",
-              route: '/mis-devices',
+              index: 5,
             ),
             _SidebarItem(
               icon: Icons.medical_services,
               title: "Doctor",
-              route: '/mis-doctors',
+              index: 6,
             ),
             _SidebarItem(
               icon: Icons.pregnant_woman,
               title: "Mother",
-              route: '/mis-mothers',
+              index: 7,
             ),
           ],
         ),
@@ -103,8 +102,9 @@ class _SidebarItem extends StatefulWidget {
   final String title;
   final String? route;
   final VoidCallback? onTap;
+  final int? index;
 
-  const _SidebarItem({this.icon, required this.title, this.route, this.onTap});
+  const _SidebarItem({this.icon, required this.title, this.route, this.onTap, this.index});
 
   @override
   _SidebarItemState createState() => _SidebarItemState();
@@ -119,14 +119,14 @@ class _SidebarItemState extends State<_SidebarItem> {
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: GestureDetector(
-        onTap: () {
-          if (widget.route != null) {
-            context.go(widget.route!);
-          } else if (widget.onTap != null) {
-            widget.onTap!();
-          }
-        },
-        child: AnimatedContainer(
+          onTap: () {
+            if (widget.index != null) {
+              context.read<DashboardCubit>().changeChildIndex(widget.index!);
+            } else if (widget.onTap != null) {
+              widget.onTap!();
+            }
+          },
+          child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           decoration: BoxDecoration(

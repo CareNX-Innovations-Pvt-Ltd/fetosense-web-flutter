@@ -1,10 +1,10 @@
+import 'package:fetosense_mis/screens/mother_details/mother_details_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fetosense_mis/screens/doctor_details/doctor_details_cubit.dart';
 import 'package:intl/intl.dart';
 
-class DoctorDetailsFilters extends StatelessWidget {
-  const DoctorDetailsFilters({super.key});
+class MotherDetailsFilter extends StatelessWidget {
+  const MotherDetailsFilter({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class DoctorDetailsFilters extends StatelessWidget {
   }
 
   Widget _buildFilterSection(BuildContext context) {
-    return BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
+    return BlocBuilder<MotherDetailsCubit, MotherDetailsState>(
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.all(16.0),
@@ -24,8 +24,8 @@ class DoctorDetailsFilters extends StatelessWidget {
                 child: buildDatePicker(
                   context,
                   'From Date',
-                  state.clearFromDate ? null : state.fromDate,
-                      (date) => context.read<DoctorDetailsCubit>().setFromDate(date),
+                  state.fromDate,
+                      (date) => context.read<MotherDetailsCubit>().setFromDate(date),
                 ),
               ),
               const SizedBox(width: 16),
@@ -33,16 +33,14 @@ class DoctorDetailsFilters extends StatelessWidget {
                 child: buildDatePicker(
                   context,
                   'Till Date',
-                  state.clearTillDate ? null : state.tillDate,
-                      (date) => context.read<DoctorDetailsCubit>().setTillDate(date),
+                  state.tillDate,
+                      (date) => context.read<MotherDetailsCubit>().setTillDate(date),
                 ),
               ),
-
               const SizedBox(width: 16),
               ElevatedButton(
                 onPressed: () {
-                  // Apply filters by re-fetching the data
-                  context.read<DoctorDetailsCubit>().fetchDoctorDetails();
+                  context.read<MotherDetailsCubit>().fetchMothersId();
                 },
                 child: const Text(
                   'Apply Filters',
@@ -52,10 +50,9 @@ class DoctorDetailsFilters extends StatelessWidget {
               const SizedBox(width: 8),
               TextButton(
                 onPressed: () {
-                  // Clear UI + cubit state, then fetch
-                  // context.read<DoctorDetailsCubit>().setFromDate(null);
-                  // context.read<DoctorDetailsCubit>().setTillDate(null);
-                  context.read<DoctorDetailsCubit>().clearAllFilters();
+                  context.read<MotherDetailsCubit>().setFromDate(null);
+                  context.read<MotherDetailsCubit>().setTillDate(null);
+                  context.read<MotherDetailsCubit>().fetchMothersId();
                 },
                 child: const Text(
                   'Clear',
@@ -79,15 +76,13 @@ class DoctorDetailsFilters extends StatelessWidget {
 
     return InkWell(
       onTap: () async {
-        final initial = selectedDate ?? DateTime.now();
         final pickedDate = await showDatePicker(
           context: context,
-          initialDate: initial,
+          initialDate: selectedDate ?? DateTime.now(),
           firstDate: DateTime(2020),
           lastDate: DateTime.now().add(const Duration(days: 365)),
         );
 
-        // pass picked (or null) back to cubit
         if (pickedDate != null) {
           onDateSelected(pickedDate);
         }
@@ -118,7 +113,6 @@ class DoctorDetailsFilters extends StatelessWidget {
     );
   }
 
-
   Widget _buildSearchBar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -127,12 +121,12 @@ class DoctorDetailsFilters extends StatelessWidget {
         child: TextField(
           style: const TextStyle(color: Colors.white),
           decoration: const InputDecoration(
-            hintText: 'Search doctors...',
+            hintText: 'Search mothers...',
             prefixIcon: Icon(Icons.search, color: Colors.tealAccent),
             border: OutlineInputBorder(),
           ),
           onChanged: (value) {
-            context.read<DoctorDetailsCubit>().updateSearchQuery(value);
+            context.read<MotherDetailsCubit>().setSearchQuery(value);
           },
         ),
       ),

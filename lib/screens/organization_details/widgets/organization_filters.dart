@@ -100,7 +100,7 @@ class OrganizationFilter extends StatelessWidget {
             Text(
               selectedDate != null ? dateFormat.format(selectedDate) : label,
               style: TextStyle(
-                color: selectedDate != null ? Colors.black : Colors.grey,
+                color: selectedDate != null ? Colors.white : Colors.grey,
               ),
             ),
             const Icon(
@@ -118,8 +118,9 @@ class OrganizationFilter extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: SizedBox(
-        height: 48, // or whatever fits your design
+        height: 48,
         child: TextField(
+          style: const TextStyle(color: Colors.white),
           decoration: const InputDecoration(
             hintText: 'Search organizations...',
             prefixIcon: Icon(Icons.search, color: Colors.tealAccent),

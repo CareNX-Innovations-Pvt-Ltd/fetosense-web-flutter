@@ -54,12 +54,12 @@ class MotherDetailsTable extends StatelessWidget {
             style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
           ),
         ),
-        DataColumn2(
-          label: Text(
-            "Test",
-            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
-          ),
-        ),
+        // DataColumn2(
+        //   label: Text(
+        //     "Test",
+        //     style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+        //   ),
+        // ),
       ],
       rows:
           filteredMothers.map((org) {
@@ -70,7 +70,7 @@ class MotherDetailsTable extends StatelessWidget {
                 buildDataCell(data['organizationName']),
                 buildDataCell(data['deviceName']),
                 buildDataCell(data['doctorName']),
-                buildDataCell(data['noOfTests']),
+                // buildDataCell(data['noOfTests']),
               ],
             );
           }).toList(),

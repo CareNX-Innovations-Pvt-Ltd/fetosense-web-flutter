@@ -1,3 +1,4 @@
+import 'package:fetosense_mis/screens/mother_details/widget/mother_details_filter.dart';
 import 'package:fetosense_mis/screens/mother_details/widget/mother_details_table.dart';
 import 'package:fetosense_mis/widget/custom_date_picker.dart';
 import 'package:flutter/material.dart';
@@ -23,58 +24,62 @@ class MotherDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final _ = context.read<MotherDetailsCubit>();
 
-    return Container(
-      alignment: Alignment.topCenter,
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
       child: Container(
-        margin: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: const Color(0xFF181A1B),
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: const Color(0xFF272A2C), width: 1),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildHeader(context),
-            _buildFilterSection(context),
-            const SizedBox(height: 20),
-            Expanded(
-              child: BlocBuilder<MotherDetailsCubit, MotherDetailsState>(
-                builder: (context, state) {
-                  if (state.isLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+        alignment: Alignment.topCenter,
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF181A1B),
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(color: const Color(0xFF272A2C)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildHeader(context),
+              const MotherDetailsFilter(),
+              const Divider(color: Colors.grey),
+              // _buildFilterSection(context),
+              const SizedBox(height: 20),
+              Expanded(
+                child: BlocBuilder<MotherDetailsCubit, MotherDetailsState>(
+                  builder: (context, state) {
+                    if (state.isLoading) {
+                      return const Center(child: CircularProgressIndicator(color: Colors.tealAccent));
+                    }
 
-                  if (state.errorMessage != null) {
-                    return Center(
-                      child: Text(
-                        state.errorMessage!,
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                    );
-                  }
+                    if (state.errorMessage != null) {
+                      return Center(
+                        child: Text(
+                          state.errorMessage!,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      );
+                    }
 
-                  // Wrap your MotherDetailsTable inside vertical & horizontal scroll views
-                  return SingleChildScrollView(
-                    scrollDirection:
-                        Axis.horizontal, // scroll horizontally for DataTable2
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: SizedBox(
-                        width:
-                            MediaQuery.of(context).size.width *
-                            0.8, // or any suitable ratio
+                    // Wrap your MotherDetailsTable inside vertical & horizontal scroll views
+                    return SingleChildScrollView(
+                      scrollDirection:
+                          Axis.horizontal, // scroll horizontally for DataTable2
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SizedBox(
+                          width:
+                              MediaQuery.of(context).size.width *
+                              0.8, // or any suitable ratio
 
-                        child: MotherDetailsTable(
-                          filteredMothers: state.filteredMothers,
+                          child: MotherDetailsTable(
+                            filteredMothers: state.filteredMothers,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -83,28 +88,18 @@ class MotherDetails extends StatelessWidget {
   Widget _buildHeader(BuildContext context) {
     final cubit = context.read<MotherDetailsCubit>();
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        color: Color(0xFF1F2223),
-        border: Border(
-          bottom: BorderSide(color: Color(0xFF3E4346), width: 0.5),
-        ),
-      ),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Row(
-            children: [
-              Icon(Icons.apartment, color: Colors.white, size: 20),
-              SizedBox(width: 8),
-              Text(
-                "Mother Details",
-                style: TextStyle(color: Colors.white, fontSize: 15),
-              ),
-            ],
+          const Icon(Icons.apartment, color: Colors.white),
+          const SizedBox(width: 8),
+          const Text(
+            "Mother Details",
+            style: TextStyle(color: Colors.white, fontSize: 18),
           ),
+          const Spacer(),
           IconButton(
             icon: const Icon(Icons.download, color: Colors.white),
             onPressed: () => cubit.downloadExcel(context),
@@ -115,86 +110,4 @@ class MotherDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterSection(BuildContext context) {
-    final cubit = context.read<MotherDetailsCubit>();
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: BlocBuilder<MotherDetailsCubit, MotherDetailsState>(
-                  buildWhen:
-                      (previous, current) =>
-                          previous.fromDate != current.fromDate,
-                  builder: (context, state) {
-                    return customDatePicker(
-                      context: context,
-                      label: "From Date",
-                      selectedDate: state.fromDate,
-                      controller: cubit.fromDateController,
-                      onDateCleared: cubit.clearFromDate,
-                      onDateSelected: cubit.setFromDate,
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: BlocBuilder<MotherDetailsCubit, MotherDetailsState>(
-                  buildWhen:
-                      (previous, current) =>
-                          previous.tillDate != current.tillDate,
-                  builder: (context, state) {
-                    return customDatePicker(
-                      context: context,
-                      label: "Till Date",
-                      selectedDate: state.tillDate,
-                      controller: cubit.tillDateController,
-                      onDateCleared: cubit.clearTillDate,
-                      onDateSelected: cubit.setTillDate,
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 16),
-              SizedBox(
-                height: 40,
-                child: ElevatedButton(
-                  onPressed: cubit.fetchMothersId,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    side: const BorderSide(color: Color(0xFF1A86AD)),
-                  ),
-                  child: const Text(
-                    "Get Data",
-                    style: TextStyle(color: Color(0xFF1A86AD)),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          TextField(
-            controller: cubit.searchController,
-            style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.search, color: Colors.white),
-              hintText: 'Search',
-              hintStyle: TextStyle(color: Colors.grey),
-              filled: true,
-              fillColor: Color(0xFF181A1B),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                borderSide: BorderSide.none,
-              ),
-            ),
-            onChanged: cubit.setSearchQuery,
-          ),
-        ],
-      ),
-    );
-  }
 }

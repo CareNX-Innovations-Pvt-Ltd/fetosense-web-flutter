@@ -21,7 +21,7 @@ class DoctorEditCubit extends Cubit<DoctorEditState> {
 
   /// Initialize the form with existing doctor data.
   void initialize(Map<String, dynamic> data) {
-    nameController.text = data['doctorName'] ?? '';
+    nameController.text = data['name'] ?? '';
     mobileController.text = data['mobileNo'].toString();
     emailController.text = data['email'] ?? '';
     emit(DoctorEditLoaded());
@@ -32,7 +32,7 @@ class DoctorEditCubit extends Cubit<DoctorEditState> {
     emit(DoctorEditSaving());
     try {
       final updatedData = {
-        'doctorName': nameController.text.trim(),
+        'name': nameController.text.trim(),
         'mobileNo': 0,
         'email': emailController.text.trim(),
       };

@@ -74,7 +74,7 @@ class _OrganizationRegistrationForm extends StatelessWidget {
                 ),
                 child: const Text(
                   "Save",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ),
             ),
@@ -90,7 +90,7 @@ class _OrganizationRegistrationForm extends StatelessWidget {
       children: [
         _row([
           _textField("Organization", cubit.organizationController, true),
-          _textField("Mobile", cubit.mobileController, true, isNumber: true),
+          _textField("Mobile", cubit.mobileController, true, isNumber: true, maxCharacters: 10),
         ]),
         _row([
           _dropdownField(
@@ -180,6 +180,7 @@ class _OrganizationRegistrationForm extends StatelessWidget {
     TextEditingController controller,
     bool required, {
     bool isNumber = false,
+      int  maxCharacters = 400,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,6 +192,8 @@ class _OrganizationRegistrationForm extends StatelessWidget {
           keyboardType: isNumber ? TextInputType.number : TextInputType.text,
           style: const TextStyle(color: Colors.grey),
           decoration: _inputDecoration(label),
+          maxLength: maxCharacters,
+
           validator:
               required
                   ? (v) =>
@@ -252,6 +255,7 @@ class _OrganizationRegistrationForm extends StatelessWidget {
       fillColor: Colors.black54,
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      counterText: '',
     );
   }
 }

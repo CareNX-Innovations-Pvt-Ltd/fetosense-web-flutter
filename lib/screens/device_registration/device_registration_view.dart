@@ -4,6 +4,7 @@ import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/screens/device_registration/device_registration_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 /// Widget for device registration screen that uses the Cubit pattern.
 ///
@@ -91,7 +92,6 @@ class _DeviceRegistrationViewState extends State<DeviceRegistrationView> {
   Widget build(BuildContext context) {
     return BlocConsumer<DeviceRegistrationCubit, DeviceRegistrationState>(
       listener: (context, state) {
-        // Show error message if there is one
         if (state.errorMessage != null) {
           ScaffoldMessenger.of(
             context,
@@ -99,13 +99,10 @@ class _DeviceRegistrationViewState extends State<DeviceRegistrationView> {
           context.read<DeviceRegistrationCubit>().clearError();
         }
 
-        // Show success message if registration was successful
         if (state.isSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Device registered successfully!')),
           );
-
-          // Reset the form
           _formKey.currentState?.reset();
           deviceNameController.clear();
           kitIdController.clear();
@@ -121,67 +118,52 @@ class _DeviceRegistrationViewState extends State<DeviceRegistrationView> {
           child: Container(
             margin: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF272A2C),
+              color: Colors.black45,
               borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: const Color(0xFF3E4346), width: 0.5),
+              border: Border.all(color: Colors.grey, width: 0.5),
             ),
             child: Form(
               key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+              child: ListView(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(16),
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF1F2223),
-                      border: Border(
-                        bottom: BorderSide(color: Colors.white, width: 0.5),
-                      ),
-                    ),
-                    child: const Text(
-                      "Device Registration",
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
+                  const Text(
+                    "Device Registration",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    textAlign: TextAlign.center,
                   ),
-                  Container(
-                    color: const Color(0xFF181A1B),
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 20),
-                        _buildFormFields(context, state),
-                        const SizedBox(height: 20),
-                        Center(
-                          child: ElevatedButton(
-                            onPressed:
-                                state.isSubmitting
-                                    ? null
-                                    : () => _saveForm(context),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF19607A),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 80,
-                                vertical: 14,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                            ),
-                            child:
-                                state.isSubmitting
-                                    ? const CircularProgressIndicator(
-                                      color: Colors.white,
-                                    )
-                                    : const Text(
-                                      "Save",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                          ),
+                  const SizedBox(height: 20),
+                  _buildFormFields(context, state),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed:
+                          state.isSubmitting
+                              ? null
+                              : () => _saveForm(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF19607A),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 80,
+                          vertical: 14,
                         ),
-                      ],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      child:
+                          state.isSubmitting
+                              ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                              : const Text(
+                                "Save",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
                     ),
                   ),
                 ],

@@ -37,21 +37,29 @@ void main() {
     when(() => doc.$id).thenReturn('doc123');
 
     emptyState = const DoctorDetailsState(
-      allDoctors: [],
+      doctorDetails: [],
       filteredDoctors: [],
       fromDate: null,
       tillDate: null,
-      isLoading: false,
-      error: null,
+      clearError: false,
+      errorMessage: null,
+        searchQuery: '',
+        clearTillDate: true,
+        clearFromDate: true,
+        status: DoctorStatus.initial
     );
 
     populatedState = DoctorDetailsState(
-      allDoctors: [doc],
+      doctorDetails: [doc],
       filteredDoctors: [doc],
       fromDate: DateTime(2025, 10, 24),
       tillDate: DateTime(2025, 10, 25),
-      isLoading: false,
-      error: null,
+      clearError: false,
+      errorMessage: null,
+      searchQuery: '',
+      clearTillDate: true,
+      clearFromDate: true,
+      status: DoctorStatus.initial
     );
   });
 

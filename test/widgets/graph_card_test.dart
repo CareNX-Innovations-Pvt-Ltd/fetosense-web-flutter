@@ -9,7 +9,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: GraphCard(),
+            body: GraphCard(tests: [],),
           ),
         ),
       );
@@ -31,7 +31,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: GraphCard(),
+            body: GraphCard(tests: [],),
           ),
         ),
       );

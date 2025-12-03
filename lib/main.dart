@@ -1,11 +1,11 @@
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
 import 'package:fetosense_mis/core/utils/app_routes.dart';
 import 'package:fetosense_mis/core/utils/preferences.dart';
+import 'package:fetosense_mis/screens/dashboard/dashboard_cubit.dart';
 import 'package:fetosense_mis/screens/device_details/device_details_cubit.dart';
 import 'package:fetosense_mis/screens/doctor_details/doctor_details_cubit.dart';
 import 'package:fetosense_mis/screens/login/login_cubit.dart';
 import 'package:fetosense_mis/screens/organization_registration/organization_registration_cubit.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
 
         /// Provides [DoctorDetailsCubit] for doctor details state management.
         BlocProvider(create: (context) => DoctorDetailsCubit()),
+        BlocProvider(create: (context) => DashboardCubit()),
       ],
       child: MaterialApp.router(
         /// The title of the application displayed in the browser tab.

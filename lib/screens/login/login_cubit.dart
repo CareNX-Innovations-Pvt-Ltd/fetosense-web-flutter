@@ -1,10 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:fetosense_mis/core/network/dependency_injection.dart';
-import 'package:fetosense_mis/core/utils/app_routes.dart';
 import 'package:fetosense_mis/core/utils/preferences.dart';
 import 'package:fetosense_mis/core/services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 part 'login_state.dart';
 
@@ -38,31 +36,18 @@ class LoginCubit extends Cubit<LoginState> {
   /// Navigates to the dashboard on success, or shows an error on failure.
   Future<void> loginUser(BuildContext context) async {
     emit(LoginLoading());
-
     try {
       final bool success = await _authService.loginUser(
         usernameController.text,
         passwordController.text,
       );
-
       if (success) {
         emit(LoginSuccess());
-
-        try {
           await locator<PreferenceHelper>().setAutoLogin(true);
-          if (context.mounted) {
-            GoRouter.of(context).go(AppRoutes.dashboard);
-          }
-        } catch (_) {
-          // Optional: log error
-        }
-
-        return; // ✅ Prevent reaching catch again
+      } else {
+        emit(LoginFailure('Invalid username or password.'));
       }
-
-      emit(LoginFailure('Doctors/User cannot access the dashboard.'));
     } catch (e) {
-      // Emit failure only if success block didn’t already emit
       emit(LoginFailure(e.toString()));
     }
   }

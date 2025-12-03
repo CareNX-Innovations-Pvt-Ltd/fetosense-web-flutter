@@ -30,10 +30,10 @@ class DeviceTable extends StatelessWidget {
         _buildDataColumn('Doppler Number', flex: 2),
         _buildDataColumn('Device Code'),
         _buildDataColumn('Organization', flex: 2),
-        _buildDataColumn('Mother'),
-        _buildDataColumn('Test'),
+        // _buildDataColumn('Mothers'),
+        // _buildDataColumn('Test'),
         _buildDataColumn('CreatedOn', flex: 2),
-        _buildDataColumn('Version'),
+        // _buildDataColumn('Version'),
         _buildDataColumn('Action'),
       ],
       rows:
@@ -58,11 +58,10 @@ class DeviceTable extends StatelessWidget {
       cells: [
         _buildDataCell(data['deviceName'], flex: 2),
         _buildDataCell(data['deviceCode']),
-        _buildDataCell(data['organizationName'], flex: 2),
-        _buildDataCell(data['noOfMother']),
-        _buildDataCell(data['noOfTests']),
+        _buildDataCell(data['hospitalName'], flex: 2),
+        // _buildDataCell(mothersCount),
+        // _buildDataCell(testsCount),
         _buildDataCell(formatDate(data['createdOn']), flex: 2),
-        _buildDataCell(data['appVersion']),
         DataCell(
           TextButton(
             onPressed: () => _showEditDialog(context, device),

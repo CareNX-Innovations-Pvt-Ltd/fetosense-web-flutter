@@ -7,6 +7,7 @@ import 'package:fetosense_mis/core/utils/preferences.dart';
 import 'package:fetosense_mis/core/utils/user_role.dart';
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
+import 'package:go_router/go_router.dart';
 
 part 'organization_registration_state.dart';
 
@@ -96,6 +97,7 @@ class OrganizationRegistrationCubit
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Organization saved successfully!')),
           );
+          context.pop();
         } catch (e) {
           ScaffoldMessenger.of(
             context,

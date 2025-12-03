@@ -34,12 +34,16 @@ void main() {
     when(() => doc.data).thenReturn({'doctorName': 'Dr. Strange'});
     when(() => cubit.state).thenReturn(
       DoctorDetailsState(
-        allDoctors: [doc],
+        doctorDetails: [doc],
         filteredDoctors: [doc],
         fromDate: null,
         tillDate: null,
-        isLoading: false,
-        error: null,
+          searchQuery: '',
+          clearTillDate: true,
+          clearFromDate: true,
+          status: DoctorStatus.initial,
+        errorMessage: '',
+        clearError: false,
       ),
     );
   });

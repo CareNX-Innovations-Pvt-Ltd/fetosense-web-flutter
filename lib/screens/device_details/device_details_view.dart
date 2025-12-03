@@ -1,7 +1,3 @@
-import 'package:appwrite/models.dart' as models;
-import 'package:fetosense_mis/screens/device_details/device_edit/device_edit_view.dart';
-import 'package:fetosense_mis/utils/format_date.dart';
-import 'package:fetosense_mis/widget/custom_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'device_details_cubit.dart';
@@ -35,8 +31,6 @@ class _DeviceDetailsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DeviceDetailsCubit, DeviceDetailsState>(
       builder: (context, state) {
-        final cubit = context.read<DeviceDetailsCubit>();
-
         return Container(
           alignment: Alignment.topCenter,
           margin: const EdgeInsets.all(16),
@@ -49,16 +43,16 @@ class _DeviceDetailsView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const DeviceDetailsHeader(),
-              DeviceDetailsFilters(cubit: cubit, state: state),
-
+              const DeviceDetailsFilters(),
+              const Divider(color: Colors.grey),
               const SizedBox(height: 20),
               if (state.isLoading)
-                const Center(child: CircularProgressIndicator())
+                const Center(child: CircularProgressIndicator(color: Colors.tealAccent))
               else
                 Expanded(
                   child: SingleChildScrollView(
                     scrollDirection:
-                        Axis.horizontal, // scroll horizontally for DataTable2
+                        Axis.horizontal,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: SizedBox(

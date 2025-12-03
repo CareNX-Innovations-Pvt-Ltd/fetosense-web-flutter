@@ -22,7 +22,7 @@ Future<List<models.Document>> fetchDevices(
   DateTime? tillDate,
 }) async {
   try {
-    final List<String> queries = [Query.equal('type', 'device')];
+    final List<String> queries = [];
 
     final bool applyDateFilter = fromDate != null || tillDate != null;
 
@@ -54,7 +54,7 @@ Future<List<models.Document>> fetchDevices(
     // Fetch device documents from Appwrite database
     final result = await db.listDocuments(
       databaseId: AppConstants.appwriteDatabaseId,
-      collectionId: AppConstants.userCollectionId,
+      collectionId: AppConstants.deviceCollectionId,
       queries: queries,
     );
 

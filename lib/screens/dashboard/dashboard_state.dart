@@ -27,6 +27,12 @@ class DashboardState {
   /// The number of tests.
   final int testCount;
 
+  /// The number of referrals.
+  final int referralCount;
+
+  /// The list of tests.
+  final List<Test> tests;
+
   /// Creates a [DashboardState] with the given values.
   const DashboardState({
     required this.userEmail,
@@ -36,6 +42,8 @@ class DashboardState {
     required this.deviceCount,
     required this.motherCount,
     required this.testCount,
+    required this.tests,
+    required this.referralCount,
   });
 
   /// Returns a copy of this state with updated fields if provided.
@@ -47,6 +55,8 @@ class DashboardState {
     int? deviceCount,
     int? motherCount,
     int? testCount,
+    List<Test>? tests,
+    int? referralCount,
   }) {
     return DashboardState(
       userEmail: userEmail ?? this.userEmail,
@@ -56,6 +66,8 @@ class DashboardState {
       deviceCount: deviceCount ?? this.deviceCount,
       motherCount: motherCount ?? this.motherCount,
       testCount: testCount ?? this.testCount,
+      tests: tests ?? this.tests,
+      referralCount: referralCount ?? this.referralCount,
     );
   }
 }

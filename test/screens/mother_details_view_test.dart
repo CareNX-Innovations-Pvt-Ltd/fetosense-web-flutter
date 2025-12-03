@@ -25,9 +25,8 @@ void main() {
     when(() => cubit.fetchMothersId()).thenAnswer((_) async {});
     when(() => cubit.downloadExcel(any())).thenAnswer((_) async {});
     when(() => cubit.setFromDate(any())).thenReturn(null);
-    when(() => cubit.clearFromDate()).thenReturn(null);
+    when(() => cubit.clearAllFilters()).thenReturn(null);
     when(() => cubit.setTillDate(any())).thenReturn(null);
-    when(() => cubit.clearTillDate()).thenReturn(null);
     when(() => cubit.setSearchQuery(any())).thenReturn(null);
   });
 
@@ -125,13 +124,7 @@ void main() {
     cubit.setFromDate(DateTime.now());
     verify(() => cubit.setFromDate(any())).called(1);
 
-    cubit.clearFromDate();
-    verify(() => cubit.clearFromDate()).called(1);
-
     cubit.setTillDate(DateTime.now());
     verify(() => cubit.setTillDate(any())).called(1);
-
-    cubit.clearTillDate();
-    verify(() => cubit.clearTillDate()).called(1);
   });
 }
