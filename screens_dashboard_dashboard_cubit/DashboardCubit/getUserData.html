@@ -54,7 +54,7 @@
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.flutter.dev/flutter/flutter_test/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
 <span class="name ">getUserData</span>(<wbr>)
 
       
@@ -102,9 +102,12 @@
   final testCount = await databases.listDocuments(
     databaseId: AppConstants.appwriteDatabaseId,
     collectionId: AppConstants.testsCollectionId,
-    queries: isRestricted
-        ? [Query.equal(&#39;organizationId&#39;, userData.organizationId)]
-        : [],
+  );
+
+  final referrals = await databases.listDocuments(
+    databaseId: AppConstants.appwriteDatabaseId,
+    collectionId: AppConstants.testsCollectionId,
+    queries: [Query.equal(&#39;referral&#39;, true)],
   );
 
   emit(
@@ -114,6 +117,7 @@
       deviceCount: deviceCount.total,
       motherCount: motherCount.total,
       testCount: testCount.total,
+      referralCount: referrals.total,
     ),
   );
 }</code></pre>

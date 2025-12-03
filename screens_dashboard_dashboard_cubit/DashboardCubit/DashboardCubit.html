@@ -69,21 +69,24 @@
   AuthService? authService,
   Databases? databases,
   PreferenceHelper? prefs,
-})  : _authService = authService ?? AuthService(),
-      databases = databases ?? Databases(locator&lt;AppwriteService&gt;().client),
-      prefs = prefs ?? locator&lt;PreferenceHelper&gt;(),
-      super(
-      const DashboardState(
-        userEmail: &quot;&quot;,
-        isSidebarOpen: false,
-        childIndex: 0,
-        organizationCount: 0,
-        deviceCount: 0,
-        motherCount: 0,
-        testCount: 0,
-      ),
-    ) {
+}) : _authService = authService ?? AuthService(),
+     databases = databases ?? Databases(locator&lt;AppwriteService&gt;().client),
+     prefs = prefs ?? locator&lt;PreferenceHelper&gt;(),
+     super(
+       const DashboardState(
+         userEmail: &quot;&quot;,
+         isSidebarOpen: false,
+         childIndex: 0,
+         organizationCount: 0,
+         deviceCount: 0,
+         motherCount: 0,
+         testCount: 0,
+         tests: [],
+          referralCount: 0,
+       ),
+     ) {
   getUserData();
+  fetchAllTests();
 }</code></pre>
 </section>
 

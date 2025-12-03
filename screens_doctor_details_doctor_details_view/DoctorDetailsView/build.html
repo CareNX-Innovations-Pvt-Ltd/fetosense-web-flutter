@@ -110,44 +110,45 @@ and</li>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
   final cubit = context.read&lt;DoctorDetailsCubit&gt;();
-  cubit.fetchDoctorsId();
+  cubit.fetchDoctorDetails();
 
   return BlocBuilder&lt;DoctorDetailsCubit, DoctorDetailsState&gt;(
     builder: (context, state) {
-      final cubit = context.read&lt;DoctorDetailsCubit&gt;();
-      return Container(
-        alignment: Alignment.topCenter,
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Container(
-          margin: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: const Color(0xFF181A1B),
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(color: const Color(0xFF272A2C), width: 1),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const DoctorDetailsHeader(),
-              DoctorDetailsFilters(cubit: cubit, state: state),
+          alignment: Alignment.topCenter,
+          child: Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFF181A1B),
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: const Color(0xFF272A2C)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const DoctorDetailsHeader(),
+                const DoctorDetailsFilters(),
+                const Divider(color: Colors.grey),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection:
+                        Axis.horizontal,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: SizedBox(
+                        width:
+                            MediaQuery.of(context).size.width *
+                            0.8, &#47;&#47; or any suitable ratio
 
-              const SizedBox(height: 20),
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection:
-                      Axis.horizontal, &#47;&#47; scroll horizontally for DataTable2
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SizedBox(
-                      width:
-                          MediaQuery.of(context).size.width *
-                          0.8, &#47;&#47; or any suitable ratio
-
-                      child: DoctorDetailsTable(state: state),
+                        child: DoctorDetailsTable(state: state),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );

@@ -66,12 +66,16 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory DoctorDetailsState.initial() =&gt; const DoctorDetailsState(
-  allDoctors: [],
+  doctorDetails: [],
   filteredDoctors: [],
+  searchQuery: &quot;&quot;,
   fromDate: null,
   tillDate: null,
-  isLoading: false,
-  error: null,
+  status: DoctorStatus.initial,
+  errorMessage: null,
+  clearError: false,
+  clearFromDate: false,
+  clearTillDate: false,
 );</code></pre>
 </section>
 

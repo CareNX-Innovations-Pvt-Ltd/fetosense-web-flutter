@@ -81,12 +81,16 @@ two instances are equal.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;Object?&gt; get props =&gt; [
-  allDoctors,
+  doctorDetails,
   filteredDoctors,
+  searchQuery,
   fromDate,
   tillDate,
-  isLoading,
-  error,
+  status,
+  errorMessage,
+  clearError,
+  clearFromDate,
+  clearTillDate,
 ];</code></pre>
 </section>
 

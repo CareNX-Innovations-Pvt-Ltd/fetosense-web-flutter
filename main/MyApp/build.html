@@ -122,6 +122,7 @@ Widget build(BuildContext context) {
 
       &#47;&#47;&#47; Provides [DoctorDetailsCubit] for doctor details state management.
       BlocProvider(create: (context) =&gt; DoctorDetailsCubit()),
+      BlocProvider(create: (context) =&gt; DashboardCubit()),
     ],
     child: MaterialApp.router(
       &#47;&#47;&#47; The title of the application displayed in the browser tab.

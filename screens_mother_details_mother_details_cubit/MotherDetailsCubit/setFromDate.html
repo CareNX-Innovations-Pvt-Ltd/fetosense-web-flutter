@@ -74,7 +74,9 @@
   if (date != null) {
     fromDateController.text = date.toString().split(&#39; &#39;)[0];
   }
-  emit(state.copyWith(fromDate: date));
+
+  &#47;&#47; IMPORTANT: overrideFromDate = true allows clearing
+  emit(state.copyWith(fromDate: date, overrideFromDate: true));
 }</code></pre>
 </section>
 

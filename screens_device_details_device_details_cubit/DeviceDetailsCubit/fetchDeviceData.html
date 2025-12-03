@@ -54,7 +54,7 @@
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.flutter.dev/flutter/flutter_test/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
 <span class="name ">fetchDeviceData</span>(<wbr>)
 
       
@@ -73,11 +73,11 @@
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; fetchDeviceData() async {
   emit(state.copyWith(isLoading: true));
   try {
-    final devices = await fetchDevices(
-      _db,
+    final devices = await _fetchDevicesLocal(
       fromDate: state.fromDate,
       tillDate: state.tillDate,
     );
+
     emit(
       state.copyWith(
         allDevices: devices,
@@ -85,7 +85,8 @@
         isLoading: false,
       ),
     );
-    applySearch(state.searchQuery); &#47;&#47; Apply search after fetch
+
+    applySearch(state.searchQuery);
   } catch (e) {
     emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
   }

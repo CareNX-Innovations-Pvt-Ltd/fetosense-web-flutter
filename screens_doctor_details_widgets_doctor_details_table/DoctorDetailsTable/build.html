@@ -109,6 +109,12 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
+  if (state.status == DoctorStatus.loading) {
+    return const Center(
+      child: CircularProgressIndicator(color: Colors.tealAccent),
+    );
+  }
+
   if (state.filteredDoctors.isEmpty) {
     return const Center(
       child: Text(&quot;No data available&quot;, style: TextStyle(color: Colors.white)),
@@ -136,8 +142,8 @@ Widget build(BuildContext context) {
       _buildDataColumn(&#39;Mother&#39;),
       _buildDataColumn(&#39;Test&#39;),
       _buildDataColumn(&#39;CreatedOn&#39;, flex: 2),
-      _buildDataColumn(&#39;L.O.T&#39;, flex: 2),
-      _buildDataColumn(&#39;Version&#39;),
+      &#47;&#47; _buildDataColumn(&#39;L.O.T&#39;, flex: 2),
+      &#47;&#47; _buildDataColumn(&#39;Version&#39;),
       _buildDataColumn(&#39;Action&#39;),
     ],
     rows:

@@ -61,12 +61,12 @@
 <li><span class="parameter" id="-param-fromDate"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">fromDate</span>, </span></li>
 <li><span class="parameter" id="-param-tillDate"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">tillDate</span>, </span></li>
 <li><span class="parameter" id="-param-searchQuery"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">searchQuery</span>, </span></li>
+<li><span class="parameter" id="-param-noOfTests"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_test_model/Test-class.html">Test</a></span>&gt;</span>?</span> <span class="parameter-name">noOfTests</span>, </span></li>
+<li><span class="parameter" id="-param-testsPerDevice"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span></span> <span class="parameter-name">testsPerDevice</span> = <span class="default-value">const {}</span>, </span></li>
+<li><span class="parameter" id="-param-mothersPerDevice"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span></span> <span class="parameter-name">mothersPerDevice</span> = <span class="default-value">const {}</span>, </span></li>
 </ol>})
     </section>
     
-<section class="desc markdown">
-  <p>Creates a <a href="../../screens_device_details_device_details_cubit/DeviceDetailsState-class.html">DeviceDetailsState</a> with the given values.</p>
-</section>
 
 
     
@@ -80,6 +80,9 @@
   required this.fromDate,
   required this.tillDate,
   required this.searchQuery,
+  required this.noOfTests,
+  this.testsPerDevice = const {},
+  this.mothersPerDevice = const {},
 });</code></pre>
 </section>
 

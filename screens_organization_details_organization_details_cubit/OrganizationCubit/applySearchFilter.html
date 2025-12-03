@@ -79,11 +79,11 @@
   } else {
     final filtered =
         state.organizationDetails.where((orgDetail) {
-          &#47;&#47; Since we&#39;re storing a list of documents, we need to access the first one
           if (orgDetail.organizations.isEmpty) return false;
 
           final org = orgDetail.organizations.first;
-          final name = org.data[&#39;name&#39;]?.toString().toLowerCase() ?? &#39;&#39;;
+          final name =
+              org.data[&#39;organizationName&#39;]?.toString().toLowerCase() ?? &#39;&#39;;
           return name.contains(keyword);
         }).toList();
 

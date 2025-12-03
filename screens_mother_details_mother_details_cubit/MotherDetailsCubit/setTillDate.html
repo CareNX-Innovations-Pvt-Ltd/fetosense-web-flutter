@@ -74,7 +74,8 @@
   if (date != null) {
     tillDateController.text = date.toString().split(&#39; &#39;)[0];
   }
-  emit(state.copyWith(tillDate: date));
+
+  emit(state.copyWith(tillDate: date, overrideTillDate: true));
 }</code></pre>
 </section>
 

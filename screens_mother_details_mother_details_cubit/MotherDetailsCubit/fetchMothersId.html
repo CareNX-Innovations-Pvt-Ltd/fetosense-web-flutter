@@ -54,7 +54,7 @@
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.flutter.dev/flutter/flutter_test/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
 <span class="name ">fetchMothersId</span>(<wbr>)
 
       
@@ -73,8 +73,7 @@
   try {
     emit(state.copyWith(isLoading: true, clearError: true));
 
-    final result = await fetchMothers(
-      db,
+    final result = await _fetchMothersLocalFilter(
       fromDate: state.fromDate,
       tillDate: state.tillDate,
     );
@@ -87,7 +86,6 @@
       ),
     );
 
-
     _applySearchFilter();
   } catch (e) {
     emit(
@@ -96,7 +94,7 @@
         errorMessage: &quot;Error fetching mothers: $e&quot;,
       ),
     );
-    print(&quot;Error fetching mothers: $e&quot;);
+    debugPrint(&quot;Error fetching mothers: $e&quot;);
   }
 }</code></pre>
 </section>

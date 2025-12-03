@@ -62,6 +62,8 @@
 <li><span class="parameter" id="copyWith-param-deviceCount"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">deviceCount</span>, </span></li>
 <li><span class="parameter" id="copyWith-param-motherCount"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">motherCount</span>, </span></li>
 <li><span class="parameter" id="copyWith-param-testCount"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">testCount</span>, </span></li>
+<li><span class="parameter" id="copyWith-param-tests"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_test_model/Test-class.html">Test</a></span>&gt;</span>?</span> <span class="parameter-name">tests</span>, </span></li>
+<li><span class="parameter" id="copyWith-param-referralCount"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">referralCount</span>, </span></li>
 </ol>})
 
       
@@ -84,6 +86,8 @@
   int? deviceCount,
   int? motherCount,
   int? testCount,
+  List&lt;Test&gt;? tests,
+  int? referralCount,
 }) {
   return DashboardState(
     userEmail: userEmail ?? this.userEmail,
@@ -93,6 +97,8 @@
     deviceCount: deviceCount ?? this.deviceCount,
     motherCount: motherCount ?? this.motherCount,
     testCount: testCount ?? this.testCount,
+    tests: tests ?? this.tests,
+    referralCount: referralCount ?? this.referralCount,
   );
 }</code></pre>
 </section>

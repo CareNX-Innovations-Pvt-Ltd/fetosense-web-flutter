@@ -71,7 +71,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void initialize(Map&lt;String, dynamic&gt; data) {
-  nameController.text = data[&#39;doctorName&#39;] ?? &#39;&#39;;
+  nameController.text = data[&#39;name&#39;] ?? &#39;&#39;;
   mobileController.text = data[&#39;mobileNo&#39;].toString();
   emailController.text = data[&#39;email&#39;] ?? &#39;&#39;;
   emit(DoctorEditLoaded());

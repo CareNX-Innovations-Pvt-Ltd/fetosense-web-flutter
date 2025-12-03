@@ -77,9 +77,7 @@
           ? state.allDevices
           : state.allDevices.where((device) {
             final name =
-                (device.data[&#39;organizationName&#39;] ?? &#39;&#39;)
-                    .toString()
-                    .toLowerCase();
+                (device.data[&#39;deviceName&#39;] ?? &#39;&#39;).toString().toLowerCase();
             return name.contains(keyword);
           }).toList();
 

@@ -71,7 +71,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void updateFromDate(DateTime? date) {
-  emit(state.copyWith(fromDate: date));
+  emit(state.copyWith(fromDate: date, overrideFromDate: true));
 }</code></pre>
 </section>
 

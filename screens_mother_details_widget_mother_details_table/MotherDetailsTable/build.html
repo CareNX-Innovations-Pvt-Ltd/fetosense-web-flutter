@@ -154,12 +154,12 @@ Widget build(BuildContext context) {
           style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
         ),
       ),
-      DataColumn2(
-        label: Text(
-          &quot;Test&quot;,
-          style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
-        ),
-      ),
+      &#47;&#47; DataColumn2(
+      &#47;&#47;   label: Text(
+      &#47;&#47;     &quot;Test&quot;,
+      &#47;&#47;     style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+      &#47;&#47;   ),
+      &#47;&#47; ),
     ],
     rows:
         filteredMothers.map((org) {
@@ -170,7 +170,7 @@ Widget build(BuildContext context) {
               buildDataCell(data[&#39;organizationName&#39;]),
               buildDataCell(data[&#39;deviceName&#39;]),
               buildDataCell(data[&#39;doctorName&#39;]),
-              buildDataCell(data[&#39;noOfTests&#39;]),
+              &#47;&#47; buildDataCell(data[&#39;noOfTests&#39;]),
             ],
           );
         }).toList(),

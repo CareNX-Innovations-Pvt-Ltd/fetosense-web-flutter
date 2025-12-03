@@ -68,13 +68,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void setSelectedState(String? stateName) {
-  print(&quot;state triggered&quot;);
-  emit(
-    state.copyWith(
-      selectedState: stateName,
-      selectedCity: null, &#47;&#47; Clear city when state changes
-    ),
-  );
+  emit(state.copyWith(selectedState: stateName, selectedCity: null));
 }</code></pre>
 </section>
 

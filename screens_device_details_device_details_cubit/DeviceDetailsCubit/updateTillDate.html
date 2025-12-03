@@ -71,7 +71,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void updateTillDate(DateTime? date) {
-  emit(state.copyWith(tillDate: date));
+  emit(state.copyWith(tillDate: date, overrideTillDate: true));
 }</code></pre>
 </section>
 

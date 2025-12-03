@@ -84,13 +84,10 @@ for navigating between different sections of the app.</p>
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SidebarItem(
+        const _SidebarItem(
           icon: Icons.dashboard,
           title: &quot;Dashboard&quot;,
-          onTap: () {
-            &#47;&#47; Navigator.pushNamed(context, &#39;&#47;dashboard&#39;);
-            context.pushReplacement(AppRoutes.dashboard);
-          },
+          index: 0,
         ),
         role == UserRoles.admin
             ? const _ExpandableMenu(
@@ -99,10 +96,10 @@ for navigating between different sections of the app.</p>
               children: [
                 _SidebarItem(
                   title: &quot;Organization&quot;,
-                  route: &#39;&#47;organization-registration&#39;,
+                  index: 1,
                 ),
-                _SidebarItem(title: &quot;Device&quot;, route: &#39;&#47;device-registration&#39;),
-                _SidebarItem(title: &quot;Generate QR&quot;, route: &#39;&#47;generate-qr&#39;),
+                _SidebarItem(title: &quot;Device&quot;, index: 2,),
+                _SidebarItem(title: &quot;Generate QR&quot;, index: 3,),
               ],
             )
             : Container(),
@@ -113,22 +110,22 @@ for navigating between different sections of the app.</p>
             _SidebarItem(
               icon: Icons.business,
               title: &quot;Organizations&quot;,
-              route: &#39;&#47;mis-organizations&#39;,
+              index: 4,
             ),
             _SidebarItem(
               icon: Icons.tablet_mac,
               title: &quot;Device&quot;,
-              route: &#39;&#47;mis-devices&#39;,
+              index: 5,
             ),
             _SidebarItem(
               icon: Icons.medical_services,
               title: &quot;Doctor&quot;,
-              route: &#39;&#47;mis-doctors&#39;,
+              index: 6,
             ),
             _SidebarItem(
               icon: Icons.pregnant_woman,
               title: &quot;Mother&quot;,
-              route: &#39;&#47;mis-mothers&#39;,
+              index: 7,
             ),
           ],
         ),

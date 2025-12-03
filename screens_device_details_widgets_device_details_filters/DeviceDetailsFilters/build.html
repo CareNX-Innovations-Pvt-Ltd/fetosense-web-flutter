@@ -109,73 +109,8 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 15),
-    child: Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: customDatePicker(
-                context: context,
-                label: &quot;From Date&quot;,
-                selectedDate: state.fromDate,
-                controller: TextEditingController(
-                  text: formatDate(state.fromDate?.toIso8601String()),
-                ),
-                onDateSelected: cubit.updateFromDate,
-                onDateCleared: () =&gt; cubit.updateFromDate(null),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: customDatePicker(
-                context: context,
-                label: &quot;Till Date&quot;,
-                selectedDate: state.tillDate,
-                controller: TextEditingController(
-                  text: formatDate(
-                    state.tillDate?.toIso8601String(),
-                  ), &#47;&#47; fixed to tillDate here
-                ),
-                onDateSelected: cubit.updateTillDate,
-                onDateCleared: () =&gt; cubit.updateTillDate(null),
-              ),
-            ),
-            const SizedBox(width: 16),
-            SizedBox(
-              height: 40,
-              child: ElevatedButton(
-                onPressed: cubit.fetchDeviceData,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  side: const BorderSide(color: Color(0xFF1A86AD)),
-                ),
-                child: const Text(
-                  &quot;Get Data&quot;,
-                  style: TextStyle(color: Color(0xFF1A86AD)),
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 20),
-        TextField(
-          onChanged: cubit.applySearch,
-          style: const TextStyle(color: Colors.white),
-          decoration: const InputDecoration(
-            prefixIcon: Icon(Icons.search, color: Colors.white),
-            hintText: &#39;Search&#39;,
-            hintStyle: TextStyle(color: Colors.grey),
-            filled: true,
-            fillColor: Color(0xFF181A1B),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-            ),
-          ),
-        ),
-      ],
-    ),
+  return Column(
+    children: [_buildSearchBar(context), _buildFilterSection(context)],
   );
 }</code></pre>
 </section>

@@ -113,7 +113,9 @@ Widget build(BuildContext context) {
     builder: (context, state) {
       switch (state.status) {
         case OrganizationStatus.loading:
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: CircularProgressIndicator(color: Colors.tealAccent),
+          );
 
         case OrganizationStatus.error:
           return Center(child: Text(&#39;Error: ${state.errorMessage}&#39;));
@@ -143,8 +145,8 @@ Widget build(BuildContext context) {
               _buildDataColumn(&#39;Doctors&#39;),
               _buildDataColumn(&#39;Mother&#39;),
               _buildDataColumn(&#39;Test&#39;),
-              _buildDataColumn(&#39;Mobile&#39;),
-              _buildDataColumn(&#39;Status&#39;),
+              &#47;&#47; _buildDataColumn(&#39;Mobile&#39;),
+              &#47;&#47; _buildDataColumn(&#39;Status&#39;),
               _buildDataColumn(&#39;Created On&#39;, flex: 2),
               _buildDataColumn(&#39;Address&#39;, flex: 3),
               _buildDataColumn(&#39;Email&#39;, flex: 2),
@@ -153,17 +155,17 @@ Widget build(BuildContext context) {
             rows:
                 state.filteredOrganizationDetails.map((orgDetail) {
                   final data = orgDetail.organizations.first.data;
-                  log(data.toString());
+                  &#47;&#47; log(data.toString());
 
                   return DataRow(
                     cells: [
                       _buildDataCell(data[&#39;organizationName&#39;], flex: 2),
-                      _buildDataCell(data[&#39;deviceName&#39;]),
-                      _buildDataCell(data[&#39;doctors&#39;]),
-                      _buildDataCell(data[&#39;mother&#39;]),
-                      _buildDataCell(data[&#39;test&#39;]),
-                      _buildDataCell(data[&#39;mobileNo&#39;]),
-                      _buildDataCell(data[&#39;status&#39;]),
+                      _buildDataCell(data[&#39;noOfDevices&#39;]),
+                      _buildDataCell(1),
+                      _buildDataCell(data[&#39;noOfMother&#39;]),
+                      _buildDataCell(data[&#39;noOfTests&#39;]),
+                      &#47;&#47; _buildDataCell(data[&#39;mobileNo&#39;]),
+                      &#47;&#47; _buildDataCell(data[&#39;status&#39;]),
                       _buildDataCell(
                         data[&#39;createdOn&#39;] != null
                             ? DateFormat(

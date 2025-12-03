@@ -111,58 +111,62 @@ and</li>
 Widget build(BuildContext context) {
   final _ = context.read&lt;MotherDetailsCubit&gt;();
 
-  return Container(
-    alignment: Alignment.topCenter,
+  return Padding(
+    padding: const EdgeInsets.all(16.0),
     child: Container(
-      margin: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF181A1B),
-        borderRadius: BorderRadius.circular(5),
-        border: Border.all(color: const Color(0xFF272A2C), width: 1),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildHeader(context),
-          _buildFilterSection(context),
-          const SizedBox(height: 20),
-          Expanded(
-            child: BlocBuilder&lt;MotherDetailsCubit, MotherDetailsState&gt;(
-              builder: (context, state) {
-                if (state.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+      alignment: Alignment.topCenter,
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF181A1B),
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(color: const Color(0xFF272A2C)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildHeader(context),
+            const MotherDetailsFilter(),
+            const Divider(color: Colors.grey),
+            &#47;&#47; _buildFilterSection(context),
+            const SizedBox(height: 20),
+            Expanded(
+              child: BlocBuilder&lt;MotherDetailsCubit, MotherDetailsState&gt;(
+                builder: (context, state) {
+                  if (state.isLoading) {
+                    return const Center(child: CircularProgressIndicator(color: Colors.tealAccent));
+                  }
 
-                if (state.errorMessage != null) {
-                  return Center(
-                    child: Text(
-                      state.errorMessage!,
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  );
-                }
+                  if (state.errorMessage != null) {
+                    return Center(
+                      child: Text(
+                        state.errorMessage!,
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    );
+                  }
 
-                &#47;&#47; Wrap your MotherDetailsTable inside vertical &amp; horizontal scroll views
-                return SingleChildScrollView(
-                  scrollDirection:
-                      Axis.horizontal, &#47;&#47; scroll horizontally for DataTable2
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SizedBox(
-                      width:
-                          MediaQuery.of(context).size.width *
-                          0.8, &#47;&#47; or any suitable ratio
+                  &#47;&#47; Wrap your MotherDetailsTable inside vertical &amp; horizontal scroll views
+                  return SingleChildScrollView(
+                    scrollDirection:
+                        Axis.horizontal, &#47;&#47; scroll horizontally for DataTable2
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: SizedBox(
+                        width:
+                            MediaQuery.of(context).size.width *
+                            0.8, &#47;&#47; or any suitable ratio
 
-                      child: MotherDetailsTable(
-                        filteredMothers: state.filteredMothers,
+                        child: MotherDetailsTable(
+                          filteredMothers: state.filteredMothers,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ),
   );

@@ -57,7 +57,6 @@
   <div>
     <ol class="annotation-list">
         <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
-        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
 <span class="returntype"><a href="https://api.flutter.dev/flutter/widgets/Widget-class.html">Widget</a></span>
@@ -176,217 +175,169 @@ prints green, as expected.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-@override
 Widget build(BuildContext context) {
   final cubit = context.read&lt;LoginCubit&gt;();
   cubit.usernameController.text = &#39;pranav@carenx.com&#39;;
   cubit.passwordController.text = &#39;12345678&#39;;
 
   return Scaffold(
-    backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-    body: Row(
-      children: [
-        &#47;&#47; 🔹 Left half - Full image
-        Expanded(
-          child: Stack(
-            children: [
-              &#47;&#47; Background Image
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Colors.black,
-
-                      Color.fromARGB(
-                        255,
-                        17,
-                        65,
-                        74,
-                      ), &#47;&#47; Target teal shade (66, 149, 164)
-                    ],
+    backgroundColor: Colors.black,
+    body: BlocListener&lt;LoginCubit, LoginState&gt;(
+      listener: (context, state) {
+        if (state is LoginSuccess) {
+          context.replaceNamed(AppRoutes.dashboard);
+        }
+      },
+      child: Row(
+        children: [
+          Expanded(
+            child: Stack(
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Colors.black, Color.fromARGB(255, 17, 65, 74)],
+                    ),
                   ),
                 ),
-              ),
-
-              &#47;&#47; Overlay: Fetosense Logo (centered or positioned as needed)
-              Positioned(
-                top: MediaQuery.of(context).size.height &#47; 2.5,
-
-                left: MediaQuery.of(context).size.width &#47; 8,
-                &#47;&#47; child: const AnimatedLogo(),
-                child: Image.asset(
-                  &#39;assets&#47;images&#47;login&#47;fetosense.png&#39;,
-                  width: 350,
-                  height: 150,
-                  fit: BoxFit.contain,
-                  errorBuilder:
-                      (context, error, stackTrace) =&gt; const Icon(
-                        Icons.image_not_supported,
-                        color: Colors.white70,
-                        size: 80,
-                      ),
+                Positioned(
+                  top: MediaQuery.of(context).size.height &#47; 2.5,
+                  left: MediaQuery.of(context).size.width &#47; 8,
+                  child: Image.asset(
+                    &#39;assets&#47;images&#47;login&#47;fetosense.png&#39;,
+                    width: 350,
+                    height: 150,
+                    fit: BoxFit.contain,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
 
-        &#47;&#47; 🔸 Right half - Login form centered
-        Expanded(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 140.0),
-              child: BlocBuilder&lt;LoginCubit, LoginState&gt;(
-                builder: (context, state) {
-                  String errorMessage = &#39;&#39;;
-                  bool obscurePassword = cubit.obscurePassword;
+          &#47;&#47; Right Section (Login Form)
+          Expanded(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 140.0),
+                child: BlocBuilder&lt;LoginCubit, LoginState&gt;(
+                  builder: (context, state) {
+                    String errorMessage = &#39;&#39;;
+                    bool obscurePassword = cubit.obscurePassword;
 
-                  if (state is LoginFailure) {
-                    errorMessage = state.message;
-                  }
-                  if (state is LoginTogglePassword) {
-                    obscurePassword = state.obscurePassword;
-                  }
+                    if (state is LoginFailure) {
+                      errorMessage = state.message;
+                    }
+                    if (state is LoginTogglePassword) {
+                      obscurePassword = state.obscurePassword;
+                    }
 
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        &quot;Welcome Back 👋&quot;,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        &quot;Login to your account&quot;,
-                        style: TextStyle(color: Colors.white70, fontSize: 16),
-                      ),
-                      const SizedBox(height: 32),
-
-                      TextField(
-                        controller: cubit.usernameController,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: customInputDecoration(
-                          &quot;Email&quot;,
-                          Icons.person,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      TextField(
-                        controller: cubit.passwordController,
-                        obscureText: obscurePassword,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: customInputDecoration(
-                          &quot;Password&quot;,
-                          Icons.lock,
-                        ).copyWith(
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              obscurePassword
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: Colors.white,
-                            ),
-                            onPressed: () =&gt; cubit.togglePasswordVisibility(),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      CaptchaCheckbox(
-                        onVerified: (value) {
-                          setState(() {
-                            isChecked = value;
-                          });
-                          debugPrint(&quot;CAPTCHA verified: $isChecked&quot;);
-                        },
-                      ),
-                      const SizedBox(height: 20),
-
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (isChecked) {
-                              cubit.loginUser(context);
-                            } else {
-                              showDialog(
-                                context: context,
-                                builder:
-                                    (context) =&gt; AlertDialog(
-                                      backgroundColor: Colors.grey.shade900,
-                                      title: const Text(
-                                        &quot;Verification Required&quot;,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      content: const Text(
-                                        &quot;Please verify you&#39;re not a robot.&quot;,
-                                        style: TextStyle(
-                                          color: Colors.white70,
-                                        ),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed:
-                                              () =&gt;
-                                                  Navigator.of(context).pop(),
-                                          child: const Text(
-                                            &quot;OK&quot;,
-                                            style: TextStyle(
-                                              color: Colors.tealAccent,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                              );
-                            }
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            context.read&lt;DashboardCubit&gt;().logout(context);
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.cyan[700],
-                            padding: const EdgeInsets.symmetric(vertical: 14),
+                          child: const Text(
+                            &quot;Welcome Back 👋&quot;,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          child:
-                              state is LoginLoading
-                                  ? const CircularProgressIndicator(
-                                    color: Colors.white,
-                                  )
-                                  : const Text(
-                                    &quot;Login&quot;,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
+                        const SizedBox(height: 8),
+                        const Text(
+                          &quot;Login to your account&quot;,
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(height: 32),
 
-                      if (errorMessage.isNotEmpty)
-                        Text(
-                          errorMessage,
-                          style: const TextStyle(color: Colors.redAccent),
+                        TextField(
+                          controller: cubit.usernameController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: customInputDecoration(
+                            &quot;Email&quot;,
+                            Icons.person,
+                          ),
                         ),
-                    ],
-                  );
-                },
+                        const SizedBox(height: 20),
+
+                        TextField(
+                          controller: cubit.passwordController,
+                          obscureText: obscurePassword,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: customInputDecoration(
+                            &quot;Password&quot;,
+                            Icons.lock,
+                          ).copyWith(
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                obscurePassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: Colors.white,
+                              ),
+                              onPressed:
+                                  () =&gt; cubit.togglePasswordVisibility(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+
+                        const SizedBox(height: 20),
+
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (isChecked) {
+                                cubit.loginUser(context);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.cyan[700],
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 14,
+                              ),
+                            ),
+                            child:
+                                state is LoginLoading
+                                    ? const CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                    : const Text(
+                                      &quot;Login&quot;,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+
+                        if (errorMessage.isNotEmpty)
+                          Text(
+                            errorMessage,
+                            style: const TextStyle(color: Colors.redAccent),
+                          ),
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }</code></pre>
